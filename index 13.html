@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mes Fiches de Révision</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181b27;
+    --surface2: #1e2235;
+    --border: #2a2f45;
+    --accent: #6c63ff;
+    --accent2: #a78bfa;
+    --accent-glow: rgba(108,99,255,0.18);
+    --text: #e8eaf6;
+    --text-muted: #7b82a8;
+    --green: #34d399;
+    --red: #f87171;
+    --yellow: #fbbf24;
+
+    --mat-maths: #6c63ff;
+    --mat-francais: #ec4899;
+    --mat-histoire: #f59e0b;
+    --mat-anglais: #06b6d4;
+    --mat-svt: #34d399;
+    --mat-physique: #f97316;
+    --mat-techno: #8b5cf6;
+    --mat-espagnol: #ef4444;
+    --mat-arts: #14b8a6;
+    --mat-musique: #e879f9;
+    --mat-eps: #84cc16;
+    --mat-emc: #64748b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    background: rgba(15,17,23,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .badge-admin {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover { background: #5a52e0; transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { background: var(--surface2); color: var(--text); }
+
+  .btn-danger {
+    background: rgba(248,113,113,0.12);
+    color: var(--red);
+    border: 1px solid rgba(248,113,113,0.2);
+  }
+  .btn-danger:hover { background: rgba(248,113,113,0.22); }
+
+  /* MAIN */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 48px 0 40px;
+  }
+  .hero h1 {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .hero p {
+    color: var(--text-muted);
+    font-size: 1rem;
+  }
+
+  /* ADMIN LOGIN */
+  #admin-gate-box {
+    max-width: 380px;
+    margin: 60px auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 36px 32px;
+  }
+  #admin-gate-box h2 { font-size: 1.3rem; margin-bottom: 6px; }
+  #admin-gate-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 6px; }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.18s;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: var(--accent);
+  }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .error-msg { color: var(--red); font-size: 0.82rem; margin-top: 8px; }
+
+  /* SUBJECTS GRID */
+  .section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 20px;
+  }
+
+  .subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+
+  .subject-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .subject-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--mat-color, var(--accent));
+    border-radius: 4px 0 0 4px;
+  }
+  .subject-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--mat-color, var(--accent));
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .subject-emoji { font-size: 1.8rem; margin-bottom: 8px; }
+  .subject-name { font-size: 1rem; font-weight: 600; }
+  .subject-count { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+
+  /* FICHES LIST */
+  #fiches-view { display: none; }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 24px;
+    transition: color 0.18s;
+  }
+  .back-btn:hover { color: var(--text); }
+
+  .fiches-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .fiches-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .fiches-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .fiche-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    transition: border-color 0.18s;
+    cursor: pointer;
+  }
+  .fiche-card:hover { border-color: var(--accent); }
+
+  .fiche-info { flex: 1; min-width: 0; }
+  .fiche-title { font-weight: 600; font-size: 0.98rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fiche-meta { font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; }
+
+  .fiche-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    border-radius: 8px;
+  }
+
+  /* FICHE READER */
+  #reader-view { display: none; }
+  .reader-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .reader-header h2 { font-size: 1.4rem; font-weight: 700; }
+  .reader-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    line-height: 1.75;
+    font-size: 0.97rem;
+  }
+
+  .rich h2{font-size:1.35rem;margin:18px 0 8px;color:var(--accent2)}
+  .rich h3{font-size:1.1rem;margin:14px 0 6px}
+  .rich p,.rich div{margin:0 0 6px}
+  .rich ul,.rich ol{margin:6px 0 10px 22px}
+  .rich blockquote{background:var(--accent-glow);border-left:4px solid var(--accent);border-radius:8px;padding:10px 14px;margin:10px 0}
+  .rich hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+  .rich mark{background:rgba(251,191,36,.35);color:inherit;padding:0 2px;border-radius:3px}
+  .toolbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+  .toolbar button{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;min-width:38px;height:36px;padding:0 8px;font-family:inherit;font-size:.85rem;cursor:pointer}
+  .toolbar button:active{background:var(--accent)}
+  .editor{min-height:240px;max-height:45vh;overflow-y:auto;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;outline:none;line-height:1.6}
+  .editor:focus{border-color:var(--accent)}
+  .editor:empty:before{content:attr(data-ph);color:var(--text-muted)}
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal h3 { font-size: 1.2rem; margin-bottom: 20px; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+  }
+  .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+  .empty-state p { font-size: 0.95rem; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 0.88rem;
+    z-index: 300;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-color: var(--green); color: var(--green); }
+
+  /* LOADING */
+  .loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px;
+    color: var(--text-muted);
+    gap: 10px;
+    font-size: 0.9rem;
+  }
+  .spin {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 480px) {
+    .subjects-grid { grid-template-columns: repeat(2, 1fr); }
+    .fiche-card { flex-direction: column; align-items: flex-start; }
+    .fiche-actions { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">📚 MesRévisions</span>
+  <div class="nav-right">
+    <span id="nav-badge" style="display:none" class="badge-admin">ADMIN</span>
+    <button id="btn-admin-toggle" class="btn btn-ghost" style="display:none" onclick="showAdminLogin()">Connexion admin</button>
+    <button id="btn-admin-pw" class="btn btn-ghost" style="display:none" onclick="openPwModal()" title="Changer le mot de passe">🔑</button>
+    <button id="btn-admin-logout" class="btn btn-ghost" style="display:none" onclick="logoutAdmin()">Déconnexion</button>
+  </div>
+</nav>
+
+<!-- LOADING -->
+<div id="loading" class="loader">
+  <div class="spin"></div> Chargement...
+</div>
+
+<!-- HOME VIEW -->
+<div id="home-view" style="display:none">
+  <main>
+    <div class="hero">
+      <h1 id="hero-title">Fiches de révision 📖</h1>
+      <p id="hero-sub">Toutes les matières du collège</p>
+    </div>
+    <div class="section-title">Matières</div>
+    <div id="subjects-grid" class="subjects-grid"></div>
+  </main>
+</div>
+
+<!-- FICHES VIEW -->
+<div id="fiches-view">
+  <main>
+    <button class="back-btn" onclick="showHome()">← Retour aux matières</button>
+    <div class="fiches-header">
+      <h2 id="fiches-title"></h2>
+      <button id="btn-add-fiche" class="btn btn-primary" style="display:none" onclick="openAddFiche()">+ Ajouter une fiche</button>
+    </div>
+    <div id="fiches-list" class="fiches-list"></div>
+  </main>
+</div>
+
+<!-- READER VIEW -->
+<div id="reader-view">
+  <main>
+    <button class="back-btn" id="btn-back-reader" onclick="backToFiches()">← Retour</button>
+    <div class="reader-header">
+      <h2 id="reader-title"></h2>
+      <div style="display:flex;gap:8px;" id="reader-admin-btns"></div>
+    </div>
+    <div id="reader-content" class="reader-content rich"></div>
+  </main>
+</div>
+
+<!-- ADMIN GATE -->
+<div id="admin-gate" style="display:none">
+  <main>
+    <div id="admin-gate-box">
+      <h2>🔐 Connexion Admin</h2>
+      <p>Seulement pour toi — entre le mot de passe pour gérer les fiches.</p>
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input type="password" id="pw-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkAdminPw()">
+      </div>
+      <div id="pw-error" class="error-msg" style="display:none">Mot de passe incorrect</div>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="checkAdminPw()">Connexion</button>
+      <button class="btn btn-ghost" style="width:100%;margin-top:10px" onclick="cancelAdmin()">Annuler</button>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL: Ajouter/Modifier fiche -->
+<div class="modal-overlay" id="modal-fiche">
+  <div class="modal">
+    <h3 id="modal-fiche-title">Nouvelle fiche</h3>
+    <div class="form-group">
+      <label>Titre de la fiche</label>
+      <input type="text" id="fiche-input-title" placeholder="Ex: Les fractions, La Révolution française...">
+    </div>
+    <div class="form-group" id="rich-group">
+      <label>Contenu de la fiche</label>
+      <div class="toolbar" onpointerdown="event.preventDefault()">
+        <button onclick="fmt('formatBlock','h2')">Titre</button>
+        <button onclick="fmt('formatBlock','h3')">Sous-titre</button>
+        <button onclick="fmt('formatBlock','p')">Texte</button>
+        <button onclick="fmt('bold')"><b>G</b></button>
+        <button onclick="fmt('italic')"><i>I</i></button>
+        <button onclick="fmt('underline')"><u>S</u></button>
+        <button onclick="fmt('hiliteColor','#fde68a')">🖍️</button>
+        <button onclick="fmt('foreColor','#f87171')" style="color:#f87171">A</button>
+        <button onclick="fmt('foreColor','#34d399')" style="color:#34d399">A</button>
+        <button onclick="fmt('foreColor','#e8eaf6')">A</button>
+        <button onclick="fmt('insertUnorderedList')">• Liste</button>
+        <button onclick="fmt('insertOrderedList')">1. Liste</button>
+        <button onclick="fmt('formatBlock','blockquote')">💡 Encadré</button>
+        <button onclick="fmt('insertHorizontalRule')">―</button>
+        <button onclick="fmt('removeFormat')">✖</button>
+      </div>
+      <div id="fiche-input-content" class="editor rich" contenteditable="true" data-ph="Écris ta fiche ici : sélectionne du texte puis utilise les boutons..."></div>
+    </div>
+    <div class="form-group">
+      <label id="file-label">Ou importer un fichier (PDF ou image, 4 Mo max)</label>
+      <input type="file" id="fiche-file" accept="application/pdf,image/*">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-fiche')">Annuler</button>
+      <button class="btn btn-primary" id="btn-save-fiche" onclick="saveFiche()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-pw">
+  <div class="modal">
+    <h3>🔑 Changer le mot de passe</h3>
+    <div class="form-group"><label>Mot de passe actuel</label><input type="password" id="pw-old"></div>
+    <div class="form-group"><label>Nouveau mot de passe (6 caractères min.)</label><input type="password" id="pw-new"></div>
+    <div class="form-group"><label>Confirmer le nouveau</label><input type="password" id="pw-new2"></div>
+    <div id="pw-change-error" class="error-msg" style="display:none"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-pw')">Annuler</button>
+      <button class="btn btn-primary" onclick="changePw()">Valider</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────
+const DEFAULT_PASSWORD = "admin123"; // mot de passe de départ, à changer via le bouton 🔑
+let adminHash = null;
+
+const SUBJECTS = [
+  { id: "maths",     name: "Mathématiques",     emoji: "📐", color: "#6c63ff" },
+  { id: "francais",  name: "Français",           emoji: "📝", color: "#ec4899" },
+  { id: "histoire",  name: "Histoire-Géographie",emoji: "🌍", color: "#f59e0b" },
+  { id: "anglais",   name: "Anglais",            emoji: "🇬🇧", color: "#06b6d4" },
+  { id: "svt",       name: "SVT",               emoji: "🧬", color: "#34d399" },
+  { id: "physique",  name: "Physique-Chimie",    emoji: "⚗️",  color: "#f97316" },
+  { id: "techno",    name: "Technologie",        emoji: "💻", color: "#8b5cf6" },
+  { id: "espagnol",  name: "Espagnol",           emoji: "🇪🇸", color: "#ef4444" },
+  { id: "arts",      name: "Arts Plastiques",    emoji: "🎨", color: "#14b8a6" },
+  { id: "musique",   name: "Éducation Musicale", emoji: "🎵", color: "#e879f9" },
+  { id: "eps",       name: "EPS",                emoji: "⚽", color: "#84cc16" },
+  { id: "emc",       name: "EMC",               emoji: "⚖️",  color: "#64748b" },
+];
+
+// ─── STATE ────────────────────────────────────────────────
+let db = null;
+let isAdmin = false;
+let currentSubject = null;
+let currentFiche = null;
+let editingFicheId = null;
+let editingFormat = null;
+let ficheCounts = {};
+
+// ─── BASE DE DONNÉES (faux Firestore au-dessus d'un "store") ──
+function makeDB(store) {
+  const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+  const docRef = path => ({
+    id: path.split("/").pop(), path,
+    async get() { const v = await store.get(path); return { id: this.id, exists: v !== undefined, ref: this, data: () => v }; },
+    async set(d) { await store.put(path, d); },
+    async update(d) { const old = await store.get(path); await store.put(path, { ...(old || {}), ...d }); },
+    async delete() { await store.del(path); }
+  });
+  const colRef = (path, order) => ({
+    doc: id => docRef(path + "/" + (id || uid())),
+    orderBy: f => colRef(path, f),
+    async get() {
+      const pre = path + "/";
+      const entries = await store.list(pre);
+      const docs = entries.filter(([k]) => !k.slice(pre.length).includes("/"))
+        .map(([k, v]) => ({ id: k.slice(pre.length), exists: true, ref: docRef(k), data: () => v }));
+      if (order) docs.sort((x, y) => (x.data()[order] || 0) - (y.data()[order] || 0));
+      return { docs, size: docs.length };
+    }
+  });
+  return { doc: docRef, collection: p => colRef(p) };
+}
+
+// Stockage local (secours, propre à chaque téléphone)
+const idbStore = (() => {
+  let dbp;
+  const open = () => dbp || (dbp = new Promise((ok, ko) => {
+    const r = indexedDB.open("mes-revision", 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("kv");
+    r.onsuccess = () => ok(r.result); r.onerror = () => ko(r.error);
+  }));
+  const run = async (mode, fn) => {
+    const d = await open();
+    return new Promise((ok, ko) => {
+      const t = d.transaction("kv", mode), out = fn(t.objectStore("kv"));
+      t.oncomplete = () => ok(out.result); t.onerror = () => ko(t.error);
+    });
+  };
+  return {
+    get: p => run("readonly", s => s.get(p)),
+    put: (p, v) => run("readwrite", s => s.put(v, p)),
+    del: p => run("readwrite", s => s.delete(p)),
+    async list(pre) {
+      const range = IDBKeyRange.bound(pre, pre + "\uffff");
+      const keys = await run("readonly", s => s.getAllKeys(range));
+      const vals = await run("readonly", s => s.getAll(range));
+      return keys.map((k, i) => [k, vals[i]]);
+    }
+  };
+})();
+const localDB = makeDB(idbStore);
+
+// ─── BASE PARTAGÉE (jsonbin.io) : colle ici ton ID et ta clé ──
+const BIN_ID = "6abbc9e6ffd5d160533bbe4c";
+const MASTER_KEY = "$2a$10$9dPigUgT7UGgtwPZ30GNKeC7rdYXBRvn1zwVm7DNIXX51c9Sffe7G";
+function remoteStore(id, key) {
+  const url = "https://api.jsonbin.io/v3/b/" + id;
+  const headers = { "Content-Type": "application/json", "X-Master-Key": key, "X-Bin-Meta": "false" };
+  let cache = null, stamp = 0, chain = Promise.resolve();
+  async function load(force) {
+    if (!force && cache && Date.now() - stamp < 4000) return cache;
+    const r = await fetch(url + "/latest", { headers, cache: "no-store" });
+    if (!r.ok) throw new Error("lecture refusée (code " + r.status + ")");
+    const j = await r.json();
+    cache = (j && typeof j === "object") ? j : {}; stamp = Date.now();
+    return cache;
+  }
+  function mutate(fn) {
+    const p = chain.then(async () => {
+      const c = await load(true); fn(c);
+      const r = await fetch(url, { method: "PUT", headers, body: JSON.stringify(c) });
+      if (!r.ok) throw new Error("écriture refusée (code " + r.status + ")");
+      cache = c; stamp = Date.now();
+    });
+    chain = p.catch(() => {});
+    return p;
+  }
+  return {
+    load,
+    get: async p => (await load())[p],
+    put: (p, v) => mutate(c => { c[p] = v; }),
+    del: p => mutate(c => { delete c[p]; }),
+    list: async pre => Object.entries(await load()).filter(([k]) => k.startsWith(pre))
+  };
+}
+
+// ─── FIREBASE (base partagée pour tout le monde) ──────────
+// Colle ici la config de ton projet Firebase (voir les étapes).
+const FIREBASE_CONFIG = {
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
+};
+function loadScript(u) {
+  return new Promise((ok, ko) => { const sc = document.createElement("script"); sc.src = u; sc.onload = ok; sc.onerror = ko; document.head.appendChild(sc); });
+}
+async function initFirebase() {
+  if (!FIREBASE_CONFIG.apiKey || !FIREBASE_CONFIG.projectId) return null;
+  const V = "https://www.gstatic.com/firebasejs/10.12.2/";
+  await loadScript(V + "firebase-app-compat.js");
+  await loadScript(V + "firebase-firestore-compat.js");
+  firebase.initializeApp(FIREBASE_CONFIG);
+  return firebase.firestore();
+}
+
+// ─── DB INIT ──────────────────────────────────────────────
+async function initDB() {
+  if (BIN_ID && MASTER_KEY) { try { const st = remoteStore(BIN_ID, MASTER_KEY); await st.load(true); db = makeDB(st); } catch(e) { db = null; } }
+  if (!db) { try { db = await initFirebase(); } catch(e) { db = null; } }
+  if (!db) { try { db = (typeof claude !== "undefined") ? await claude.use("db") : null; } catch(e) { db = null; } }
+  if (!db) db = localDB;
+  if (!db) {
+    document.getElementById("loading").innerHTML = "❌ Impossible de se connecter à la base de données.";
+    return;
+  }
+
+  await loadAdminHash();
+  try {
+    if (localStorage.getItem("rev_admin") === adminHash) {
+      isAdmin = true;
+    }
+  } catch(e) {}
+
+  await loadCounts();
+  showHome();
+}
+
+async function loadCounts() {
+  ficheCounts = {};
+  for (const sub of SUBJECTS) {
+    try {
+      const snap = await db.collection("fiches_" + sub.id).get();
+      ficheCounts[sub.id] = snap.docs ? snap.docs.length : 0;
+    } catch(e) {
+      ficheCounts[sub.id] = 0;
+    }
+  }
+}
+
+// ─── MOT DE PASSE ─────────────────────────────────────────
+async function sha(str) {
+  const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join("");
+}
+async function loadAdminHash() {
+  try {
+    const d = (await db.doc("config/admin").get()).data();
+    adminHash = d && d.hash ? d.hash : await sha(DEFAULT_PASSWORD);
+  } catch(e) { adminHash = await sha(DEFAULT_PASSWORD); }
+}
+function openPwModal() {
+  ["pw-old","pw-new","pw-new2"].forEach(i => document.getElementById(i).value = "");
+  document.getElementById("pw-change-error").style.display = "none";
+  document.getElementById("modal-pw").classList.add("open");
+}
+async function changePw() {
+  const err = document.getElementById("pw-change-error");
+  const o = document.getElementById("pw-old").value, n = document.getElementById("pw-new").value, n2 = document.getElementById("pw-new2").value;
+  const fail = m => { err.textContent = m; err.style.display = "block"; };
+  await loadAdminHash();
+  if (await sha(o) !== adminHash) return fail("Mot de passe actuel incorrect");
+  if (n.length < 6) return fail("Le nouveau mot de passe est trop court (6 min.)");
+  if (n !== n2) return fail("Les deux mots de passe ne correspondent pas");
+  try {
+    const h = await sha(n);
+    await db.doc("config/admin").set({ hash: h });
+    adminHash = h;
+    try { localStorage.setItem("rev_admin", h); } catch(e) {}
+    closeModal("modal-pw");
+    showToast("Mot de passe modifié ✓", "success");
+  } catch(e) { fail("Impossible d'enregistrer (droits d'écriture ?)"); }
+}
+
+// ─── CONTENU RICHE ────────────────────────────────────────
+const OK_TAGS = new Set("H2 H3 P DIV BR B STRONG I EM U MARK SPAN UL OL LI BLOCKQUOTE HR".split(" "));
+function clean(html) {
+  const doc = new DOMParser().parseFromString("<body>" + html, "text/html");
+  (function walk(n) {
+    for (const c of [...n.childNodes]) {
+      if (c.nodeType === 3) continue;
+      if (c.nodeType !== 1) { c.remove(); continue; }
+      if (!OK_TAGS.has(c.tagName)) {
+        if (/^(SCRIPT|STYLE|IFRAME|OBJECT|EMBED)$/.test(c.tagName)) { c.remove(); continue; }
+        walk(c); c.replaceWith(...c.childNodes); continue;
+      }
+      const st = (c.getAttribute("style") || "").match(/(background-)?color:\s*(#[0-9a-f]{3,8}|rgba?\([\d\s,.]+\))/gi);
+      [...c.attributes].forEach(a => c.removeAttribute(a.name));
+      if (st) c.setAttribute("style", st.join(";"));
+      walk(c);
+    }
+  })(doc.body);
+  return doc.body.innerHTML;
+}
+function toHtml(d) {
+  return d.format === "html" ? clean(d.content) : escHtml(d.content || "").replace(/\n/g, "<br>");
+}
+function fmt(cmd, val) {
+  document.getElementById("fiche-input-content").focus();
+  try { document.execCommand("styleWithCSS", false, cmd !== "formatBlock"); } catch(e) {}
+  document.execCommand(cmd, false, val || null);
+}
+
+// ─── FICHES FICHIER (PDF / image) ─────────────────────────
+const CHUNK = 200000;
+const partsPath = id => "fiches_" + currentSubject.id + "/" + id + "/parts";
+function fileToB64(f) {
+  return new Promise((ok, ko) => { const r = new FileReader(); r.onload = () => ok(r.result.split(",")[1]); r.onerror = ko; r.readAsDataURL(f); });
+}
+async function delParts(id) {
+  try { const snap = await db.collection(partsPath(id)).get(); for (const x of snap.docs) await x.ref.delete(); } catch(e) {}
+}
+async function ensurePdfJs() {
+  if (window.pdfjsLib) return;
+  const B = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+  const L = u => new Promise((ok, ko) => { const sc = document.createElement("script"); sc.src = u; sc.onload = ok; sc.onerror = ko; document.head.appendChild(sc); });
+  await L(B + "pdf.min.js"); await L(B + "pdf.worker.min.js");
+  pdfjsLib.GlobalWorkerOptions.workerSrc = B + "pdf.worker.min.js";
+}
+// Transforme un PDF ou une image en petites pages JPEG (légères pour la base gratuite)
+async function shrinkFile(file) {
+  const tries = [[750, 0.45], [600, 0.38], [480, 0.3], [380, 0.25]];
+  let out = [];
+  for (const [W, q] of tries) {
+    out = [];
+    if (file.type.startsWith("image/")) {
+      const im = await new Promise((ok, ko) => { const i = new Image(); i.onload = () => ok(i); i.onerror = ko; i.src = URL.createObjectURL(file); });
+      const sc = Math.min(1, (W * 1.4) / Math.max(im.naturalWidth, im.naturalHeight));
+      const cv = document.createElement("canvas"); cv.width = Math.round(im.naturalWidth * sc); cv.height = Math.round(im.naturalHeight * sc);
+      cv.getContext("2d").drawImage(im, 0, 0, cv.width, cv.height);
+      out.push(cv.toDataURL("image/jpeg", q).split(",")[1]);
+    } else {
+      await ensurePdfJs();
+      const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+      if (pdf.numPages > 15) throw new Error("PDF trop long (15 pages max avec ce stockage gratuit)");
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const pg = await pdf.getPage(i), v = pg.getViewport({ scale: W / pg.getViewport({ scale: 1 }).width });
+        const cv = document.createElement("canvas"); cv.width = Math.round(v.width); cv.height = Math.round(v.height);
+        const cx = cv.getContext("2d"); cx.fillStyle = "#fff"; cx.fillRect(0, 0, cv.width, cv.height);
+        await pg.render({ canvasContext: cx, viewport: v }).promise;
+        out.push(cv.toDataURL("image/jpeg", q).split(",")[1]);
+      }
+    }
+    if (out.reduce((n, x) => n + x.length, 0) < 350000) return out;
+  }
+  throw new Error("Fichier trop lourd pour ce stockage gratuit (limité à 1 Mo au total). Coupe-le en plusieurs fiches plus courtes.");
+}
+async function extractPdfPositioned(file) {
+  await ensurePdfJs();
+  const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+  if (pdf.numPages > 60) throw new Error("PDF trop long (60 pages max)");
+  let pages = [];
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const pg = await pdf.getPage(i);
+    const tc = await pg.getTextContent();
+    const [x0, y0, x1, y1] = pg.view;
+    const w = x1 - x0, h = y1 - y0;
+    const items = [];
+    tc.items.forEach(it => {
+      if (!it.str || !it.str.trim()) return;
+      const t = it.transform;
+      const fs = Math.hypot(t[2], t[3]) || Math.hypot(t[0], t[1]) || 10;
+      const ang = Math.round((Math.atan2(t[1], t[0]) * 180 / Math.PI) * 100) / 100;
+      items.push({ s: it.str, x: Math.round((t[4] - x0) * 10) / 10, y: Math.round((t[5] - y0) * 10) / 10, fs: Math.round(fs * 10) / 10, a: ang || 0 });
+    });
+    pages.push({ w: Math.round(w), h: Math.round(h), items });
+  }
+  return pages;
+}
+async function saveFileFiche(title, file) {
+  if (!file) { await db.doc("fiches_" + currentSubject.id + "/" + editingFicheId).update({ title }); return; }
+  const ref = editingFicheId ? db.doc("fiches_" + currentSubject.id + "/" + editingFicheId) : db.collection("fiches_" + currentSubject.id).doc();
+
+  // PDF texte : on garde la position exacte de chaque bloc de texte, pour un rendu identique à l'original
+  if (file.type === "application/pdf") {
+    showToast("Lecture du PDF...", "");
+    let pages = [];
+    try { pages = await extractPdfPositioned(file); } catch (e) { pages = []; }
+    const totalChars = pages.reduce((n, p) => n + p.items.reduce((m, it) => m + it.s.length, 0), 0);
+    const totalItems = pages.reduce((n, p) => n + p.items.length, 0);
+    if (totalChars > totalItems * 1.5 && totalChars > 20) {
+      if (editingFicheId) await delParts(editingFicheId);
+      const meta = { title, content: JSON.stringify(pages), format: "pdfpos" };
+      if (editingFicheId) await ref.update(meta); else await ref.set({ ...meta, createdAt: Date.now() });
+      return;
+    }
+    // Sinon, PDF scanné (image) sans texte : on repasse par la compression en images
+  }
+
+  showToast("Compression du fichier...", "");
+  const pages = await shrinkFile(file);
+  if (editingFicheId) await delParts(editingFicheId);
+  for (let i = 0; i < pages.length; i++) await db.doc(partsPath(ref.id) + "/p" + i).set({ i, d: pages[i] });
+  const meta = { title, format: "file", fileName: file.name, fileType: "multi/jpeg", parts: pages.length };
+  if (editingFicheId) await ref.update(meta); else await ref.set({ ...meta, createdAt: Date.now() });
+}
+function renderPdfText(d) {
+  const el = document.getElementById("reader-content");
+  el.innerHTML = ""; el.style.padding = "12px"; el.style.background = "transparent"; el.style.border = "none";
+  let htmlPages = [];
+  try { htmlPages = JSON.parse(d.content); } catch(e) { htmlPages = [d.content]; }
+  let zoom = 1;
+  const bar = document.createElement("div");
+  bar.style.cssText = "display:flex;gap:8px;align-items:center;margin-bottom:12px;position:sticky;top:calc(60px + env(safe-area-inset-top,0px));z-index:5;background:var(--surface);padding:6px 10px;border-radius:10px;width:fit-content";
+  const lbl = document.createElement("span"); lbl.style.cssText = "font-size:.8rem;color:var(--text-muted);min-width:44px;text-align:center"; lbl.textContent = "100%";
+  const holder = document.createElement("div"); holder.style.cssText = "overflow:auto;max-height:78vh;-webkit-overflow-scrolling:touch";
+  const wrap = document.createElement("div"); wrap.style.cssText = "transform-origin:top center;transition:transform .12s";
+  const setZ = z => { zoom = Math.min(3, Math.max(0.5, z)); lbl.textContent = Math.round(zoom * 100) + "%"; wrap.style.transform = "scale(" + zoom + ")"; };
+  const mk = (t, f) => { const x = document.createElement("button"); x.className = "btn btn-ghost btn-sm"; x.textContent = t; x.onclick = f; bar.appendChild(x); };
+  mk("➖", () => setZ(zoom - 0.15)); bar.appendChild(lbl); mk("➕", () => setZ(zoom + 0.15)); mk("Ajuster", () => setZ(1));
+  htmlPages.forEach(html => {
+    const page = document.createElement("div");
+    page.style.cssText = "background:#fff;color:#1a1a1a;max-width:700px;margin:0 auto 24px;padding:48px 56px;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,.35);line-height:1.7;font-size:.98rem";
+    page.innerHTML = html || "<p style=\"color:#999\">(page vide)</p>";
+    wrap.appendChild(page);
+  });
+  holder.appendChild(wrap);
+  el.appendChild(bar); el.appendChild(holder);
+}
+function renderPdfPositioned(d) {
+  const el = document.getElementById("reader-content");
+  el.innerHTML = ""; el.style.padding = "12px"; el.style.background = "transparent"; el.style.border = "none";
+  let pages = [];
+  try { pages = JSON.parse(d.content); } catch(e) { pages = []; }
+  let zoom = 1;
+  const bar = document.createElement("div");
+  bar.style.cssText = "display:flex;gap:8px;align-items:center;margin-bottom:12px;position:sticky;top:calc(60px + env(safe-area-inset-top,0px));z-index:5;background:var(--surface);padding:6px 10px;border-radius:10px;width:fit-content";
+  const lbl = document.createElement("span"); lbl.style.cssText = "font-size:.8rem;color:var(--text-muted);min-width:44px;text-align:center"; lbl.textContent = "100%";
+  const holder = document.createElement("div"); holder.style.cssText = "overflow:auto;max-height:78vh;-webkit-overflow-scrolling:touch";
+  const wrap = document.createElement("div"); wrap.style.cssText = "transform-origin:top center;transition:transform .12s";
+  const setZ = z => { zoom = Math.min(3, Math.max(0.5, z)); lbl.textContent = Math.round(zoom * 100) + "%"; wrap.style.transform = "scale(" + zoom + ")"; };
+  const mk = (t, f) => { const x = document.createElement("button"); x.className = "btn btn-ghost btn-sm"; x.textContent = t; x.onclick = f; bar.appendChild(x); };
+  mk("➖", () => setZ(zoom - 0.15)); bar.appendChild(lbl); mk("➕", () => setZ(zoom + 0.15)); mk("Ajuster", () => setZ(1));
+  const TARGET_W = 700;
+  pages.forEach(p => {
+    const scale = TARGET_W / (p.w || 595);
+    const page = document.createElement("div");
+    page.style.cssText = "position:relative;background:#fff;width:" + TARGET_W + "px;height:" + Math.round((p.h || 842) * scale) + "px;margin:0 auto 24px;border-radius:4px;box-shadow:0 4px 24px rgba(0,0,0,.35);overflow:hidden";
+    (p.items || []).forEach(it => {
+      const sp = document.createElement("span");
+      sp.textContent = it.s;
+      const rot = it.a ? "rotate(" + (-it.a) + "deg)" : "none";
+      sp.style.cssText = "position:absolute;left:" + (it.x * scale) + "px;bottom:" + (it.y * scale) + "px;font-size:" + (it.fs * scale) + "px;line-height:1;white-space:pre;color:#1a1a1a;transform-origin:left bottom;transform:" + rot + ";font-family:Arial,Helvetica,sans-serif";
+      page.appendChild(sp);
+    });
+    wrap.appendChild(page);
+  });
+  holder.appendChild(wrap);
+  el.appendChild(bar); el.appendChild(holder);
+}
+function renderPages(d, arr) {
+  const el = document.getElementById("reader-content");
+  el.innerHTML = ""; el.style.padding = "12px";
+  let zoom = 1;
+  const bar = document.createElement("div");
+  bar.style.cssText = "display:flex;gap:8px;align-items:center;margin-bottom:12px;position:sticky;top:calc(60px + env(safe-area-inset-top,0px));z-index:5;background:var(--surface);padding:6px 0";
+  const lbl = document.createElement("span"); lbl.style.cssText = "font-size:.8rem;color:var(--text-muted);min-width:44px;text-align:center"; lbl.textContent = "100%";
+  const holder = document.createElement("div"); holder.style.cssText = "overflow:auto;max-height:78vh;-webkit-overflow-scrolling:touch;text-align:center";
+  const setZ = z => { zoom = Math.min(5, Math.max(0.5, z)); lbl.textContent = Math.round(zoom * 100) + "%"; holder.querySelectorAll("img").forEach(i => i.style.width = (zoom * 100) + "%"); };
+  const mk = (t, f) => { const x = document.createElement("button"); x.className = "btn btn-ghost btn-sm"; x.textContent = t; x.onclick = f; bar.appendChild(x); };
+  mk("➖", () => setZ(zoom - 0.25)); bar.appendChild(lbl); mk("➕", () => setZ(zoom + 0.25)); mk("Ajuster", () => setZ(1));
+  arr.forEach(b => { const im = document.createElement("img"); im.src = "data:image/jpeg;base64," + b; im.style.cssText = "width:100%;max-width:none;display:block;margin:0 auto 10px;border-radius:6px;background:#fff"; holder.appendChild(im); });
+  el.appendChild(bar); el.appendChild(holder);
+}
+async function renderFile(d, id) {
+  const el = document.getElementById("reader-content");
+  el.innerHTML = '<div class="loader"><div class="spin"></div> Chargement du fichier...</div>';
+  const snap = await db.collection(partsPath(id)).get();
+  const arr = []; snap.docs.forEach(x => { const v = x.data(); arr[v.i] = v.d; });
+  if (d.fileType === "multi/jpeg") { renderPages(d, arr); return; }
+  const b64 = arr.join("");
+  const bin = atob(b64), bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  const blob = new Blob([bytes], { type: d.fileType });
+  el.innerHTML = "";
+  el.style.padding = "12px";
+  let zoom = 1, token = 0, redraw = () => {};
+  const bar = document.createElement("div");
+  bar.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;position:sticky;top:calc(60px + env(safe-area-inset-top,0px));z-index:5;background:var(--surface);padding:6px 0";
+  const mk = (t, f) => { const x = document.createElement("button"); x.className = "btn btn-ghost btn-sm"; x.textContent = t; x.onclick = f; bar.appendChild(x); return x; };
+  const lbl = document.createElement("span"); lbl.style.cssText = "font-size:.8rem;color:var(--text-muted);min-width:44px;text-align:center";
+  const setZ = z => { zoom = Math.min(5, Math.max(0.5, z)); lbl.textContent = Math.round(zoom * 100) + "%"; redraw(); };
+  mk("➖", () => setZ(zoom - 0.25)); bar.appendChild(lbl); mk("➕", () => setZ(zoom + 0.25)); mk("Ajuster", () => setZ(1));
+  mk("⬇️ Télécharger", async () => {
+    try { const dl = await claude.use("downloads"); await dl.save({ filename: d.fileName, data: blob }); return; } catch(e) { if (e && e.code === "declined") return; }
+    try { const f = new File([blob], d.fileName, { type: d.fileType }); if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f] }); return; } } catch(e) { if (e && e.name === "AbortError") return; }
+    try { window.open(URL.createObjectURL(blob), "_blank"); } catch(e) { showToast("Téléchargement impossible sur cet appareil", ""); }
+  });
+  const holder = document.createElement("div"); holder.style.cssText = "overflow:auto;max-height:78vh;-webkit-overflow-scrolling:touch;text-align:center";
+  el.appendChild(bar); el.appendChild(holder); lbl.textContent = "100%";
+  if (d.fileType.startsWith("image/")) {
+    const img = document.createElement("img"); img.src = "data:" + d.fileType + ";base64," + b64; img.style.cssText = "border-radius:10px;max-width:none";
+    holder.appendChild(img);
+    redraw = () => { img.style.width = (zoom * 100) + "%"; }; redraw();
+    return;
+  }
+  try {
+    if (!window.pdfjsLib) {
+      const B = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+      const L = u => new Promise((ok, ko) => { const sc = document.createElement("script"); sc.src = u; sc.onload = ok; sc.onerror = ko; document.head.appendChild(sc); });
+      await L(B + "pdf.min.js"); await L(B + "pdf.worker.min.js");
+      pdfjsLib.GlobalWorkerOptions.workerSrc = B + "pdf.worker.min.js";
+    }
+    const pdf = await pdfjsLib.getDocument({ data: bytes.slice() }).promise;
+    redraw = async () => {
+      const t = ++token, w = Math.max(200, (el.clientWidth - 24) * zoom), dpr = Math.min(window.devicePixelRatio || 1, 2);
+      holder.innerHTML = "";
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const pg = await pdf.getPage(i);
+        if (t !== token) return;
+        const sc = w / pg.getViewport({ scale: 1 }).width, v = pg.getViewport({ scale: sc * dpr });
+        const cv = document.createElement("canvas"); cv.width = v.width; cv.height = v.height;
+        cv.style.cssText = "width:" + w + "px;height:" + (v.height / dpr) + "px;display:block;margin:0 auto 10px;border-radius:6px;background:#fff";
+        holder.appendChild(cv);
+        await pg.render({ canvasContext: cv.getContext("2d"), viewport: v }).promise;
+      }
+    };
+    await redraw();
+  } catch(e) {
+    const fr = document.createElement("iframe"); fr.src = URL.createObjectURL(blob); fr.style.cssText = "width:100%;height:70vh;border:none;border-radius:10px;background:#fff";
+    holder.innerHTML = ""; holder.appendChild(fr);
+  }
+}
+
+// ─── VIEWS ────────────────────────────────────────────────
+function hideAll() {
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("home-view").style.display = "none";
+  document.getElementById("fiches-view").style.display = "none";
+  document.getElementById("reader-view").style.display = "none";
+  document.getElementById("admin-gate").style.display = "none";
+}
+
+function showHome() {
+  hideAll();
+  updateNav();
+  renderSubjects();
+  document.getElementById("home-view").style.display = "block";
+}
+
+function renderSubjects() {
+  const grid = document.getElementById("subjects-grid");
+  grid.innerHTML = "";
+  for (const sub of SUBJECTS) {
+    const card = document.createElement("div");
+    card.className = "subject-card";
+    card.style.setProperty("--mat-color", sub.color);
+    const count = ficheCounts[sub.id] || 0;
+    card.innerHTML = `
+      <div class="subject-emoji">${sub.emoji}</div>
+      <div class="subject-name">${sub.name}</div>
+      <div class="subject-count">${count} fiche${count !== 1 ? "s" : ""}</div>
+    `;
+    card.onclick = () => showFiches(sub);
+    grid.appendChild(card);
+  }
+}
+
+async function showFiches(sub) {
+  currentSubject = sub;
+  hideAll();
+  document.getElementById("fiches-view").style.display = "block";
+  document.getElementById("fiches-title").textContent = sub.emoji + " " + sub.name;
+  document.getElementById("btn-add-fiche").style.display = isAdmin ? "inline-flex" : "none";
+
+  const listEl = document.getElementById("fiches-list");
+  listEl.innerHTML = '<div class="loader"><div class="spin"></div> Chargement...</div>';
+
+  try {
+    const snap = await db.collection("fiches_" + sub.id).orderBy("createdAt").get();
+    const docs = snap.docs || [];
+
+    if (docs.length === 0) {
+      listEl.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">📭</div>
+          <p>${isAdmin ? "Aucune fiche pour l'instant. Ajoutes-en une !" : "Aucune fiche disponible pour l'instant."}</p>
+        </div>`;
+      return;
+    }
+
+    listEl.innerHTML = "";
+    for (const doc of docs) {
+      const d = doc.data();
+      const card = document.createElement("div");
+      card.className = "fiche-card";
+      card.innerHTML = `
+        <div class="fiche-info">
+          <div class="fiche-title">${escHtml(d.title)}</div>
+          <div class="fiche-meta">Ajoutée le ${formatDate(d.createdAt)}</div>
+        </div>
+        <div class="fiche-actions">
+          <button class="btn btn-ghost btn-sm" onclick="readFiche(event,'${doc.id}')">📖 Lire</button>
+          ${isAdmin ? `<button class="btn btn-ghost btn-sm" onclick="editFiche(event,'${doc.id}')">✏️</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteFiche(event,'${doc.id}')">🗑️</button>` : ""}
+        </div>
+      `;
+      listEl.appendChild(card);
+    }
+  } catch(e) {
+    listEl.innerHTML = `<div class="empty-state"><p>Erreur de chargement</p></div>`;
+  }
+}
+
+async function readFiche(e, ficheId) {
+  e.stopPropagation();
+  hideAll();
+  document.getElementById("reader-view").style.display = "block";
+  document.getElementById("reader-title").textContent = "Chargement...";
+  document.getElementById("reader-content").textContent = ""; document.getElementById("reader-content").style.padding = "";
+
+  try {
+    const doc = await db.doc("fiches_" + currentSubject.id + "/" + ficheId).get();
+    const d = doc.data();
+    currentFiche = { id: ficheId, ...d };
+
+    document.getElementById("reader-title").textContent = d.title;
+    if (d.format === "file") await renderFile(d, ficheId);
+    else if (d.format === "pdftext") renderPdfText(d);
+    else if (d.format === "pdfpos") renderPdfPositioned(d);
+    else document.getElementById("reader-content").innerHTML = toHtml(d);
+
+    const adminBtns = document.getElementById("reader-admin-btns");
+    adminBtns.innerHTML = isAdmin ? `
+      <button class="btn btn-ghost btn-sm" onclick="editFicheFromReader()">✏️ Modifier</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteFicheFromReader()">🗑️ Supprimer</button>
+    ` : "";
+  } catch(e) {
+    document.getElementById("reader-content").textContent = "Erreur de chargement.";
+  }
+}
+
+function backToFiches() {
+  showFiches(currentSubject);
+}
+
+// ─── ADMIN ────────────────────────────────────────────────
+function updateNav() {
+  document.getElementById("nav-badge").style.display = isAdmin ? "inline-block" : "none";
+  document.getElementById("btn-admin-toggle").style.display = isAdmin ? "none" : "inline-flex";
+  document.getElementById("btn-admin-logout").style.display = isAdmin ? "inline-flex" : "none";
+  document.getElementById("btn-admin-pw").style.display = isAdmin ? "inline-flex" : "none";
+}
+
+function showAdminLogin() {
+  hideAll();
+  document.getElementById("admin-gate").style.display = "block";
+  document.getElementById("pw-input").value = "";
+  document.getElementById("pw-error").style.display = "none";
+  setTimeout(() => document.getElementById("pw-input").focus(), 100);
+}
+
+async function checkAdminPw() {
+  const val = document.getElementById("pw-input").value;
+  await loadAdminHash();
+  if (await sha(val) === adminHash) {
+    isAdmin = true;
+    try { localStorage.setItem("rev_admin", adminHash); } catch(e) {}
+    showHome();
+  } else {
+    document.getElementById("pw-error").style.display = "block";
+  }
+}
+
+function cancelAdmin() { showHome(); }
+
+function logoutAdmin() {
+  isAdmin = false;
+  try { localStorage.removeItem("rev_admin"); } catch(e) {}
+  showHome();
+}
+
+// ─── CRUD FICHES ──────────────────────────────────────────
+function syncModal() {
+  document.getElementById("fiche-file").value = "";
+  document.getElementById("rich-group").style.display = editingFormat === "file" ? "none" : "block";
+  document.getElementById("file-label").textContent = editingFormat === "file" ? "Remplacer le fichier (laisse vide pour le garder)" : "Ou importer un fichier (PDF ou image, 4 Mo max)";
+}
+function openAddFiche() {
+  editingFicheId = null; editingFormat = null;
+  document.getElementById("modal-fiche-title").textContent = "Nouvelle fiche";
+  document.getElementById("fiche-input-title").value = "";
+  document.getElementById("fiche-input-content").innerHTML = "";
+  syncModal();
+  document.getElementById("modal-fiche").classList.add("open");
+  setTimeout(() => document.getElementById("fiche-input-title").focus(), 100);
+}
+
+async function editFiche(e, ficheId) {
+  e.stopPropagation();
+  editingFicheId = ficheId;
+  try {
+    const doc = await db.doc("fiches_" + currentSubject.id + "/" + ficheId).get();
+    const d = doc.data();
+    document.getElementById("modal-fiche-title").textContent = "Modifier la fiche";
+    document.getElementById("fiche-input-title").value = d.title;
+    editingFormat = d.format || null;
+    if (editingFormat !== "file" && editingFormat !== "pdftext" && editingFormat !== "pdfpos") document.getElementById("fiche-input-content").innerHTML = toHtml(d);
+    syncModal();
+    document.getElementById("modal-fiche").classList.add("open");
+  } catch(e) {}
+}
+
+function editFicheFromReader() {
+  if (!currentFiche) return;
+  editingFicheId = currentFiche.id;
+  document.getElementById("modal-fiche-title").textContent = "Modifier la fiche";
+  document.getElementById("fiche-input-title").value = currentFiche.title;
+  editingFormat = currentFiche.format || null;
+  if (editingFormat !== "file" && editingFormat !== "pdftext" && editingFormat !== "pdfpos") document.getElementById("fiche-input-content").innerHTML = toHtml(currentFiche);
+  syncModal();
+  document.getElementById("modal-fiche").classList.add("open");
+}
+
+async function saveFiche() {
+  const title = document.getElementById("fiche-input-title").value.trim();
+  const ed = document.getElementById("fiche-input-content");
+  const content = clean(ed.innerHTML).trim();
+  const file = document.getElementById("fiche-file").files[0];
+  const isFile = !!file || (editingFicheId && (editingFormat === "file" || editingFormat === "pdftext" || editingFormat === "pdfpos"));
+  if (file && file.size > 25 * 1024 * 1024) { showToast("Fichier trop gros (25 Mo max)", ""); return; }
+  if (!title || (!isFile && !ed.textContent.trim() && !ed.querySelector("hr"))) { showToast("Remplis le titre et le contenu !", ""); return; }
+
+  const btn = document.getElementById("btn-save-fiche");
+  btn.textContent = "Enregistrement...";
+  btn.disabled = true;
+
+  try {
+    if (isFile) {
+      await saveFileFiche(title, file);
+      showToast("Fiche enregistrée ✓", "success");
+    } else if (editingFicheId) {
+      await db.doc("fiches_" + currentSubject.id + "/" + editingFicheId).update({ title, content, format: "html" });
+      showToast("Fiche modifiée ✓", "success");
+    } else {
+      const newRef = db.collection("fiches_" + currentSubject.id).doc();
+      await newRef.set({ title, content, format: "html", createdAt: Date.now() });
+      showToast("Fiche ajoutée ✓", "success");
+    }
+    closeModal("modal-fiche");
+    await loadCounts();
+    showFiches(currentSubject);
+  } catch(err) {
+    console.error(err);
+    showToast("Erreur : " + ((err && err.message) || err), "");
+  }
+  btn.textContent = "Enregistrer";
+  btn.disabled = false;
+}
+
+async function deleteFiche(e, ficheId) {
+  e.stopPropagation();
+  if (!confirm("Supprimer cette fiche ?")) return;
+  try {
+    await delParts(ficheId);
+    await db.doc("fiches_" + currentSubject.id + "/" + ficheId).delete();
+    showToast("Fiche supprimée", "success");
+    await loadCounts();
+    showFiches(currentSubject);
+  } catch(err) {
+    console.error(err);
+    showToast("Erreur suppression : " + ((err && err.message) || err), "");
+  }
+}
+
+async function deleteFicheFromReader() {
+  if (!currentFiche) return;
+  if (!confirm("Supprimer cette fiche ?")) return;
+  try {
+    await delParts(currentFiche.id);
+    await db.doc("fiches_" + currentSubject.id + "/" + currentFiche.id).delete();
+    showToast("Fiche supprimée", "success");
+    await loadCounts();
+    showFiches(currentSubject);
+  } catch(err) {
+    console.error(err);
+    showToast("Erreur suppression : " + ((err && err.message) || err), "");
+  }
+}
+
+// ─── UTILS ────────────────────────────────────────────────
+function closeModal(id) {
+  document.getElementById(id).classList.remove("open");
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (type ? " " + type : "");
+  setTimeout(() => { t.className = "toast"; }, 3000);
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function formatDate(ts) {
+  if (!ts) return "–";
+  const d = new Date(ts);
+  return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+}
+
+// Close modal on overlay click
+document.getElementById("modal-pw").addEventListener("click", function(e) { if (e.target === this) closeModal("modal-pw"); });
+document.getElementById("modal-fiche").addEventListener("click", function(e) {
+  if (e.target === this) closeModal("modal-fiche");
+});
+
+// ─── BOOT ─────────────────────────────────────────────────
+initDB();
+</script>
+</body>
+</html>
