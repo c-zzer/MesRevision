@@ -225,7 +225,7 @@ main { max-width: 680px; margin: 0 auto; padding: 12px 18px 40px; }
 .hero h1 { font: 800 clamp(2.5rem, 12vw, 3.5rem)/.98 var(--d); letter-spacing: -.045em; }
 .hero h1 em { font-style: normal; }
 .hero p { margin-top: 8px; font-size: 1.02rem; font-weight: 700; color: var(--ink); }
-.hero-streak { flex: none; align-self: flex-start; margin-top: 8px; background: var(--sun); border-radius: 14px; padding: 7px 13px; font: 800 17px/1.1 var(--d); letter-spacing: -.02em;
+.hero-streak { flex: none; align-self: flex-start; margin-top: 40px; margin-right: 6px; background: var(--sun); border-radius: 14px; padding: 7px 13px; font: 800 17px/1.1 var(--d); letter-spacing: -.02em;
   transform: rotate(-4deg); border: var(--bw) solid var(--ink); box-shadow: var(--shadow); white-space: nowrap; }
 .hero-streak[hidden] { display: none; }
 .section-title { font: 800 22px/1.1 var(--d); letter-spacing: -.03em; margin: 8px 2px 12px; text-transform: none; color: var(--ink); }
@@ -2359,11 +2359,11 @@ body.has-ipad-side .admin-menu { left: 314px; }
 #btn-inv .np{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;overflow:hidden}
 #btn-inv .np svg{width:100%;height:100%;display:block;transform:scale(1.12) translateY(5%)}
 #btn-inv .np.ic svg{width:24px;height:24px;transform:none}
-#btn-inv.pet{width:auto;min-width:var(--tb);height:60px;overflow:visible;border:0!important;box-shadow:none!important;background:transparent!important;border-radius:0!important}
+#btn-inv.pet{width:auto;min-width:var(--tb);height:84px;overflow:visible;border:0!important;box-shadow:none!important;background:transparent!important;border-radius:0!important}
 #btn-inv.pet:after{display:none}
 #btn-inv.pet:active,#btn-inv.pet:hover{transform:none;box-shadow:none}
-#btn-inv.pet .np{width:60px;height:60px;border-radius:0;overflow:visible}
-#btn-inv.pet .np svg{width:60px;height:60px;transform:none;overflow:visible;filter:drop-shadow(0 3px 0 rgba(15,59,46,.25))}
+#btn-inv.pet .np{width:84px;height:84px;border-radius:0;overflow:visible}
+#btn-inv.pet .np svg{width:84px;height:84px;transform:none;overflow:visible;filter:drop-shadow(0 3px 0 rgba(15,59,46,.25))}
 #btn-inv.pet:active .np{transform:scale(.92)}
 /* les 3 points du menu admin : à gauche, juste après la pastille ADMIN */
 #btn-admin-menu{position:fixed;z-index:101;top:calc(env(safe-area-inset-top,0px) + 12px);left:120px}
@@ -6872,7 +6872,7 @@ function renderNavPet() {
   el.classList.toggle("ic", !face);
   { const b = el.parentNode; if (b) { b.classList.toggle("pet", !!face); b.style.background = ""; } }
   // Ta bestiole entière, avec ses cosmétiques et sa danse, sans cadre ni fond (le rond avec une patte reste tant qu'aucune bestiole n'est équipée)
-  el.innerHTML = face ? (dc ? shDanceArt(f.m, dc, f.ce || [], col, 60) : shArt(f.m, f.ce || [], col, 60)) : NAV_PAW;
+  el.innerHTML = face ? (dc ? shDanceArt(f.m, dc, f.ce || [], col, 84) : shArt(f.m, f.ce || [], col, 84)) : NAV_PAW;
 }
 let _npSync = false;
 function navPetSync() {   // récupère la bestiole équipée une fois si elle n'est pas encore connue sur cet appareil
