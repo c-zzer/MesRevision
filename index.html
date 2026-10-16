@@ -2359,6 +2359,15 @@ body.has-ipad-side .admin-menu { left: 314px; }
 #btn-inv .np{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;overflow:hidden}
 #btn-inv .np svg{width:100%;height:100%;display:block;transform:scale(1.12) translateY(5%)}
 #btn-inv .np.ic svg{width:24px;height:24px;transform:none}
+#btn-inv.pet{width:auto;min-width:var(--tb);height:60px;overflow:visible;border:0!important;box-shadow:none!important;background:transparent!important;border-radius:0!important}
+#btn-inv.pet:after{display:none}
+#btn-inv.pet:active,#btn-inv.pet:hover{transform:none;box-shadow:none}
+#btn-inv.pet .np{width:60px;height:60px;border-radius:0;overflow:visible}
+#btn-inv.pet .np svg{width:60px;height:60px;transform:none;overflow:visible;filter:drop-shadow(0 3px 0 rgba(15,59,46,.25))}
+#btn-inv.pet:active .np{transform:scale(.92)}
+/* les 3 points du menu admin : à gauche, juste après la pastille ADMIN */
+#btn-admin-menu{position:fixed;z-index:101;top:calc(env(safe-area-inset-top,0px) + 12px);left:120px}
+html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
 #adm-list{display:grid;gap:8px}
 #adm-list .adm-row{display:flex;align-items:center;gap:11px;padding:9px 11px;border:2px solid var(--ink);border-radius:15px;background:#fff;box-shadow:2px 2px 0 var(--ink)}
 #adm-list .adm-row.me{background:rgba(214,242,107,.5)}
@@ -6857,16 +6866,18 @@ const NAV_PAW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
 function renderNavPet() {
   const el = document.getElementById("nav-pet"); if (!el) return;
   const f = shLoc().f, face = f && SH_BETES.some(b => b.id === f.m), col = f && (SH_COLORS.find(c => c.id === f.av) || {}).c || "";
-  const sig = face ? f.m + "|" + (f.ce || []).join(",") + "|" + col : "paw";
+  const dc = face && f.dc && SH_DANCES.some(d => d.id === f.dc) ? f.dc : "";
+  const sig = face ? f.m + "|" + (f.ce || []).join(",") + "|" + col + "|" + dc : "paw";
   if (el._sig === sig) return; el._sig = sig;
   el.classList.toggle("ic", !face);
-  { const b = el.parentNode; if (b) b.style.background = face && col ? col : ""; }
-  el.innerHTML = face ? shFace(f.m, f.ce || [], col, 44) : NAV_PAW;
+  { const b = el.parentNode; if (b) { b.classList.toggle("pet", !!face); b.style.background = ""; } }
+  // Ta bestiole entière, avec ses cosmétiques et sa danse, sans cadre ni fond (le rond avec une patte reste tant qu'aucune bestiole n'est équipée)
+  el.innerHTML = face ? (dc ? shDanceArt(f.m, dc, f.ce || [], col, 60) : shArt(f.m, f.ce || [], col, 60)) : NAV_PAW;
 }
 let _npSync = false;
 function navPetSync() {   // récupère la bestiole équipée une fois si elle n'est pas encore connue sur cet appareil
   if (_npSync || !acct || (shLoc().f && shLoc().f.m)) return; _npSync = true;
-  setTimeout(async () => { try { const d = await shDataSafe(); if (d && d.shop) { const sh = d.shop; shLocSet({ f: { m: shMasc(sh), ce: shWorn(sh), av: sh.av || "" } }); renderNavPet(); renderShopCard(); } } catch (e) {} }, 1500);
+  setTimeout(async () => { try { const d = await shDataSafe(); if (d && d.shop) { const sh = d.shop; shLocSet({ f: { m: shMasc(sh), ce: shWorn(sh), av: sh.av || "", dc: shDcur(sh) } }); renderNavPet(); renderShopCard(); } } catch (e) {} }, 1500);
 }
 const SHV = { tab: "home", inv: "c", slot: "all", d: undefined, fresh: false, pt: undefined, bounce: false };
 let SH_BUSY = false;
@@ -6916,7 +6927,7 @@ function shRender() {
   const mod = el.closest(".modal"), sc = mod ? mod.scrollTop : 0;
   qmCls(); qmReset(); setQuizRes(false);
   const d = SHV.d, day = DQ.today(), sh = (d && d.shop) || {}, can = d !== null && d !== undefined, total = (d && d.total) || 0, tab = SHV.tab;
-  if (can && !shMissing(sh, shMirGet())) { shLocSet({ f: { m: shMasc(sh), ce: shWorn(sh), av: sh.av || "" } }); try { renderShopCard(); } catch (e) {} }
+  if (can && !shMissing(sh, shMirGet())) { shLocSet({ f: { m: shMasc(sh), ce: shWorn(sh), av: sh.av || "", dc: shDcur(sh) } }); try { renderShopCard(); } catch (e) {} }
   const OF = {}; shOffers().forEach(o => OF[o.key] = o);
   const m = shMasc(sh), col = shCol(sh), nb = (sh.mo || []).length, nc = (sh.co || []).length, pulse = SHV.pt !== undefined && SHV.pt !== total ? " pulse" : ""; SHV.pt = total;
   const hero = '<div class="sh-hero"><button type="button" data-go="w" aria-label="Ouvrir mon inventaire" class="sh-hb' + (m ? " has" : "") + '"' + (m ? "" : shAvStyle({ shop: sh })) + ">" + (m ? shFace(m, shWorn(sh), col, 58) : qmIni(acct && acct.name)) + '</button><div class="sh-hi"><b>' + escHtml((acct && acct.name) || "Ma boutique") + "</b><small>" + nb + " bestiole" + (nb > 1 ? "s" : "") + " · " + nc + " cosmétique" + (nc > 1 ? "s" : "") + "</small></div>" +
