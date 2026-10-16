@@ -1803,6 +1803,21 @@ body.has-ipad-side .admin-menu { left: 314px; }
 .inv-t small { font: 800 .66rem/1.15 var(--d); text-align: center; }
 .inv-t.on { background: var(--pis); box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--ink); }
 .inv-empty { text-align: center; padding: 10px; }
+/* ═════════ BIBLIOTHÈQUE : Socle commun / Mon école ═════════ */
+.lib-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 0 12px; }
+.lib-seg button { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 14px; background: #fff; color: var(--ink); border: var(--bw) solid var(--ink); border-radius: 18px; box-shadow: 4px 4px 0 var(--ink); font: 800 1.02rem/1.1 var(--d); text-align: left; cursor: pointer; transition: transform .12s, box-shadow .12s; }
+.lib-seg button small { font: 600 .74rem/1.25 var(--d); opacity: .72; letter-spacing: 0; }
+.lib-seg button.on { background: var(--mur); color: #fff; transform: translate(4px, 4px); box-shadow: none; }
+.lib-seg button.on small { opacity: .9; }
+.lib-lv { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 0 0 14px; }
+.lib-lv[hidden] { display: none; }
+.lib-lv .lab { font: 800 .82rem var(--d); margin-right: 2px; }
+.lib-lv .sh-tab.me:after { content: " · ma classe"; font-weight: 600; opacity: .7; }
+.fiche-meta .sc-tag { font-weight: 800; }
+#reader-content table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: .92em; }
+#reader-content th, #reader-content td { border: 2px solid var(--ink); padding: 6px 8px; text-align: left; vertical-align: top; }
+#reader-content th { background: var(--pis, #F2FFC4); }
+
 .sh-need.sh-lock { color: #6B3FF0; }
 .inv-empty b { display: block; font: 800 1.2rem var(--d); margin: 6px 0 2px; }
 /* ——— les danses ———
@@ -2434,6 +2449,8 @@ body.has-ipad-side .admin-menu { left: 314px; }
       <button class="mk-tile" type="button" onclick="openA2hs()"><span class="mk-ico" style="background:var(--mur);color:#fff"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4.5"/><path d="M12 8.5v7M8.5 12h7"/></svg></span><span class="mk-txt"><b>Ajouter à l'écran d'accueil</b><i>Un raccourci pour l'ouvrir comme une app</i></span></button>
     </div>
     <div class="section-title">Tes matières</div>
+    <div class="lib-seg" id="lib-seg" role="tablist"><button type="button" data-lib="socle" role="tab">Socle commun<small>Les fiches EcoLingo du programme officiel</small></button><button type="button" data-lib="ecole" role="tab">Mon école<small>Les fiches ajoutées par ton école</small></button></div>
+    <div class="lib-lv" id="lib-lv" hidden></div>
     <div id="subjects-grid" class="subjects-grid"></div>
   </main>
   <div class="dock">
@@ -3221,7 +3238,7 @@ async function changePw() {
 }
 
 // ─── CONTENU RICHE ────────────────────────────────────────
-const OK_TAGS = new Set("H2 H3 P DIV BR B STRONG I EM U MARK SPAN UL OL LI BLOCKQUOTE HR".split(" "));
+const OK_TAGS = new Set("H2 H3 H4 P DIV BR B STRONG I EM U MARK SPAN UL OL LI BLOCKQUOTE HR TABLE THEAD TBODY TR TH TD SUP SUB".split(" "));
 function clean(html) {
   const doc = new DOMParser().parseFromString("<body>" + html, "text/html");
   (function walk(n) {
@@ -4219,10 +4236,10 @@ function toggleMark(kind, sid, id) {
   return !!m[kind][k];
 }
 function markedList(kind) {
-  const m = loadMarks()[kind], known = allFiches.length > 0, out = [];
+  const m = loadMarks()[kind], known = allFiches.length > 0 && SC.ready(), out = [];
   for (const k in m) {
     const c = k.indexOf(":"), sid = k.slice(0, c), id = k.slice(c + 1);
-    const f = allFiches.find(x => x.sid === sid && x.id === id);
+    const f = allLib().find(x => x.sid === sid && x.id === id);
     if (known && !f) continue;                       // fiche supprimée
     out.push({ sid, id, t: m[k], title: f ? f.title : "Fiche" });
   }
@@ -4443,17 +4460,20 @@ function renderHero() {
 function renderSubjects() {
   const grid = document.getElementById("subjects-grid");
   grid.innerHTML = "";
+  try { SC.paint(); } catch (e) {}
+  if (SC.on() && !SC.ready()) { SC.index().catch(() => {}); }
   for (const sub of SUBJECTS) {
+    if (SC.on() && SC.ready() && !(ficheCounts[sub.id] > 0)) continue;
     const card = document.createElement("div");
     card.className = "subject-card";
     card.style.setProperty("--bg-c", sub.bg);
     card.style.setProperty("--fg-c", sub.fg);
     card.style.setProperty("--mat-color", sub.bg);
-    const count = ficheCounts[sub.id] || 0, pct = haveMeta ? subjectPct(sub.id) : null;
+    const hm = metaOK(), count = ficheCounts[sub.id] || 0, pct = hm ? subjectPct(sub.id) : null;
     card.innerHTML = `
       <div class="subject-info">
         <div class="subject-name">${sub.name}</div>
-        <div class="subject-count">${haveMeta ? count + " fiche" + (count !== 1 ? "s" : "") : '<span class="sk sk-count"></span>'}</div>
+        <div class="subject-count">${hm ? count + " fiche" + (count !== 1 ? "s" : "") : '<span class="sk sk-count"></span>'}</div>
       </div>
       <div class="subject-pct">${pct === null ? "" : pct + "%"}</div>
     `;
@@ -4466,7 +4486,7 @@ function renderSubjects() {
 }
 
 function fichesOf(sid) {
-  return allFiches.filter(f => f.sid === sid).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+  return libFiches().filter(f => f.sid === sid).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
 }
 function listSig(sid) { return (isAdmin ? "A" : "U") + fichesOf(sid).map(f => f.id + "\u0001" + f.title + "\u0001" + difOf(f)).join("\u0002"); }
 function renderFichesList(sub, animate) {
@@ -4484,6 +4504,7 @@ function renderFichesList(sub, animate) {
     const msg = (listUnread || listDiff) ? (listUnread && !listDiff && listFilter === "all" ? "Tu as tout lu dans cette matière." : "Aucune fiche ne correspond à ces filtres.<br>Retire un filtre pour en voir plus.")
       : listFilter === "fav" ? "Aucun favori dans cette matière.<br>Touche l'étoile d'une fiche pour l'ajouter."
       : listFilter === "rev" ? "Rien à revoir dans cette matière.<br>Touche le drapeau d'une fiche pour la mettre de côté."
+      : SC.on() ? "Pas encore de fiche du socle pour cette matière en " + SC.lv() + "."
       : (isAdmin ? "Aucune fiche pour l'instant. Ajoutes-en une !" : "Aucune fiche disponible pour l'instant.");
     listEl.innerHTML = `
         <div class="empty-state">
@@ -4502,12 +4523,12 @@ function renderFichesList(sub, animate) {
     card.innerHTML = `
         <div class="fiche-info">
           <div class="fiche-title">${escHtml(f.title)}</div>
-          <div class="fiche-meta">Ajoutée le ${formatDate(f.createdAt)}${difOf(f) ? `<span class="fiche-dif" style="--c:${DIFS[difOf(f)].color}">${DIFS[difOf(f)].label}</span>` : ""}</div>
+          <div class="fiche-meta">${SC.isSc(f.id) ? '<span class="sc-tag">Programme ' + escHtml(f.lv || "") + '</span>' : "Ajoutée le " + formatDate(f.createdAt)}${difOf(f) ? `<span class="fiche-dif" style="--c:${DIFS[difOf(f)].color}">${DIFS[difOf(f)].label}</span>` : ""}</div>
         </div>
         <div class="fiche-actions">
           ${markBtns(sub.id, f.id)}
           ${(() => { const b = bestOf(getAttempts(sub.id, f.id)); return b === null ? "" : miniRingHtml(b); })()}
-          ${isAdmin ? `<button class="btn btn-ghost btn-sm" onclick="editFiche(event,'${f.id}')" aria-label="Modifier">${IC("pencil")}</button>
+          ${isAdmin && !SC.isSc(f.id) ? `<button class="btn btn-ghost btn-sm" onclick="editFiche(event,'${f.id}')" aria-label="Modifier">${IC("pencil")}</button>
           <button class="btn btn-danger btn-sm" onclick="deleteFiche(event,'${f.id}')" aria-label="Supprimer">${IC("trash")}</button>` : ""}
           <span style="color:var(--text-faint);font-size:0.8rem;margin-left:2px">&rsaquo;</span>
         </div>
@@ -4525,7 +4546,7 @@ async function showFiches(sub) {
   hideAll();
   document.getElementById("fiches-view").style.display = "block";
   document.getElementById("fiches-title").innerHTML = appIcon(sub, "fiches-ico").replace(/^<div /, "<span ").replace(/<\/div>$/, "</span>") + escHtml(sub.name);
-  document.getElementById("btn-add-fiche").style.display = isAdmin ? "inline-flex" : "none";
+  document.getElementById("btn-add-fiche").style.display = isAdmin && !SC.on() ? "inline-flex" : "none";
 
   currentFiches = [];
   document.getElementById("search-pill-label").textContent = "Rechercher dans " + sub.name;
@@ -4533,6 +4554,10 @@ async function showFiches(sub) {
   const listEl = document.getElementById("fiches-list");
   warmPdfJs();
 
+  if (SC.on()) {                         // socle commun : liste statique, pas de Firestore
+    if (!SC.ready()) { _listSig = ""; listEl.innerHTML = skRows(5); try { await SC.index(); } catch (e) { listEl.innerHTML = `<div class="empty-state"><p>Le socle commun n’a pas pu être chargé.</p></div>`; return; } if (currentSubject !== sub) return; }
+    renderFichesList(sub, true); return;
+  }
   if (!haveMeta) {                       // première ouverture sans cache : squelettes, puis fondu vers la vraie liste
     _listSig = "";
     listEl.innerHTML = skRows(5);
@@ -5156,7 +5181,7 @@ async function readFiche(e, ficheId) {
   e.stopPropagation();
   hideAll();
   document.getElementById("reader-view").style.display = "block"; document.getElementById("reader-view").classList.remove("rd-paged");
-  const _meta = allFiches.find(f => f.sid === currentSubject.id && f.id === ficheId);
+  const _meta = allLib().find(f => f.sid === currentSubject.id && f.id === ficheId);
   document.getElementById("reader-title").textContent = _meta ? _meta.title : "";
   document.getElementById("reader-content").innerHTML = skReader(); document.getElementById("reader-content").style.padding = "";
   const _tok = ++_readTok;
@@ -5178,7 +5203,7 @@ async function readFiche(e, ficheId) {
     const best = bestOf(getAttempts(currentSubject.id, ficheId));
     const S = p => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
     const hasQuizPill = ficheHasQuiz(d);
-    adminBtns.innerHTML = (isAdmin || hasQuizPill ? '<button class="rd-pill" onclick="openQuizModal()">' + S('<path d="M9 11l2 2 4-4"/><rect x="4" y="4" width="16" height="16" rx="4"/>') + 'Quiz' + (best === null ? '' : '<span class="rd-score">' + best + '%</span>') + '</button>' : '') + readerMarkBtns() + '<button type="button" class="rd-ico" onclick="downloadFiche()" aria-label="Télécharger la fiche" title="Télécharger la fiche">' + S('<path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 20h14"/>') + '</button>' + (isAdmin ?
+    adminBtns.innerHTML = ((isAdmin && !SC.isSc(ficheId)) || hasQuizPill ? '<button class="rd-pill" onclick="openQuizModal()">' + S('<path d="M9 11l2 2 4-4"/><rect x="4" y="4" width="16" height="16" rx="4"/>') + 'Quiz' + (best === null ? '' : '<span class="rd-score">' + best + '%</span>') + '</button>' : '') + readerMarkBtns() + '<button type="button" class="rd-ico" onclick="downloadFiche()" aria-label="Télécharger la fiche" title="Télécharger la fiche">' + S('<path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 20h14"/>') + '</button>' + (isAdmin && !SC.isSc(ficheId) ?
       '<button class="rd-ico" onclick="editFicheFromReader()" aria-label="Modifier">' + S('<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/>') + '</button>' +
       '<button class="rd-ico danger" onclick="deleteFicheFromReader()" aria-label="Supprimer">' + S('<path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/>') + '</button>' : "");
     try { annEnsurePills(); } catch (e) {}
@@ -5284,7 +5309,7 @@ function renderSearch() {
   const q = normSearch(document.getElementById("search-input").value.trim());
   const box = document.getElementById("sresults");
   const all = searchScope === "all";
-  const src = all ? allFiches : currentFiches.map(f => ({ ...f, sid: currentSubject.id }));
+  const src = all ? libFiches() : currentFiches.map(f => ({ ...f, sid: currentSubject.id }));
   const subOf = sid => SUBJECTS.find(x => x.id === sid) || currentSubject;
   const list = q ? src.filter(f => normSearch(f.title).includes(q) || (all && normSearch(subOf(f.sid).name).includes(q))) : src;
   let h = '<h4>' + (q ? "Résultats" : (all ? "Toutes les fiches" : "Suggestions")) + '</h4>';
@@ -7160,7 +7185,7 @@ function openQuizModal() {
   { const t = document.getElementById("qz-ttl"); if (t) t.textContent = "Quiz"; }
   const hasQuizNow = ficheHasQuiz(currentFiche);
   if (!isAdmin && !hasQuizNow) { showToast("Pas de quiz pour cette fiche", ""); return; }   // seuls les admins peuvent créer un quiz
-  document.getElementById("quiz-replace-btn").style.display = isAdmin ? "" : "none";
+  document.getElementById("quiz-replace-btn").style.display = isAdmin && !(currentFiche && SC.isSc(currentFiche.id)) ? "" : "none";
   document.getElementById("quiz-import-text").value = "";
   document.getElementById("quiz-import-error").style.display = "none";
   const hasQuiz = ficheHasQuiz(currentFiche);
@@ -7227,6 +7252,7 @@ async function importQuiz() {
     return;
   }
   try {
+    if (SC.isSc(currentFiche.id)) { showToast("Les fiches du socle commun ne se modifient pas", ""); return; }
     if (isDemo(currentFiche.id)) { DEMO_DOC.quiz = variants[0]; DEMO_DOC.quizVariants = variants.length > 1 ? variants.map(qs => ({ qs })) : null; }
     else { await db.doc("fiches_" + currentSubject.id + "/" + currentFiche.id).update({ quiz: variants[0], quizVariants: variants.length > 1 ? variants.map(qs => ({ qs })) : null }); bustCaches(); }
     currentFiche.quiz = variants[0]; currentFiche.quizVariants = variants.length > 1 ? variants.map(qs => ({ qs })) : null;
@@ -7718,7 +7744,7 @@ function renderHistory() {
   const el = document.getElementById("hist-content");
   const scores = loadScores();
   const known = allFiches.length > 0;
-  const titleOf = (sid, id) => { const f = allFiches.find(x => x.sid === sid && x.id === id); return f ? f.title : null; };
+  const titleOf = (sid, id) => { const f = allLib().find(x => x.sid === sid && x.id === id); return f ? f.title : null; };
   const rows = [];
   for (const k in scores) {
     const c = k.indexOf(":"), sid = k.slice(0, c), id = k.slice(c + 1);
@@ -8121,7 +8147,7 @@ const FB_OK = !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.projectId);
 
 function readCache() { try { const c = JSON.parse(localStorage.getItem(CACHE_KEY) || "null"); if (c && Array.isArray(c.f)) return c; } catch (e) {} return null; }
 function writeCache() { try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), f: allFiches.filter(f => !/^demo_/.test(f.id)) })); } catch (e) {} }
-function rebuildCounts() { ficheCounts = {}; SUBJECTS.forEach(x => { ficheCounts[x.id] = 0; }); allFiches.forEach(f => { ficheCounts[f.sid] = (ficheCounts[f.sid] || 0) + 1; }); }
+function rebuildCounts() { ficheCounts = {}; SUBJECTS.forEach(x => { ficheCounts[x.id] = 0; }); libFiches().forEach(f => { ficheCounts[f.sid] = (ficheCounts[f.sid] || 0) + 1; }); }
 function hydrateFromCache() { const c = readCache(); if (!c) return false; allFiches = c.f.filter(f => !/^demo_/.test(f.id)); injectDemo(); rebuildCounts(); haveMeta = true; return true; }
 
 // Connexion à la base (en arrière-plan)
@@ -8189,7 +8215,7 @@ async function revalidateSubject(sid) {
   try {
     const list = await fetchSubjectMeta(sid);
     allFiches = allFiches.filter(f => f.sid !== sid).concat(list);
-    injectDemo(); ficheCounts[sid] = allFiches.filter(f => f.sid === sid).length; subFresh[sid] = Date.now(); haveMeta = true; writeCache();
+    injectDemo(); rebuildCounts(); subFresh[sid] = Date.now(); haveMeta = true; writeCache();
     applyCounts(); refreshOpenList();
   } catch (e) {}
 }
@@ -8202,7 +8228,7 @@ function applyCounts() {
   document.querySelectorAll("#subjects-grid .subject-card").forEach(c => {
     const el = c.querySelector(".subject-count"); if (!el) return;
     const n = ficheCounts[c.dataset.sid] || 0;
-    const t = haveMeta ? n + " fiche" + (n !== 1 ? "s" : "") : "–";
+    const t = metaOK() ? n + " fiche" + (n !== 1 ? "s" : "") : "–";
     if (el.textContent !== t || el.querySelector(".sk")) { el.textContent = t; try { el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320, easing: "ease-out" }); } catch (e) {} }
   });
 }
@@ -8238,6 +8264,58 @@ function injectDemo() {
 }
 function demoLocked() { showToast("Fiche de démonstration (aperçu Claude) : lecture seule", ""); }
 
+
+// ═════════ SOCLE COMMUN : fiches EcoLingo du programme officiel (fichiers statiques socle/…) ═════════
+// socle/index.json = { levels: { "6e": [ { id, sid, title, difficulty, n } ] } } · socle/<classe>/<matière>.json = { fiches: { id: { title, content, format, difficulty, quiz, quizVariants } } }
+// Les identifiants commencent par « sc- » : jamais confondus avec les fiches de l'école (Firestore), jamais modifiables.
+const SC = (() => {
+  const KEY = "rev_lib_v1", LV = ["6e", "5e", "4e", "3e"], BASE = "socle/";
+  let st = {}; try { st = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} };
+  let idx = null, idxP = null; const files = new Map();
+  const on = () => st.lib === "socle";
+  const myLv = () => { try { return PROFILE && LV.includes(PROFILE.level) ? PROFILE.level : ""; } catch (e) { return ""; } };
+  const lv = () => LV.includes(st.lv) ? st.lv : (myLv() || "6e");
+  const isSc = id => typeof id === "string" && id.indexOf("sc-") === 0;
+  const lvOf = id => (String(id).split("-")[1] || "");
+  function index() {
+    if (idx) return Promise.resolve(idx);
+    if (!idxP) idxP = fetch(BASE + "index.json", { cache: "no-cache" }).then(r => { if (!r.ok) throw new Error("socle"); return r.json(); })
+      .then(j => { idx = j; rebuildCounts(); try { renderSubjects(); } catch (e) {} return j; }).catch(e => { idxP = null; throw e; });
+    return idxP;
+  }
+  const ready = () => !!idx;
+  const rows = l => ((idx && idx.levels[l]) || []).map(f => ({ id: f.id, sid: f.sid, title: f.title, difficulty: f.difficulty, createdAt: f.n || 0, lv: l }));
+  const meta = () => rows(lv());
+  const all = () => idx ? Object.keys(idx.levels).flatMap(rows) : [];
+  function doc(sid, id) {
+    const key = lvOf(id) + "/" + sid;
+    if (!files.has(key)) files.set(key, fetch(BASE + key + ".json", { cache: "no-cache" }).then(r => { if (!r.ok) throw new Error("socle"); return r.json(); }));
+    const p = files.get(key);
+    p.catch(() => files.delete(key));
+    return p.then(j => { const d = j.fiches && j.fiches[id]; if (!d) throw new Error("fiche introuvable"); return Object.assign({ format: "html", createdAt: 0 }, d); });
+  }
+  function paint() {
+    const seg = document.getElementById("lib-seg"), box = document.getElementById("lib-lv"); if (!seg) return;
+    seg.querySelectorAll("button").forEach(b => { const o = b.dataset.lib === (on() ? "socle" : "ecole"); b.classList.toggle("on", o); b.setAttribute("aria-selected", o ? "true" : "false"); });
+    box.hidden = !on();
+    if (on()) box.innerHTML = '<span class="lab">Classe</span>' + LV.map(l => '<button type="button" class="sh-tab' + (l === lv() ? " on" : "") + (l === myLv() ? " me" : "") + '" data-lv="' + l + '">' + l + "</button>").join("");
+  }
+  function set(o) {
+    Object.assign(st, o); save(); paint();
+    rebuildCounts(); try { renderSubjects(); } catch (e) {}
+    if (on() && !idx) index().catch(() => { try { showToast("Le socle commun n’a pas pu être chargé. Vérifie ta connexion.", ""); } catch (e) {} });
+  }
+  document.addEventListener("click", e => {
+    const b = e.target.closest && e.target.closest("#lib-seg button, #lib-lv button"); if (!b) return;
+    if (b.dataset.lib) set({ lib: b.dataset.lib }); else if (b.dataset.lv) set({ lv: b.dataset.lv });
+  });
+  return { on, lv, isSc, index, ready, meta, all, doc, paint, set, LV };
+})();
+const libFiches = () => SC.on() ? SC.meta() : allFiches;           // la bibliothèque affichée
+const allLib = () => allFiches.concat(SC.all());                     // les deux (favoris, historique, titres)
+const metaOK = () => SC.on() ? SC.ready() : haveMeta;
+
 // Mémoire de session (fiches déjà ouvertes ou survolées) : ouverture quasi instantanée
 const _docCache = new Map(), _partsCache = new Map(), CACHE_TTL = 90000;
 function memo(map, key, make, max) {
@@ -8249,7 +8327,7 @@ function memo(map, key, make, max) {
   while (map.size > max) map.delete(map.keys().next().value);
   return p;
 }
-const getFicheDoc = (sid, id) => isDemo(id) ? Promise.resolve(id === DEMO2.id ? DEMO2_DOC : DEMO_DOC) : memo(_docCache, sid + "/" + id, async () => { await dbReady; return (await db.doc("fiches_" + sid + "/" + id).get()).data(); }, 24);
+const getFicheDoc = (sid, id) => SC.isSc(id) ? SC.doc(sid, id) : isDemo(id) ? Promise.resolve(id === DEMO2.id ? DEMO2_DOC : DEMO_DOC) : memo(_docCache, sid + "/" + id, async () => { await dbReady; return (await db.doc("fiches_" + sid + "/" + id).get()).data(); }, 24);
 const getParts = id => memo(_partsCache, id, async () => { await dbReady; const snap = await db.collection(partsPath(id)).get(); const arr = []; snap.docs.forEach(x => { const v = x.data(); arr[v.i] = v.d; }); return arr; }, 2);
 function bustCaches() { _docCache.clear(); _partsCache.clear(); }
 (function prefetchOnTouch() {
