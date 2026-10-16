@@ -1902,6 +1902,7 @@ body.has-ipad-side .admin-menu { left: 314px; }
 .sh-item.sold, .sh-card.sold { filter: grayscale(.8); }
 .shfx.dud .shfx-art { filter: grayscale(.7); }
 .shfx.dud .shfx-glow, .shfx.dud .shfx-rays { opacity: 0 !important; }
+#reader-content sup, .rf sup { font-size: .72em; line-height: 0; vertical-align: super; font-weight: inherit; }
 </style>
 </head>
 <body>
@@ -1976,7 +1977,7 @@ body.has-ipad-side .admin-menu { left: 314px; }
     <div class="au-in">
       <div class="au-icon" style="--i:0"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M20 8h60a16 16 0 0 1 16 16v36a16 16 0 0 1-16 16H54L34 94V76H20A16 16 0 0 1 4 60V24A16 16 0 0 1 20 8z" fill="#0F3B2E"/><path d="M50 20L82 36L50 52L18 36Z" fill="#D6F26B"/><path d="M32 48v10c0 6 8 10 18 10s18-4 18-10V48L50 58z" fill="#D6F26B"/><path d="M82 36v18" stroke="#D6F26B" stroke-width="4" stroke-linecap="round"/><circle cx="82" cy="57" r="4" fill="#D6F26B"/></svg></div>
       <h1 style="--i:1">Bienvenue sur<br><em>EcoLingo</em></h1>
-      <p class="au-sub" style="--i:2">Crée ton compte pour retrouver tes fiches et ta série de jours. Utilise-le sur tous tes appareils (5 maximum).</p>
+      <p class="au-sub" style="--i:2">Crée ton compte pour retrouver tes fiches et ta série de jours. Utilise-le sur tous tes appareils.</p>
       <button class="au-btn" style="--i:3" type="button" onclick="authGo('create')">Créer mon compte</button>
       <button class="au-btn ghost" style="--i:4" type="button" onclick="authGo('login')">J'ai déjà un compte</button>
     </div>
@@ -5092,7 +5093,8 @@ function fitSearchOverlay() {
   if (focused) {
     const measured = _srBase - seen - top;
     // le clavier est « vu » par la page → on s'adapte exactement ; sinon (lecteur / aperçu) on prend une hauteur estimée
-    kb = measured > 150 ? measured : Math.min(Math.round(_srBase * 0.6), Math.round(Math.max(screen.height, screen.width) * 0.457) - 24);
+    const touch = window.matchMedia && matchMedia("(pointer: coarse)").matches;
+    kb = measured > 150 ? measured : !touch ? 0 : Math.min(Math.round(_srBase * 0.6), Math.round(Math.max(screen.height, screen.width) * 0.457) - 24);
   }
   // Le fond reste sur TOUTE la hauteur (jusque sous le clavier) ; seul le contenu est remonté au-dessus du clavier via le padding du bas
   ov.style.top = top + "px";
@@ -9139,6 +9141,7 @@ const FX = (function () {
   function fakeHeading(n) {
     if (n.tagName !== "P") return n;
     const t = txt(n); if (t.length < 3 || t.length > 70 || /[.!?;,:]$/.test(t)) return n;
+    if (/[=×÷±<>≤≥≠]/.test(t) || (t.match(/[0-9]/g) || []).length > t.length * 0.25) return n;      // ligne de calcul, pas un titre
     const onlyB = n.children.length > 0 && [...n.childNodes].every(c => (c.nodeType === 1 && /^(B|STRONG)$/.test(c.tagName)) || (c.nodeType === 3 && !c.nodeValue.trim()));
     const letters = t.replace(/[^A-Za-zÀ-ÿ]/g, "");
     const caps = letters.length >= 4 && t === t.toUpperCase();
@@ -9502,6 +9505,17 @@ const RF = (function () {
     });
     const r0 = median(raw.filter(i => i.r).map(i => i.r)) || 1;      // étalonnage : les polices de repli n'ont pas les mêmes largeurs
     raw.forEach(i => { i.b = !!(i.r && i.r > r0 * 1.09); });
+    // exposants (x², 10³…) : petit corps, plus haut que le texte voisin, collé à sa fin → on le ramène sur la ligne de son parent
+    raw.forEach(it => {
+      if (it.s.trim().length > 3) return;
+      let best = null;
+      raw.forEach(pv => {
+        if (pv === it || pv.fs < it.fs * 1.15 || pv.s.trim().length < 1) return;
+        const up = pv.y - it.y, dx = it.x0 - pv.x1;
+        if (up > pv.fs * 0.2 && up < pv.fs * 0.85 && dx > -pv.fs * 0.3 && dx < pv.fs * 0.45 && (!best || Math.abs(dx) < Math.abs(it.x0 - best.x1))) best = pv;
+      });
+      if (best) { it.sup = true; it.y = best.y; }
+    });
     raw.sort((a, b) => a.y - b.y || a.x0 - b.x0);
     const rows = [];
     raw.forEach(it => {
@@ -9516,7 +9530,7 @@ const RF = (function () {
         const gap = cur ? it.x0 - cur.x1 : 0;
         if (cur && gap < Math.max(cur.fs, it.fs) * 0.9) {
           const sp = gap > it.fs * 0.12 && !/\s$/.test(cur.runs[cur.runs.length - 1].t) && !/^\s/.test(it.s) ? " " : "";
-          cur.runs.push({ t: sp + it.s, b: it.b }); cur.x1 = it.x1; cur.fs = Math.max(cur.fs, it.fs);
+          cur.runs.push({ t: (it.sup ? "" : sp) + it.s, b: it.b, sup: it.sup }); cur.x1 = it.x1; cur.fs = Math.max(cur.fs, it.fs);
         } else {
           cur = { runs: [{ t: it.s, b: it.b }], x0: it.x0, x1: it.x1, y: r.y, fs: it.fs, f: it.f }; segs.push(cur);
         }
@@ -9604,6 +9618,7 @@ const RF = (function () {
 
   const runsHtml = s => s.runs.map((r, i) => {
     let t = esc(r.t);
+    if (r.sup) return "<sup>" + t + "</sup>";
     return r.b && s.runs.some(x => !x.b) ? "<strong>" + t + "</strong>" : t;
   }).join("");
   const capsFix = t => {
@@ -9630,7 +9645,7 @@ const RF = (function () {
     let para = null, list = null, call = null, idx = 0;
     const flushPara = () => { if (para) { (call ? call.items : html).push("<p>" + para.parts.join("") + "</p>"); para = null; } };
     const flushList = () => { if (list) { (call ? call.items : html).push("<" + list.tag + (list.start > 1 ? ' start="' + list.start + '"' : "") + ">" + list.items.map(i => "<li>" + i + "</li>").join("") + "</" + list.tag + ">"); list = null; } };
-    const flushCall = () => { flushPara(); flushList(); if (call) { html.push("<blockquote>" + call.items.join("") + "</blockquote>"); call = null; } };
+    const flushCall = () => { flushPara(); flushList(); if (call) { html.push(call.items.length === 1 && /^<h[1-6]>/.test(call.items[0]) ? call.items[0] : "<blockquote>" + call.items.join("") + "</blockquote>"); call = null; } };
     const flushAll = () => { flushPara(); flushList(); flushCall(); };
     const join = (parts, t) => { const last = parts[parts.length - 1] || ""; return /[A-Za-zÀ-ÿ]-$/.test(last) && /^[a-zà-ÿ]/.test(t) ? parts.slice(0, -1).concat([last.slice(0, -1), t]) : last ? parts.concat([" ", t]) : [t]; };
 
