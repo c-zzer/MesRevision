@@ -6133,7 +6133,7 @@ function plOpen(id, kind) {
   m.scrollTop = 0; ov.classList.add("open");
 }
 // Rang SOLO (Compétition) : même système que le 1 contre 1 (divisions, LP, séries de promotion), mais contre un objectif de bonnes réponses qui monte avec le rang
-const RKS = { minQ: 5, base: 60, step: 2, draw: 10, forfeitQ: 2 };   // ≥ 5 questions · objectif = 60 % + 2 % par rang (Bronze 60 → Maître 70) : les questions, elles, durcissent avec le rang · −10 pts = nul
+const RKS = { minQ: 5, base: 50, step: 2, draw: 10, forfeitQ: 2 };   // ≥ 5 questions · objectif = 50 % + 2 % par rang (Bronze 50 → Maître 60) : les questions, elles, durcissent avec le rang · −10 pts = nul
 const rkSoloGoal = t => RKS.base + RKS.step * t;
 function rkApplySolo(o) {   // o = { score, total, forfeit }
   const ref = db.doc("lingo/" + acct.id), inc = firebase.firestore.FieldValue.increment;
@@ -6194,9 +6194,9 @@ function qmFiche(duel) {
   return b.qs.length ? { id: "rk-" + b.cats[0], title: "Quiz ranked", quiz: b.qs } : null;
 }
 // Difficulté des questions (1 facile → 4 très dur) selon le rang : plus on monte, plus c'est dur (répartition en %, niveaux 1 à 4)
-const RK_DIF = [[55, 35, 9, 1], [35, 40, 20, 5], [20, 38, 30, 12], [10, 30, 38, 22], [5, 20, 40, 35], [2, 10, 38, 50]];
+const RK_DIF = [[85, 15, 0, 0], [75, 23, 2, 0], [65, 30, 5, 0], [55, 35, 10, 0], [45, 38, 15, 2], [35, 40, 20, 5]];   // banque notée pour des adultes : surtout des niveaux 1-2 pour des collégiens
 function rkLevel(t) {
-  const w = RK_DIF[t] || [25, 35, 28, 12]; let r = Math.random() * 100, L = 0;
+  const w = RK_DIF[t] || [70, 25, 5, 0]; let r = Math.random() * 100, L = 0;
   while (L < 3 && r >= w[L]) { r -= w[L]; L++; }
   return L + 1;
 }
