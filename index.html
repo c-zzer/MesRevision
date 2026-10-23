@@ -2248,10 +2248,12 @@ body.has-ipad-side .admin-menu { left: 314px; }
 </div>
 
 
+<div id="pet-spot">
+    <button id="btn-inv" class="btn btn-ghost btn-round" onclick="shOpen('w')" aria-label="Mon inventaire" title="Mon inventaire"><span class="np" id="nav-pet"></span></button>
+</div>
 <nav>
     <div class="nav-right">
     <span id="nav-badge" style="display:none" class="badge-admin">ADMIN</span>
-    <button id="btn-inv" class="btn btn-ghost btn-round" onclick="shOpen('w')" aria-label="Mon inventaire" title="Mon inventaire"><span class="np" id="nav-pet"></span></button>
     <button id="btn-admin-menu" class="btn btn-ghost btn-menu btn-round" style="display:none" onclick="toggleAdminMenu(event)" aria-label="Menu admin">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
     </button>
@@ -2354,6 +2356,7 @@ body.has-ipad-side .admin-menu { left: 314px; }
 .rk-tile .rk-ico{background:#B9A5FF}
 .rk-tile .rk-ico svg{width:22px;height:22px}
 .sk-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0 0}.sk-bar:empty{display:none}.sk-btn small{opacity:.7;font-weight:800}
+#pet-spot{position:absolute;z-index:99;top:calc(env(safe-area-inset-top,0px) + 12px);right:16px;display:flex}
 #btn-inv{position:relative;overflow:hidden;border-radius:50%!important;background:var(--cream)}
 #btn-inv:after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 0 3px #fff;pointer-events:none}
 #btn-inv .np{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;overflow:hidden}
@@ -4212,6 +4215,7 @@ function hideAll() {
     if (!document.querySelector(".modal-overlay.open")) _de.classList.remove("modal-open");
   } catch (e) {}
   const _nv = document.querySelector("nav"); if (_nv) _nv.style.display = "none";
+  const _ps = document.getElementById("pet-spot"); if (_ps) _ps.style.display = "none";
   document.getElementById("loading").style.display = "none";
   document.getElementById("home-view").style.display = "none";
   document.getElementById("fiches-view").style.display = "none";
@@ -4421,6 +4425,7 @@ function renderMarks() {
 function showHome() {
   hideAll();
   document.querySelector("nav").style.display = "flex";
+  { const _ps = document.getElementById("pet-spot"); if (_ps) _ps.style.display = "flex"; }
   updateNav();
   renderSubjects();
   document.getElementById("home-view").style.display = "block";
