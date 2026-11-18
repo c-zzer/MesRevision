@@ -67,6 +67,32 @@ const actions = {
     return { moved, left: (await db.collection("accounts").get()).size };
   },
 
+  // « Give inventaire » : seul un admin peut ajouter des Lingo ou des objets (vérifié par le serveur)
+  async donner(b) {
+    const J = require("./_jeu"), id = String(b.id || "").trim(), amount = Number(b.amount || 0), all = !!b.all, cat = String(b.cat || ""), item = String(b.item || "");
+    if (!id || /[\/\\]/.test(id) || id[0] === "_") throw L.httpErr(400, "id");
+    if (!Number.isSafeInteger(amount) || amount < 0 || amount > 100000000) throw L.httpErr(400, "amount");
+    const db = L.fs(), ref = db.doc("lingo/" + id);
+    let nm = ""; const a = await L.getAcct(id).catch(() => null); if (a) nm = a.name;
+    if (!nm) { const p = await db.doc("profiles/" + id).get(); if (p.exists) nm = [p.data().firstName, p.data().lastName].filter(Boolean).join(" "); }
+    const lg0 = await ref.get(); if (!nm && !lg0.exists) throw L.httpErr(404, "compte");
+    await db.runTransaction(async tx => {
+      const old = (await tx.get(ref)).data() || {}, shop = Object.assign({}, old.shop || {});
+      let next = shop, bonus = amount; const own = k => Array.isArray(shop[k]) ? shop[k] : [];
+      if (all) { next = J.grantAllShopItems(shop); bonus = Math.max(amount, 100000); }
+      else if (cat === "b") { if (!J.SH_BETES.some(x => x.id === item)) throw L.httpErr(400, "item"); next.mo = J.grantAddUnique(own("mo"), item); if (!next.m) next.m = item; }
+      else if (cat === "d") { if (!J.SH_DANCES.some(x => x.id === item)) throw L.httpErr(400, "item"); next.dn = J.grantAddUnique(own("dn"), item); if (!next.dc) next.dc = item; }
+      else if (cat === "c") { if (!J.SH_COS.some(x => x.id === item)) throw L.httpErr(400, "item"); next.co = J.grantAddUnique(own("co"), item); }
+      else if (cat === "a") { if (!J.SH_COLORS.some(x => x.id === item)) throw L.httpErr(400, "item"); next.own = J.grantAddUnique(own("own"), item); if (!next.av) next.av = item; }
+      else if (cat === "p") { const perk = J.SH_PERKS.find(x => x.id === item); if (!perk) throw L.httpErr(400, "item");
+        if (perk.kind === "perm") next.pm = J.grantAddUnique(own("pm"), item); else { next.pk = Object.assign({}, shop.pk || {}); next.pk[item] = Math.min(perk.max, (next.pk[item] || 0) + 1); } }
+      else if (cat === "f") { next.freeze = Math.min(J.shFzMax(shop), (shop.freeze || 0) + 1); }
+      else if (cat && cat !== "l") throw L.httpErr(400, "cat");
+      tx.set(ref, { name: nm || old.name || id, total: (old.total || 0) + bonus, shop: next }, { merge: true });
+    });
+    return { ok: true };
+  },
+
   async driveStatus() { const s = await L.secrets(true); return { connected: !!s.refreshToken, folder: !!s.folderId }; },
 
   async driveConnect(b, req) {
