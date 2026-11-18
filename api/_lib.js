@@ -20,10 +20,15 @@ const auth = () => { app(); return admin.auth(); };
 function httpErr(status, code, msg) { const e = new Error(msg || code); e.status = status; e.code = code; return e; }
 
 // ── Réponses HTTP ──
+// Le projet Vercel « ecolingo » (même code, autre adresse) appelle le serveur de mes-revision.vercel.app
+const OK_ORIGIN = /^https:\/\/(ecolingo-beryl\.vercel\.app|ecolingo-[a-z0-9-]+-c-zzers-projects\.vercel\.app|mes-revision\.vercel\.app|mes-revision-[a-z0-9-]+-c-zzers-projects\.vercel\.app)$/;
 function handler(fn) {
   return async (req, res) => {
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("X-Content-Type-Options", "nosniff");
+    const o = req.headers.origin || "";
+    if (OK_ORIGIN.test(o)) { res.setHeader("Access-Control-Allow-Origin", o); res.setHeader("Vary", "Origin"); res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization"); res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS"); res.setHeader("Access-Control-Max-Age", "600"); }
+    if (req.method === "OPTIONS") return res.status(204).end();
     if (req.method !== "POST") return res.status(405).json({ error: "method" });
     try {
       const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
