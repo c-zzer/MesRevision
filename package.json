@@ -1,0 +1,8 @@
+{
+  "name": "mes-revision",
+  "private": true,
+  "description": "EcoLingo / MesRévisions — site statique + fonctions serveur (api/) pour le stockage chiffré sur Google Drive",
+  "dependencies": {
+    "firebase-admin": "^12.7.0"
+  }
+}
