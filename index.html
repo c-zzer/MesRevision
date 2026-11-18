@@ -8541,12 +8541,14 @@ function authBusy(which, on) {
 async function api(path, body, withAuth) {
   const h = { "Content-Type": "application/json" };
   if (withAuth) { const t = await FBA.idToken(); if (!t) { const e = new Error("noauth"); e.code = "noauth"; throw e; } h.Authorization = "Bearer " + t; }
-  let r; try { r = await fetch("/api/" + path, { method: "POST", headers: h, body: JSON.stringify(body || {}) }); } catch (e) { throw new Error("offline"); }
+  let r; try { r = await fetch(API_BASE + "/api/" + path, { method: "POST", headers: h, body: JSON.stringify(body || {}) }); } catch (e) { throw new Error("offline"); }
   const j = await r.json().catch(() => ({}));
   if (!r.ok) { const e = new Error(j.error || "api"); e.code = j.error || "api"; e.data = j; e.status = r.status; throw e; }
   return j;
 }
 const apiDev = () => ({ dev: getDeviceId(), brand: devLabel() });
+// Les clés du serveur sont sur le projet Vercel « mes-revision » : les autres adresses (ecolingo…) l'appellent directement
+const API_BASE = /^mes-revision(\.vercel\.app|-[a-z0-9-]+\.vercel\.app)$/.test(location.hostname) ? "" : "https://mes-revision.vercel.app";
 function legacyErr(which, e) {
   const c = e && e.code;
   if (c === "bad") return authErr(which, which === "recover" ? "Prénom ou code incorrect. Si tu n'as jamais reçu de code, demande à l'admin." : "Prénom ou mot de passe incorrect.");
