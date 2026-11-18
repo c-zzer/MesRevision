@@ -48,10 +48,11 @@ service cloud.firestore {
     }
     match /progress/{uid} { allow read, write: if isMe(uid) || isAdmin(); }
 
-    // ── Jeu : classement (lecture pour les connectés), écriture par le propriétaire ──
+    // ── Jeu (ANTI-TRICHE) : Lingo, rangs, boutique et duels sont écrits UNIQUEMENT par le serveur (api/jeu) ──
     match /lingo/{uid} {
       allow read: if signed();
-      allow write: if isMe(uid) || isAdmin() || (signed() && uid.matches('_stock_.*'));
+      allow delete: if isMe(uid);          // suppression de son propre compte
+      allow create, update: if false;
     }
     match /presence/{uid} {
       allow read: if signed();
@@ -59,11 +60,9 @@ service cloud.firestore {
     }
     match /duels/{id} {
       allow read: if signed() && (resource == null || resource.data.toId == request.auth.uid || resource.data.fromId == request.auth.uid);
-      allow create: if signed() && request.resource.data.fromId == request.auth.uid;
-      allow update: if signed() && (resource.data.toId == request.auth.uid || resource.data.fromId == request.auth.uid)
-                    && request.resource.data.fromId == resource.data.fromId && request.resource.data.toId == resource.data.toId;
-      allow delete: if isAdmin();
+      allow write: if false;
     }
+    match /jeu_sessions/{doc=**} { allow read, write: if false; }   // questions et réponses des parties : serveur seulement
 
     // ── Statistiques d'appareils : chaque téléphone écrit sa propre fiche (identifiant aléatoire), seuls les admins voient la liste ──
     match /visitors/{dev} {
