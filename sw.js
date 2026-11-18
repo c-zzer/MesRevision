@@ -39,6 +39,7 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;           // Firebase, CDN… : on ne touche à rien
   if (url.pathname.endsWith("/sw.js")) return;
+  if (url.pathname.startsWith("/api/")) return;                // serveur (comptes, Drive) : jamais en cache
   if (req.mode === "navigate") { e.respondWith(networkFirst(req, PAGE, 4000)); return; }
   e.respondWith(networkFirst(req, req, 4000));               // icônes et autres fichiers du site
 });

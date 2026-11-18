@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confidentialité – EcoLingo / Mes Révisions</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 720px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-size: 28px; line-height: 1.2; margin: 0 0 4px; }
+  h2 { font-size: 19px; margin: 32px 0 6px; }
+  .sub { opacity: .65; margin: 0 0 24px; }
+  ul { padding-left: 20px; }
+  a { color: #4c8dff; }
+</style>
+</head>
+<body>
+<h1>Confidentialité</h1>
+<p class="sub">EcoLingo / Mes Révisions · mes-revision.vercel.app · mise à jour : novembre 2026</p>
+
+<h2>Ce que le site enregistre</h2>
+<ul>
+  <li><b>Compte</b> : prénom (ou nom, e-mail, classe et date de naissance pour les comptes e-mail) et mot de passe. Le mot de passe n'est jamais enregistré en clair : seule une empreinte (hachage) est gardée.</li>
+  <li><b>Progression et jeu</b> : scores des quiz, fiches à revoir, Lingo, objets de la boutique, classement et duels.</li>
+  <li><b>Appareils</b> : type de téléphone ou d'ordinateur (marque, modèle) et date de dernière visite, pour limiter un compte à 5 appareils et compter les visites.</li>
+</ul>
+
+<h2>Où sont les données</h2>
+<ul>
+  <li>La progression, le jeu et les profils e-mail sont dans <b>Google Firebase</b>. Des règles de sécurité font que chacun ne peut lire et modifier que ses propres données.</li>
+  <li>Les comptes « prénom » (empreintes des mots de passe, codes de récupération, appareils) sont dans un <b>Google Drive privé</b>, <b>chiffrés</b> (AES-256). Seul le serveur du site peut les ouvrir.</li>
+  <li>Le site est hébergé par <b>Vercel</b>.</li>
+</ul>
+
+<h2>Accès à Google Drive</h2>
+<p>L'accès au Drive sert uniquement à l'administrateur du site pour ranger les données des comptes. Il est limité aux fichiers créés par le site : le site ne voit aucun autre fichier du Drive. Les données ne sont ni vendues ni partagées.</p>
+
+<h2>Tes droits</h2>
+<p>Tu peux télécharger tes données ou supprimer ton compte depuis les Réglages du site, ou demander à l'administrateur de le faire.</p>
+
+<h2>Contact</h2>
+<p><a href="mailto:eliott.royer49@gmail.com">eliott.royer49@gmail.com</a></p>
+<p><a href="/">← Retour au site</a></p>
+</body>
+</html>

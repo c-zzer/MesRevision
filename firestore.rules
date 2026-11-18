@@ -1,0 +1,87 @@
+rules_version = '2';
+// Règles de sécurité Firestore — EcoLingo / MesRévisions
+// Principe : chacun ne lit/écrit que SES données ; les admins (config/admins ou admins/<uid>) gèrent le reste.
+// Les comptes « prénom » (mots de passe hachés, appareils, codes) ne sont plus ici : ils sont dans le Google Drive, chiffrés,
+// et seul le serveur (fonctions Vercel /api) y accède.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signed() { return request.auth != null; }
+    function isMe(uid) { return signed() && request.auth.uid == uid; }
+    function isAdmin() {
+      return signed() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        request.auth.uid in get(/databases/$(database)/documents/config/admins).data.ids
+      );
+    }
+
+    // ── Secrets du serveur et anciennes données sensibles : interdits à tout le monde (le serveur passe outre) ──
+    match /secrets/{doc=**} { allow read, write: if false; }
+    match /accounts/{doc=**} { allow read, write: if false; }
+
+    // ── Configuration ──
+    match /config/admins { allow read: if signed(); allow write: if isAdmin(); }
+    match /config/{other} { allow read, write: if false; }
+    // Admins « e-mail » : déclarés à la main dans la console (ID du document = UID), jamais depuis l'app
+    match /admins/{uid} { allow read: if isMe(uid) || isAdmin(); allow write: if false; }
+
+    // ── Profils (comptes e-mail) : propriétaire uniquement, lisibles aussi par les admins ──
+    function validProfile(d) {
+      return d.keys().hasOnly(['firstName','lastName','email','emailVerified','role','level','birth','newsletter','privacy','createdAt','updatedAt','schema','legacyId'])
+        && d.keys().hasAll(['firstName','lastName','email','role','level','birth','newsletter','privacy','createdAt','updatedAt','schema'])
+        && d.firstName is string && d.firstName.size() >= 1 && d.firstName.size() <= 60
+        && d.lastName is string && d.lastName.size() >= 1 && d.lastName.size() <= 60
+        && d.email is string && d.email == request.auth.token.email
+        && (d.emailVerified == false || request.auth.token.email_verified == true)
+        && d.role in ['eleve', 'prof']
+        && d.level in ['cm1','cm2','6e','5e','4e','3e','2nde','1ere','term','sup','autre','multi']
+        && d.birth is string && d.birth.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && d.newsletter is map && d.newsletter.optIn is bool
+        && d.privacy is map
+        && d.schema == 1;
+    }
+    match /profiles/{uid} {
+      allow read: if isMe(uid) || isAdmin();
+      allow create: if isMe(uid) && validProfile(request.resource.data);
+      allow update: if isMe(uid) && validProfile(request.resource.data) && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isMe(uid);
+    }
+    match /progress/{uid} { allow read, write: if isMe(uid) || isAdmin(); }
+
+    // ── Jeu : classement (lecture pour les connectés), écriture par le propriétaire ──
+    match /lingo/{uid} {
+      allow read: if signed();
+      allow write: if isMe(uid) || isAdmin() || (signed() && uid.matches('_stock_.*'));
+    }
+    match /presence/{uid} {
+      allow read: if signed();
+      allow write: if isMe(uid) || isAdmin();
+    }
+    match /duels/{id} {
+      allow read: if signed() && (resource == null || resource.data.toId == request.auth.uid || resource.data.fromId == request.auth.uid);
+      allow create: if signed() && request.resource.data.fromId == request.auth.uid;
+      allow update: if signed() && (resource.data.toId == request.auth.uid || resource.data.fromId == request.auth.uid)
+                    && request.resource.data.fromId == resource.data.fromId && request.resource.data.toId == resource.data.toId;
+      allow delete: if isAdmin();
+    }
+
+    // ── Statistiques d'appareils : chaque téléphone écrit sa propre fiche (identifiant aléatoire), seuls les admins voient la liste ──
+    match /visitors/{dev} {
+      allow get: if true;
+      allow list: if isAdmin();
+      allow create, update: if request.resource.data.keys().hasOnly(['firstSeen', 'lastSeen', 'brand', 'model', 'name', 'accountId'])
+                            && (!('accountId' in request.resource.data) || request.resource.data.accountId == null || isMe(request.resource.data.accountId) || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // ── Fiches de révision : publiques en lecture, modifiables par les admins ──
+    match /{coll}/{fiche} {
+      allow read: if coll.matches('fiches_.*');
+      allow write: if coll.matches('fiches_.*') && isAdmin();
+      match /parts/{part} {
+        allow read: if coll.matches('fiches_.*');
+        allow write: if coll.matches('fiches_.*') && isAdmin();
+      }
+    }
+  }
+}

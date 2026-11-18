@@ -2272,6 +2272,7 @@ body.has-ipad-side .admin-menu { left: 314px; }
     <button id="btn-autobak" class="btn btn-ghost" style="display:none" onclick="openAutoBackups()" title="Copies automatiques des fiches (une par jour)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/><path d="M12 8v4l3 2"/></svg> Sauvegardes auto</button>
     <button id="btn-admin-admins" class="btn btn-ghost" style="display:none" onclick="openAdminsPanel(event)" title="Gérer les admins"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 7.6-8 9-4.8-1.4-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg> Admins</button>
     <button id="btn-admin-give" class="btn btn-ghost" style="display:none" onclick="openGrantPanel(event)" title="Gérer les inventaires"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg> Give inventaire</button>
+    <button id="btn-admin-drive" class="btn btn-ghost" style="display:none" onclick="openDrivePanel(event)" title="Stockage Google Drive chiffré"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Stockage Drive</button>
     <button id="btn-admin-pw" class="btn btn-ghost" style="display:none" onclick="openPwModal()" title="Changer le mot de passe"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/></svg> Mot de passe</button>
     <button id="btn-admin-logout" class="btn btn-danger" style="display:none" onclick="logoutAdmin()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H6a2 2 0 00-2 2v12a2 2 0 002 2h4"/><path d="M16 8l4 4-4 4M20 12H9"/></svg> Déconnexion</button>
   </div>
@@ -3210,13 +3211,7 @@ async function sha(str) {
   const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
   return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join("");
 }
-async function loadAdminHash() {
-  await dbReady;
-  try {
-    const d = (await db.doc("config/admin").get()).data();
-    adminHash = d && d.hash ? d.hash : await sha(DEFAULT_PASSWORD);
-  } catch(e) { adminHash = await sha(DEFAULT_PASSWORD); }
-}
+async function loadAdminHash() { adminHash = null; /* ancien mot de passe admin partagé : supprimé */ }
 function openPwModal() {
   ["pw-old","pw-new","pw-new2"].forEach(i => document.getElementById(i).value = "");
   document.getElementById("pw-change-error").style.display = "none";
@@ -3235,8 +3230,7 @@ async function changePw() {
   const err = document.getElementById("pw-change-error");
   const o = document.getElementById("pw-old").value, n = document.getElementById("pw-new").value, n2 = document.getElementById("pw-new2").value;
   const fail = m => { err.textContent = m; err.style.display = "block"; };
-  await loadAdminHash();
-  if (await sha(o) !== adminHash) return fail("Mot de passe actuel incorrect");
+  return fail("Le mot de passe admin partagé n'existe plus : les admins se connectent avec leur propre compte.");
   if (n.length < 6) return fail("Le nouveau mot de passe est trop court (6 min.)");
   if (n !== n2) return fail("Les deux mots de passe ne correspondent pas");
   try {
@@ -5414,6 +5408,7 @@ function updateNav() {
   document.getElementById("btn-admin-pw").style.display = "none";   // plus de mot de passe admin partagé
   { const g = document.getElementById("btn-admin-admins"); if (g) g.style.display = isAdmin ? "inline-flex" : "none"; }
   { const g = document.getElementById("btn-admin-give"); if (g) g.style.display = isAdmin ? "inline-flex" : "none"; }
+  { const g = document.getElementById("btn-admin-drive"); if (g) g.style.display = isAdmin ? "inline-flex" : "none"; }
   navSwap("btn-admin-menu", isAdmin, "inline-flex");
   navBooted = true;
   if (!isAdmin) closeAdminMenu();
@@ -8405,10 +8400,6 @@ async function verifyAdmin(boot) {
     if (!(await loadAdminIds())) return;   // hors ligne : on garde l'état courant
     let ok = ADMIN_IDS.includes(acct.id);
     if (!ok && acct.fb) { try { ok = await FBA.isAdmin(acct.id); } catch (e) {} }
-    // Ancien admin (mot de passe) : son compte devient admin, une seule fois, au démarrage (ou s'il n'y a encore aucun admin)
-    if (!ok && legacy && (boot || !ADMIN_IDS.length)) {
-      try { await db.doc("config/admins").set({ ids: [...new Set([...ADMIN_IDS, acct.id])] }); ADMIN_IDS = [...new Set([...ADMIN_IDS, acct.id])]; ok = true; } catch (e) {}
-    }
     if (ok || boot) { try { localStorage.removeItem("rev_admin"); } catch (e) {} }
     try { if (ok) localStorage.setItem("rev_adm2", acct.id); else localStorage.removeItem("rev_adm2"); } catch (e) {}
     setAdminState(ok);
@@ -8431,7 +8422,7 @@ async function admLoad() {
   const map = {};
   try {
     await Promise.all([loadAdminIds(),
-      (async () => { try { const snap = await db.collection("accounts").get(); (snap.docs || []).forEach(d => { const v = d.data() || {}; if (v.migratedTo) return; map[d.id] = { id: d.id, name: v.name || d.id, sub: "Compte prénom · " + d.id }; }); } catch (e) {} })(),
+      (async () => { try { ((await api("admin", { action: "list" }, true)).accounts || []).forEach(v => { if (v.migratedTo) return; map[v.id] = { id: v.id, name: v.name || v.id, sub: "Compte prénom · " + v.id }; }); } catch (e) {} })(),
       (async () => { try { const rows = await FBA.allProfiles(); rows.forEach(p => { map[p.id] = { id: p.id, name: [p.firstName, p.lastName].filter(Boolean).join(" ") || p.email || p.id, sub: p.email || p.id }; }); } catch (e) {} })()]);
   } catch (e) {}
   ADMIN_IDS.forEach(id => { if (!map[id]) map[id] = { id, name: id, sub: "Compte introuvable · " + id }; });
@@ -8544,6 +8535,30 @@ function authBusy(which, on) {
   if (on) { b.dataset.t = b.textContent; b.innerHTML = '<i class="au-sp"></i>'; b.disabled = true; }
   else { b.textContent = b.dataset.t || b.textContent; b.disabled = false; }
 }
+// ─── SERVEUR (fonctions Vercel /api) ───────────────────────
+// Les mots de passe des comptes « prénom » sont vérifiés sur le serveur ; leurs empreintes sont dans le Drive, chiffrées,
+// et ne passent jamais par le navigateur.
+async function api(path, body, withAuth) {
+  const h = { "Content-Type": "application/json" };
+  if (withAuth) { const t = await FBA.idToken(); if (!t) { const e = new Error("noauth"); e.code = "noauth"; throw e; } h.Authorization = "Bearer " + t; }
+  let r; try { r = await fetch(API_BASE + "/api/" + path, { method: "POST", headers: h, body: JSON.stringify(body || {}) }); } catch (e) { throw new Error("offline"); }
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { const e = new Error(j.error || "api"); e.code = j.error || "api"; e.data = j; e.status = r.status; throw e; }
+  return j;
+}
+const apiDev = () => ({ dev: getDeviceId(), brand: devLabel() });
+// Les clés du serveur sont sur le projet Vercel « mes-revision » : les autres adresses (ecolingo…) l'appellent directement
+const API_BASE = /^mes-revision(\.vercel\.app|-[a-z0-9-]+\.vercel\.app)$/.test(location.hostname) ? "" : "https://mes-revision.vercel.app";
+function legacyErr(which, e) {
+  const c = e && e.code;
+  if (c === "bad") return authErr(which, which === "recover" ? "Prénom ou code incorrect. Si tu n'as jamais reçu de code, demande à l'admin." : "Prénom ou mot de passe incorrect.");
+  if (c === "locked") return authErr(which, "Trop d'essais. Réessaie dans " + ((e.data && e.data.lockMin) || 10) + " min.");
+  if (c === "migrated") return authErr(which, "Ce compte utilise maintenant ton e-mail : connecte-toi avec ton adresse e-mail.");
+  if (c === "weak") return authErr(which, "Mot de passe trop faible : 8 caractères min., avec une lettre et un chiffre.");
+  if (c === "taken") return authErr(which, "Ce prénom est déjà pris. Ajoute par exemple l'initiale de ton nom.");
+  if (c === "nodrive" || c === "config") return authErr(which, "Le serveur des comptes est en maintenance. Réessaie dans un moment.");
+  authFail(which, e);
+}
 async function authDb() {
   try { await dbReady; } catch (e) {}
   if (!db || degraded) throw new Error("offline");
@@ -8561,24 +8576,10 @@ async function authCreate(ev) {
   if (!pwOk(pw)) return authErr("create", "Mot de passe trop faible : 8 caractères min., avec une lettre et un chiffre.");
   authBusy("create", true);
   try {
-    const d = await authDb(), dev = getDeviceId();
-    const vis = await d.doc("visitors/" + dev).get();
-    if (vis.exists && (vis.data() || {}).accountId) {
-      const mine = await d.doc("accounts/" + vis.data().accountId).get();
-      if (mine.exists && devsOf(mine.data() || {})[dev]) {
-        authBusy("create", false);
-        document.getElementById("au-l-name").value = mine.data().name || "";
-        authGo("login"); authErr("login", "Ce téléphone a déjà un compte (" + (mine.data().name || "") + "). Connecte-toi.");
-        return;
-      }
-    }
-    const ex = await d.doc("accounts/" + id).get();
-    if (ex.exists) { authBusy("create", false); return authErr("create", "Ce prénom est déjà pris. Ajoute par exemple l'initiale de ton nom (« " + name + " D »)."); }
-    const salt = randHex(16), hash = await pbkdf(pw, salt), now = Date.now();
-    const rc = await recFields();
-    await d.doc("accounts/" + id).set({ name, salt, hash, ...rc.f, devices: { [dev]: { brand: devLabel(), added: now, last: now } }, createdAt: now, lastLogin: now });
-    await authSuccess({ id, name }, true, rc.code);
-  } catch (e) { authBusy("create", false); authFail("create", e); }
+    const r = await api("compte", { action: "create", name, pw, ...apiDev() });
+    await FBA.signInToken(r.token);
+    await authSuccess({ id: r.id, name: r.name }, true, r.recCode);
+  } catch (e) { authBusy("create", false); legacyErr("create", e); }
 }
 async function linkDevice() {
   if (!acct) return;
@@ -8634,9 +8635,7 @@ const devLabel = () => { const i = deviceInfo(); return i.model ? i.brand + " " 
 const normCode = c => String(c || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 function genRecCode() { const A = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", b = new Uint8Array(16); crypto.getRandomValues(b); const c = [...b].map(x => A[x % 32]); return [0, 4, 8, 12].map(i => c.slice(i, i + 4).join("")).join("-"); }
 async function recFields() { const code = genRecCode(), recSalt = randHex(16); return { code, f: { recSalt, recHash: await pbkdf(normCode(code), recSalt) } }; }
-async function setRecovery(d, id) { const r = await recFields(); await d.doc("accounts/" + id).update(r.f); return r.code; }
 const lockMsg = a => "Trop d'essais. Réessaie dans " + Math.max(1, Math.ceil((a.lockUntil - Date.now()) / 60000)) + " min.";
-async function bumpFail(d, id, a) { const n = (a.failCount || 0) + 1, p = n >= 6 ? { failCount: 0, lockUntil: Date.now() + 600000 } : { failCount: n }; try { await d.doc("accounts/" + id).update(p); } catch (e) {} }
 
 let _ish;
 function iosSheet(o) {
@@ -8691,8 +8690,8 @@ async function faceCheck() {
 async function askPassword(sub) {
   const r = await iosSheet({ title: "Confirme ton identité", sub, html: '<input class="ish-in" type="password" autocomplete="current-password" placeholder="Mot de passe">', btns: [{ t: "Continuer", v: "go" }, { t: "Annuler", v: "", cls: "sec" }] });
   if (r.v !== "go") return false;
-  try { const d = await authDb(), a = (await d.doc("accounts/" + acct.id).get()).data() || {}; if (r.val && (await pbkdf(r.val, a.salt)) === a.hash) return true; showToast("Mot de passe incorrect", ""); }
-  catch (e) { showToast("Vérification impossible hors ligne", ""); }
+  try { if (r.val && (await api("compte", { action: "checkPw", pw: r.val }, true)).ok) return r.val; showToast("Mot de passe incorrect", ""); }
+  catch (e) { showToast(e && e.code === "locked" ? "Trop d'essais. Réessaie dans " + ((e.data && e.data.lockMin) || 10) + " min." : "Vérification impossible pour le moment", ""); }
   return false;
 }
 async function viewRecovery() {
@@ -8717,14 +8716,10 @@ async function authRecover(ev) {
   if (!pwOk(pw)) return authErr("recover", "Mot de passe trop faible : 8 caractères min., avec une lettre et un chiffre.");
   authBusy("recover", true);
   try {
-    const d = await authDb(), dev = getDeviceId(), snap = await d.doc("accounts/" + id).get(), a = snap.exists ? (snap.data() || {}) : null;
-    if (a && a.lockUntil > Date.now()) { authBusy("recover", false); return authErr("recover", lockMsg(a)); }
-    const good = a && a.recSalt && a.recHash && (await pbkdf(code, a.recSalt)) === a.recHash;
-    if (!good) { if (a) await bumpFail(d, id, a); await new Promise(r => setTimeout(r, 600)); authBusy("recover", false); return authErr("recover", "Prénom ou code incorrect. Si tu n'as jamais reçu de code, demande à l'admin."); }
-    const salt = randHex(16), hash = await pbkdf(pw, salt), r = await recFields(), now = Date.now();
-    await d.doc("accounts/" + id).update({ salt, hash, ...r.f, devices: { [dev]: { brand: devLabel(), added: now, last: now } }, deviceId: null, failCount: 0, lockUntil: 0, lastLogin: now });
-    await authSuccess({ id, name: a.name || name }, false, r.code);
-  } catch (e) { authBusy("recover", false); authFail("recover", e); }
+    const r = await api("compte", { action: "recover", name, code, pw, ...apiDev() });
+    await FBA.signInToken(r.token);
+    await authSuccess({ id: r.id, name: r.name || name }, false, r.recCode);
+  } catch (e) { authBusy("recover", false); legacyErr("recover", e); }
 }
 async function authLogin(ev) {
   ev.preventDefault(); if (_authBusy) return;
@@ -8734,42 +8729,43 @@ async function authLogin(ev) {
   if (IS_CLAUDE_PREVIEW && id === "test") return authSuccess({ id: "test", name: "Test" }, false);
   authBusy("login", true);
   try {
-    const d = await authDb(), dev = getDeviceId();
-    const snap = await d.doc("accounts/" + id).get(), a = snap.exists ? (snap.data() || {}) : null;
-    if (a && a.lockUntil > Date.now()) { authBusy("login", false); return authErr("login", lockMsg(a)); }
-    const good = a && a.salt && a.hash && (await pbkdf(pw, a.salt)) === a.hash;
-    if (!good) { if (a) await bumpFail(d, id, a); await new Promise(r => setTimeout(r, 600)); authBusy("login", false); return authErr("login", "Prénom ou mot de passe incorrect."); }
-    const devs = devsOf(a), now = Date.now();
-    if (!devs[dev] && Object.keys(devs).length >= MAX_DEV) {
-      authBusy("login", false);
-      const out = await pickDeviceToReplace(devs); if (!out) return;
-      delete devs[out]; authBusy("login", true);
+    let r = null, replace = null;
+    for (;;) {
+      try { r = await api("compte", { action: "login", name, pw, replace, ...apiDev() }); break; }
+      catch (e) {
+        if (e.code !== "devfull") throw e;
+        authBusy("login", false);
+        const devs = {}; ((e.data && e.data.devices) || []).forEach(x => { devs[x.id] = x; });
+        replace = await pickDeviceToReplace(devs); if (!replace) return;
+        authBusy("login", true);
+      }
     }
-    devs[dev] = { brand: devLabel(), added: (devs[dev] || {}).added || now, last: now };
-    await d.doc("accounts/" + id).update({ devices: devs, deviceId: null, lastLogin: now, failCount: 0, lockUntil: 0 });
-    const code = a.recHash ? null : await setRecovery(d, id);
-    await authSuccess({ id, name: a.name || name }, false, code);
-  } catch (e) { authBusy("login", false); authFail("login", e); }
+    await FBA.signInToken(r.token);
+    await authSuccess({ id: r.id, name: r.name || name }, false, r.recCode);
+  } catch (e) { authBusy("login", false); legacyErr("login", e); }
 }
 async function verifyAcct() {
   if (!acct) return;
   try {
-    const d = await authDb(), snap = await d.doc("accounts/" + acct.id).get();
-    if (!snap.exists) return logoutAcct("Ce compte n'existe plus. Crée-en un nouveau.");
-    const a = snap.data() || {}, dev = getDeviceId(), devs = devsOf(a), now = Date.now();
-    if (a.name && a.name !== acct.name) saveAcct({ ...acct, name: a.name });   // renommé par un admin
-    if (!devs[dev]) {
-      if (Object.keys(devs).length) return logoutAcct("Cet appareil a été retiré du compte. Reconnecte-toi.");
-      devs[dev] = { brand: devLabel(), added: now, last: now }; await d.doc("accounts/" + acct.id).update({ devices: devs, deviceId: null });
-    } else if (now - (devs[dev].last || 0) > 600000) { devs[dev].last = now; await d.doc("accounts/" + acct.id).update({ devices: devs, deviceId: null }); }
+    const uid = await FBA.uid();
+    // Mise à jour de sécurité : les anciennes sessions doivent se reconnecter une fois (le serveur vérifie le mot de passe)
+    if (uid !== acct.id) return logoutAcct("Mise à jour de sécurité : reconnecte-toi une fois avec ton prénom et ton mot de passe.");
+    const r = await api("compte", { action: "session", ...apiDev() }, true);
+    if (r.name && r.name !== acct.name) saveAcct({ ...acct, name: r.name });   // renommé par un admin
     linkDevice();
-    if (!a.recHash) showRecovery(await setRecovery(d, acct.id));
-  } catch (e) { /* hors ligne : on garde la session */ }
+    if (r.recCode) showRecovery(r.recCode);
+  } catch (e) {
+    const c = e && e.code;
+    if (c === "gone") return logoutAcct("Ce compte n'existe plus. Crée-en un nouveau.");
+    if (c === "devremoved") return logoutAcct("Cet appareil a été retiré du compte. Reconnecte-toi.");
+    if (c === "noauth" || c === "notlegacy") return logoutAcct("Reconnecte-toi.");
+    /* hors ligne / serveur indisponible : on garde la session */
+  }
 }
 window.renderMyDevices = async function () {
   const box = document.getElementById("set-devs"); if (!box || !acct) return;
   try {
-    const d = await authDb(), a = (await d.doc("accounts/" + acct.id).get()).data() || {}, devs = devsOf(a), me = getDeviceId();
+    const devs = (await api("compte", { action: "devices" }, true)).devices || {}, me = getDeviceId();
     const rows = Object.entries(devs).sort((x, y) => (y[1].last || 0) - (x[1].last || 0)).map(([id, x]) => '<div class="set-row"><span class="dv-t"><b>' + escHtml(x.brand || "Appareil") + (id === me ? " · cet appareil" : "") + '</b><small>' + (x.last ? "Actif " + visAgo(x.last) : "") + '</small></span>' + (id === me ? "" : '<button type="button" class="dv-rm" data-rm="' + escHtml(id) + '">Retirer</button>') + '</div>').join("");
     box.innerHTML = '<div class="dv-title">Appareils · ' + Object.keys(devs).length + ' / ' + MAX_DEV + '</div><div class="set-group">' + rows + '</div>';
   } catch (e) { console.warn("renderMyDevices", e); box.innerHTML = '<div class="set-group"><div class="set-row"><span style="color:var(--text-muted)">Appareils indisponibles (hors ligne ?)</span></div></div>'; }
@@ -8777,12 +8773,12 @@ window.renderMyDevices = async function () {
 async function removeDevice(id) {
   const r = await iosSheet({ title: "Retirer cet appareil ?", sub: "Il sera déconnecté du compte.", btns: [{ t: "Retirer", v: "go", cls: "danger" }, { t: "Annuler", v: "", cls: "sec" }] });
   if (r.v !== "go") return;
-  try { const d = await authDb(), devs = devsOf((await d.doc("accounts/" + acct.id).get()).data() || {}); delete devs[id]; await d.doc("accounts/" + acct.id).update({ devices: devs, deviceId: null }); showToast("Appareil retiré", "success"); renderMyDevices(); }
+  try { await api("compte", { action: "removeDevice", id }, true); showToast("Appareil retiré", "success"); renderMyDevices(); }
   catch (e) { showToast("Impossible de retirer l'appareil", ""); }
 }
 async function regenRecovery() {
-  if (!(await askPassword("L'ancien code ne fonctionnera plus. Entre ton mot de passe pour confirmer."))) return;
-  try { const d = await authDb(), code = await setRecovery(d, acct.id); renderMyDevices(); showRecovery(code, true); }
+  const pw = await askPassword("L'ancien code ne fonctionnera plus. Entre ton mot de passe pour confirmer."); if (!pw) return;
+  try { const code = (await api("compte", { action: "regenRec", pw }, true)).recCode; renderMyDevices(); showRecovery(code, true); }
   catch (e) { showToast("Impossible pour le moment", ""); }
 }
 document.addEventListener("keydown", e => { if (e.key === "Escape" && _ish && _ish.classList.contains("on")) { const x = _ish.querySelector(".ish-x"); if (x) x.click(); } });
@@ -8805,7 +8801,7 @@ document.addEventListener("click", e => { const t = e.target.closest && e.target
 // Admin : liste des comptes + « libérer » le téléphone d'un compte
 let ACCTS = [], PROFS = [], PROFS_ERR = "", LGN = [];
 async function loadAccounts() {
-  try { await dbReady; const snap = await db.collection("accounts").get(); ACCTS = (snap.docs || []).map(x => { const v = x.data() || {}; return { id: x.id, name: v.name, deviceId: v.deviceId, devices: v.devices, createdAt: v.createdAt, lastLogin: v.lastLogin, migratedTo: v.migratedTo }; }); } catch (e) { ACCTS = []; }
+  try { ACCTS = (await api("admin", { action: "list" }, true)).accounts || []; } catch (e) { ACCTS = []; }
   PROFS_ERR = "";
   try { PROFS = (await FBA.allProfiles()).map(p => ({ id: p.id, first: p.firstName, last: p.lastName, email: p.email, role: p.role, level: p.level, verified: !!p.emailVerified, createdAt: p.createdAt, updatedAt: p.updatedAt })); } catch (e) { PROFS = []; PROFS_ERR = (e && (e.code || e.message)) || "erreur"; }
   // Firebase Authentication n'est pas listable depuis le site : on retrouve aussi les comptes e-mail via leurs données de jeu (Lingo, appareils), lisibles sans les profils
@@ -8824,25 +8820,14 @@ async function deleteAccount(id, name) {
   if (!isAdmin) return;
   if (!confirm("Supprimer définitivement le compte « " + (name || id) + " » ?\n\nLa personne sera déconnectée et pourra recréer un compte avec ce prénom. Cette action est irréversible.")) return;
   try {
-    await dbReady;
-    let mig = null; try { mig = ((await db.doc("accounts/" + id).get()).data() || {}).migratedTo || null; } catch (e) {}
-    await db.doc("accounts/" + id).delete();
-    try { await db.doc("profiles/" + id).delete(); } catch (e) {}
-    if (mig) for (const c of ["profiles", "progress", "lingo", "presence"]) { try { await db.doc(c + "/" + mig).delete(); } catch (e) {} }
-    try { await db.doc("progress/" + id).delete(); } catch (e) {}
-    try { await db.doc("lingo/" + id).delete(); await db.doc("presence/" + id).delete(); } catch (e) {}
-    // on retire aussi le lien compte ↔ téléphone dans la liste des appareils (les statistiques d'appareils restent)
-    try {
-      const snap = await db.collection("visitors").get();
-      await Promise.all((snap.docs || []).filter(x => (x.data() || {}).accountId === id).map(x => x.ref.update({ name: null, accountId: null })));
-    } catch (e) { console.warn("deleteAccount visitors", e); }
+    await api("admin", { action: "delete", id }, true);
     showToast("Compte supprimé", "success");
     await Promise.all([loadAccounts(), loadVisitorStats()]);
     renderStatsSheet();
   } catch (e) { console.warn("deleteAccount", e); showToast("Impossible de supprimer ce compte", ""); }
 }
 async function releaseAccount(id) {
-  try { await dbReady; await db.doc("accounts/" + id).update({ deviceId: null, devices: {} }); showToast("Appareils libérés", "success"); await loadAccounts(); renderStatsSheet(); }
+  try { await api("admin", { action: "release", id }, true); showToast("Appareils libérés", "success"); await loadAccounts(); renderStatsSheet(); }
   catch (e) { showToast("Impossible de libérer ce compte", ""); }
 }
 
@@ -8859,13 +8844,7 @@ async function adminRename(id, name, kind) {
   if (!nm || !okRe.test(nm)) return showToast("Nom invalide (24 caractères max, lettres et chiffres)", "");
   if (nm === cur) return;
   try {
-    await dbReady; const d = await authDb(); let partial = false;
-    const tryDo = async f => { try { await f(); return true; } catch (e) { return false; } };
-    if (kind === "old") { if (!(await tryDo(() => d.doc("accounts/" + id).update({ name: nm })))) throw new Error("accounts"); }
-    else if (!(await tryDo(() => d.doc("profiles/" + id).update({ firstName: nm, updatedAt: Date.now() })))) partial = true;   // profil e-mail : seul le propriétaire peut parfois l'écrire
-    await tryDo(() => d.doc("lingo/" + id).update({ name: nm }));
-    await tryDo(() => d.doc("presence/" + id).update({ name: nm, nl: normName(nm) }));
-    await tryDo(async () => { const snap = await d.collection("visitors").get(); await Promise.all((snap.docs || []).filter(x => (x.data() || {}).accountId === id).map(x => x.ref.update({ name: nm }))); });
+    const partial = !!(await api("admin", { action: "rename", id, name: nm }, true)).partial;
     if (acct && acct.id === id) { saveAcct({ ...acct, name: nm }); if (PROFILE && kind !== "old") PROFILE = { ...PROFILE, firstName: nm }; }
     showToast(partial ? "Renommé dans le classement, mais pas dans le profil (règles Firestore)" : "Renommé en « " + nm + " »", partial ? "" : "success");
     await Promise.all([loadAccounts(), loadVisitorStats()]); renderStatsSheet();
@@ -8893,9 +8872,7 @@ async function adminSetPassword(id, name, kind, email) {
     break;
   }
   try {
-    await dbReady;
-    const salt = randHex(16), hash = await pbkdf(pw, salt);
-    await db.doc("accounts/" + id).update({ salt, hash, failCount: 0, lockUntil: 0 });
+    await api("admin", { action: "setPw", id, pw }, true);
   } catch (e) { console.warn("adminSetPassword", e); return showToast("Impossible de modifier le mot de passe", ""); }
   showToast("Mot de passe modifié", "success");
   for (;;) {
@@ -8912,26 +8889,11 @@ const dbReady = connectDB();
 // refait plus, même depuis un autre téléphone, et un mot de passe changé ensuite est conservé.
 // (Pour une prochaine réinitialisation, il suffirait de changer PW_RESET_ID.) Cette fonction peut ensuite être supprimée.
 const PW_RESET_ID = "reset-admin123-1";
-async function resetAdminPwOnce() {
-  try { if (localStorage.getItem("rev_pwreset") === PW_RESET_ID) return; } catch (e) {}
-  try {
-    await dbReady;
-    const mk = (await db.doc("config/pwreset").get()).data();
-    if (!mk || mk.id !== PW_RESET_ID) {
-      const h = await sha(DEFAULT_PASSWORD);
-      await db.doc("config/admin").set({ hash: h });                       // écrase l'ancien mot de passe
-      adminHash = h;
-      try { localStorage.setItem("rev_pwreset", PW_RESET_ID); } catch (e) {}
-      try { if (localStorage.getItem("rev_admin")) localStorage.setItem("rev_admin", h); } catch (e) {}   // cet appareil reste connecté en admin
-      await db.doc("config/pwreset").set({ id: PW_RESET_ID, t: Date.now() });
-    } else { try { localStorage.setItem("rev_pwreset", PW_RESET_ID); } catch (e) {} }
-  } catch (e) { console.warn("resetAdminPwOnce", e); }                       // hors ligne / écriture refusée : on réessaiera au prochain lancement
-}
+async function resetAdminPwOnce() { /* supprimé : plus de mot de passe admin partagé, les admins sont des comptes */ }
 async function postConnect() {
   try { await dbReady; } catch (e) {}
   if (restUsed && !fsActive) { restOK = false; refreshMeta(); }   // base de secours ≠ Firestore : on relit depuis la même source que les fiches
   registerDevice(true);
-  await resetAdminPwOnce();
   verifyAdmin(true);
   progSync();
 }
@@ -9040,6 +9002,10 @@ const FBA = (function () {
       const c = await (await A()).signInWithEmailAndPassword(email, pw); return usr(c.user);
     },
     async signOut() { if (mock()) { M.cur = null; return; } try { await (await A()).signOut(); } catch (e) {} },
+    // Anciens comptes (prénom) : le serveur vérifie le mot de passe puis donne un jeton de connexion Firebase
+    async signInToken(t) { const c = await (await A()).signInWithCustomToken(t); return usr(c.user); },
+    async idToken(force) { if (mock()) return null; const u = (await A()).currentUser; return u ? u.getIdToken(!!force) : null; },
+    async uid() { if (mock()) return M.cur ? M.users[M.cur].uid : null; const a = await A(); await new Promise(r => { const off = a.onAuthStateChanged(() => { off(); r(); }); }); return a.currentUser ? a.currentUser.uid : null; },
     async reset(email) { if (mock()) return; await (await A()).sendPasswordResetEmail(email); },
     async verify() { if (mock()) return; const u = (await A()).currentUser; if (u) await u.sendEmailVerification(); },
     async reauth(pw) {
@@ -9148,6 +9114,7 @@ async function suStep3(ev) {
   if (!$a("au-c-priv").checked) return authErr("create3", "Coche la case sur la confidentialité pour continuer.");
   authBusy("create3", true);
   let u = null;
+  if (SU.upgrade && !FBA.mock()) { try { SU.oldTok = await FBA.idToken(true); } catch (e) { SU.oldTok = null; } }   // preuve de l'ancien compte, avant de changer de session
   try {
     u = await FBA.signUp(email, pw);
     const prof = mkProfile({ ...SU, news: $a("au-c-news").checked }, email, SU.upgrade ? { legacyId: SU.upgrade.id } : null);
@@ -9253,32 +9220,9 @@ function startUpgrade() {
   const n = $a("au-c-name"); if (n) n.value = acct.name;
 }
 async function migrateLegacy(oldId, uid) {
-  try {
-    if (FBA.mock()) return;
-    const d = await authDb(), old = await d.doc("progress/" + oldId).get();
-    if (old.exists) await d.doc("progress/" + uid).set({ ...old.data(), updatedAt: Date.now() });
-    let okL = true;
-    for (let tr = 0; tr < 2; tr++) {   // inventaire, lingots et classements de l'ancien compte (2 essais)
-      try {
-        const ol = await d.doc("lingo/" + oldId).get(), nl = await d.doc("lingo/" + uid).get();
-        if (ol.exists) {
-          const o = ol.data() || {}, n = nl.exists ? nl.data() || {} : null;
-          if (!n) await d.doc("lingo/" + uid).set({ ...o, migFrom: oldId });
-          else if (n.migFrom !== oldId) {   // le nouveau document existe déjà (créé avant la migration) : on FUSIONNE au lieu de tout ignorer
-            const os = o.shop || {}, ns = n.shop || {}, p = {};
-            ["mo", "co", "own", "dn", "pm"].forEach(k => { const a = Array.isArray(ns[k]) ? ns[k] : [], u = [...new Set([...a, ...(Array.isArray(os[k]) ? os[k] : [])])]; if (u.length !== a.length) p[k] = u; });
-            ["m", "av", "dc"].forEach(k => { if (!ns[k] && os[k]) p[k] = os[k]; });
-            if (!(ns.ce && ns.ce.length) && Array.isArray(os.ce)) p.ce = os.ce;
-            if (os.ot && !ns.ot) p.ot = os.ot;
-            await d.doc("lingo/" + uid).set({ migFrom: oldId, total: (n.total || 0) + (o.total || 0), shop: p }, { merge: true });
-          }
-        }
-        okL = true; break;
-      } catch (e) { okL = false; console.warn("migrateLegacy lingo", e); }
-    }
-    if (!okL) { console.warn("migrateLegacy : inventaire non copié, l'ancien accès reste actif"); return; }   // on ne coupe JAMAIS l'ancien accès si l'inventaire n'a pas suivi
-    await d.doc("accounts/" + oldId).update({ migratedTo: uid, hash: null, salt: null });      // l'ancien accès ne marche plus : on passe par l'e-mail
-  } catch (e) { console.warn("migrateLegacy", e); }
+  // Le serveur vérifie les deux identités, copie progression + inventaire, puis désactive l'ancien accès
+  try { if (FBA.mock() || !SU.oldTok) return; await api("compte", { action: "upgrade", oldToken: SU.oldTok }, true); SU.oldTok = null; }
+  catch (e) { console.warn("migrateLegacy", e); }
 }
 
 // ── Page Compte ──
@@ -10338,6 +10282,23 @@ function gpSay(v) {
   el.className = /^✅/.test(v) ? "ok" : /^(❌|Refusé|Saisis|Le nombre)/.test(v) ? "err" : "";
   if (v) try { el.scrollIntoView({ block: "nearest", behavior: "smooth" }); } catch (e) {}
 }
+// ── Stockage Google Drive chiffré (admin) : connexion du Drive + transfert des comptes ──
+async function openDrivePanel(e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  if (!isAdmin) return;
+  try { closeAdminMenu(); } catch (x) {}
+  let st = null; try { st = await api("admin", { action: "driveStatus" }, true); } catch (x) { return showToast(x && x.code === "notadmin" ? "Réservé aux admins" : "Serveur indisponible (" + ((x && x.code) || "erreur") + ")", ""); }
+  if (!st.connected) {
+    const r = await iosSheet({ title: "Connecter Google Drive", sub: "Les comptes (mots de passe hachés, appareils, codes de récupération) seront rangés dans ton Google Drive, chiffrés. Le site ne verra que les fichiers qu'il crée.", btns: [{ t: "Connecter mon Drive", v: "go" }, { t: "Annuler", v: "", cls: "sec" }] });
+    if (r.v !== "go") return;
+    try { location.href = (await api("admin", { action: "driveConnect" }, true)).url; } catch (x) { showToast("Connexion impossible (" + ((x && x.code) || "erreur") + ")", ""); }
+    return;
+  }
+  const r = await iosSheet({ title: "Google Drive connecté ✅", sub: "Les comptes sont stockés chiffrés dans le dossier « EcoLingo - donnees chiffrees ». Tu peux y transférer les comptes qui sont encore dans l'ancienne base.", btns: [{ t: "Transférer les comptes", v: "mig" }, { t: "Fermer", v: "", cls: "sec" }] });
+  if (r.v !== "mig") return;
+  try { const m = await api("admin", { action: "migrate" }, true); showToast(m.moved + " compte(s) transféré(s)" + (m.left ? ", " + m.left + " restant(s)" : ""), m.left ? "" : "success"); }
+  catch (x) { showToast("Transfert impossible (" + ((x && x.code) || "erreur") + ")", ""); }
+}
 function openGrantPanel(e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
   if (!isAdmin) { showToast("Accès réservé à l’administrateur", ""); return; }
@@ -10359,9 +10320,8 @@ async function grantLoadAccounts() {
   try {
     await dbReady;
     if (!isAdmin || !db || !fsActive || degraded || IS_CLAUDE_PREVIEW) throw new Error("Firestore indisponible");
-    const snap = await db.collection("accounts").get(), map = {};
-    const gone = new Set();
-    (snap.docs || []).forEach(d => { const v = d.data() || {}; if (v.migratedTo) { gone.add(d.id); return; } map[d.id] = { id: d.id, name: v.name || d.id, sub: d.id }; });   // ancien compte déjà passé en e-mail : on ne le liste plus
+    const map = {}, gone = new Set();
+    try { ((await api("admin", { action: "list" }, true)).accounts || []).forEach(v => { if (v.migratedTo) { gone.add(v.id); return; } map[v.id] = { id: v.id, name: v.name || v.id, sub: v.id }; }); } catch (e) {}   // comptes prénom (serveur / Drive)   // ancien compte déjà passé en e-mail : on ne le liste plus
     try { (await FBA.allProfiles()).forEach(p => { map[p.id] = { id: p.id, name: [p.firstName, p.lastName].filter(Boolean).join(" ") || p.email || p.id, sub: p.email || p.id }; }); } catch (e) {}   // comptes e-mail (profil)
     try { (await db.collection("lingo").get()).docs.forEach(d => { if (d.id[0] === "_" || gone.has(d.id) || map[d.id]) return; map[d.id] = { id: d.id, name: (d.data() || {}).name || d.id, sub: "Compte e-mail · " + d.id }; }); } catch (e) {}   // retrouvés via leurs données de jeu
     _grantAccounts = Object.values(map).sort((a,b) => a.name.localeCompare(b.name, "fr"));
@@ -10448,8 +10408,8 @@ async function grantApply(all) {
     await dbReady;
     if (!db || !fsActive || degraded || IS_CLAUDE_PREVIEW || !qmOn()) throw new Error("Connecte-toi à un compte et vérifie que Firestore est disponible.");
     const ref = db.doc("lingo/" + id);
-    let acc = await db.doc("accounts/" + id).get().catch(() => null);
-    if (!acc || !acc.exists) acc = await db.doc("profiles/" + id).get().catch(() => null);
+    let acc = await db.doc("profiles/" + id).get().catch(() => null);
+    if (!acc || !acc.exists) { const la = (_grantAccounts || []).find(x => x.id === id); if (la) acc = { exists: true, data: () => ({ name: la.name }) }; }
     const lg0 = await db.doc("lingo/" + id).get().catch(() => null);
     if (!(acc && acc.exists) && !(lg0 && lg0.exists)) throw new Error("Compte introuvable. Vérifie son identifiant exact.");
     const ad = acc && acc.exists ? acc.data() || {} : {};
