@@ -65,7 +65,7 @@ function duelApply(tx, ref, d, name, o) {
   if (o.vs) up.vs = o.vs;
   tx.set(ref, up, { merge: true }); x.gain = gain; return x;
 }
-const slimX = x => x && ({ d: x.d, lp: x.lp, ev: x.ev, gain: x.gain, reward: x.reward, before: x.before, after: x.after, thr: x.thr, pct: x.pct });
+const slimX = x => x && JSON.parse(JSON.stringify({ d: x.d, lp: x.lp, ev: x.ev, gain: x.gain, reward: x.reward, before: x.before, after: x.after, thr: x.thr, pct: x.pct }));   // sans « undefined » (refusé par Firestore)
 
 // ── Sessions de quiz ──
 async function sesGet(sid, uid) {
@@ -117,7 +117,7 @@ async function duelFinalize(uid, id, force) {
       const tg = trGain(d, m.c || 0, du.n || 10); res.gain = tg.g;
       if (tg.g > 0) tx.set(ref, { name, t: t, total: FV().increment(tg.g), trd: tg.trd }, { merge: true });
     }
-    tx.set(DUEL(id), { fin: { [uid]: res } }, { merge: true });
+    tx.set(DUEL(id), { fin: { [uid]: JSON.parse(JSON.stringify(res)) } }, { merge: true });
     return res;
   });
 }
