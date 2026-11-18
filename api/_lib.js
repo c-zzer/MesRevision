@@ -80,7 +80,10 @@ async function secrets(fresh) {
   if (_sec && !fresh && Date.now() - _secT < 300000) return _sec;
   const ref = fs().doc("secrets/drive");
   let s = (await ref.get()).data() || {};
-  if (!s.dataKey) { s.dataKey = randHex(32); await ref.set({ dataKey: s.dataKey }, { merge: true }); s = (await ref.get()).data() || {}; }
+  if (!s.dataKey) {   // création atomique : deux serveurs ne doivent jamais choisir deux clés différentes
+    await fs().runTransaction(async tx => { const d = (await tx.get(ref)).data() || {}; if (!d.dataKey) tx.set(ref, { dataKey: randHex(32) }, { merge: true }); });
+    s = (await ref.get()).data() || {};
+  }
   _sec = s; _secT = Date.now(); return s;
 }
 
@@ -126,21 +129,26 @@ async function folderId() {
   const s = await secrets();
   if (s.folderId) return (_folder = s.folderId);
   const r = await gd("/drive/v3/files", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: FOLDER, mimeType: "application/vnd.google-apps.folder" }) });
-  _folder = (await r.json()).id;
-  await fs().doc("secrets/drive").set({ folderId: _folder }, { merge: true }); _sec = null;
-  return _folder;
+  const mine = (await r.json()).id, ref = fs().doc("secrets/drive");
+  const won = await fs().runTransaction(async tx => { const d = (await tx.get(ref)).data() || {}; if (d.folderId) return d.folderId; tx.set(ref, { folderId: mine }, { merge: true }); return mine; });
+  if (won !== mine) await gd("/drive/v3/files/" + mine, { method: "DELETE" }).catch(() => {});   // un autre serveur l'a créé avant nous
+  _sec = null; return (_folder = won);
 }
+const IDX = () => fs().doc("secrets/driveIndex");
+const idxKey = name => name.replace(/\./g, "_");
 async function findFile(name) {
   if (fileIds.has(name)) return fileIds.get(name);
+  const ix = ((await IDX().get()).data() || {}).files || {};
+  if (ix[idxKey(name)]) { fileIds.set(name, ix[idxKey(name)]); return ix[idxKey(name)]; }
   const f = await folderId();
   const r = await gd("/drive/v3/files?" + new URLSearchParams({ q: "name = " + q(name) + " and " + q(f) + " in parents and trashed = false", fields: "files(id)", pageSize: "1" }));
   const id = ((await r.json()).files || [])[0]?.id || null;
-  if (id) fileIds.set(name, id);
+  if (id) { fileIds.set(name, id); await IDX().set({ files: { [idxKey(name)]: id } }, { merge: true }); }
   return id;
 }
 async function readFile(name) {
   const id = await findFile(name); if (!id) return null;
-  const r = await gd("/drive/v3/files/" + id + "?alt=media");
+  const r = await gd("/drive/v3/files/" + id + "?alt=media").catch(e => { fileIds.delete(name); throw e; });
   return open(Buffer.from(await r.arrayBuffer()));
 }
 async function writeFile(name, obj) {
@@ -151,11 +159,13 @@ async function writeFile(name, obj) {
     Buffer.from("--" + b + "\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n" + JSON.stringify({ name, parents: [f] }) + "\r\n--" + b + "\r\nContent-Type: application/octet-stream\r\n\r\n"),
     data, Buffer.from("\r\n--" + b + "--")]);
   const r = await gd("/upload/drive/v3/files?uploadType=multipart&fields=id", { method: "POST", headers: { "Content-Type": "multipart/related; boundary=" + b }, body });
-  fileIds.set(name, (await r.json()).id);
+  const nid = (await r.json()).id; fileIds.set(name, nid);
+  await IDX().set({ files: { [idxKey(name)]: nid } }, { merge: true });
 }
 async function deleteFile(name) {
   const id = await findFile(name); if (!id) return;
   await gd("/drive/v3/files/" + id, { method: "DELETE" }); fileIds.delete(name);
+  await IDX().update(new admin.firestore.FieldPath("files", idxKey(name)), admin.firestore.FieldValue.delete()).catch(() => {});
 }
 async function listFiles(prefix) {
   const f = await folderId(), out = []; let pt = "";
@@ -163,6 +173,10 @@ async function listFiles(prefix) {
     const r = await gd("/drive/v3/files?" + new URLSearchParams({ q: "name contains " + q(prefix) + " and " + q(f) + " in parents and trashed = false", fields: "nextPageToken,files(id,name)", pageSize: "200", ...(pt ? { pageToken: pt } : {}) }));
     const j = await r.json(); (j.files || []).forEach(x => { if (x.name.startsWith(prefix)) { out.push(x.name); fileIds.set(x.name, x.id); } }); pt = j.nextPageToken || "";
   } while (pt);
+  const ix = ((await IDX().get()).data() || {}).files || {};
+  Object.keys(ix).forEach(k => { const n = k.replace(/_enc$/, ".enc"); if (n.startsWith(prefix) && !out.includes(n)) { out.push(n); fileIds.set(n, ix[k]); } });
+  const miss = {}; out.forEach(n => { if (!ix[idxKey(n)] && fileIds.get(n)) miss[idxKey(n)] = fileIds.get(n); });
+  if (Object.keys(miss).length) await IDX().set({ files: miss }, { merge: true });
   return out;
 }
 
