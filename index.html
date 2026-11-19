@@ -1812,6 +1812,7 @@ body.has-ipad-side .admin-menu { left: 314px; }
 .lib-seg button.bb { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 12px; background: var(--sun); }
 .lib-seg button.bb .bb-ic { display: grid; place-items: center; width: 40px; height: 40px; flex: none; border-radius: 12px; background: #fff; border: var(--bw) solid var(--ink); }
 .lib-seg button.bb .bb-t { display: flex; flex-direction: column; gap: 2px; }
+.lib-seg button.bb.on { background: var(--mur); color: #fff; }
 .lib-seg button.bb.on .bb-ic { color: var(--ink); }
 .lib-lv .bb-note { font: 600 .82rem/1.3 var(--d); opacity: .8; }
 .lib-lv { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 0 0 14px; }
@@ -4536,7 +4537,7 @@ function renderFichesList(sub, animate) {
     card.innerHTML = `
         <div class="fiche-info">
           <div class="fiche-title">${escHtml(f.title)}</div>
-          <div class="fiche-meta">${SC.isSc(f.id) ? '<span class="sc-tag">Programme ' + escHtml(f.lv || "") + '</span>' : "Ajoutée le " + formatDate(f.createdAt)}${difOf(f) ? `<span class="fiche-dif" style="--c:${DIFS[difOf(f)].color}">${DIFS[difOf(f)].label}</span>` : ""}</div>
+          <div class="fiche-meta">${SC.isSc(f.id) ? '<span class="sc-tag">' + (f.lv === "bb" ? "Brevet blanc n°1" : "Programme " + escHtml(f.lv || "")) + '</span>' : "Ajoutée le " + formatDate(f.createdAt)}${difOf(f) ? `<span class="fiche-dif" style="--c:${DIFS[difOf(f)].color}">${DIFS[difOf(f)].label}</span>` : ""}</div>
         </div>
         <div class="fiche-actions">
           ${markBtns(sub.id, f.id)}
