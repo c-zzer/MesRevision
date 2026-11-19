@@ -1809,6 +1809,12 @@ body.has-ipad-side .admin-menu { left: 314px; }
 .lib-seg button small { font: 600 .74rem/1.25 var(--d); opacity: .72; letter-spacing: 0; }
 .lib-seg button.on { background: var(--mur); color: #fff; transform: translate(4px, 4px); box-shadow: none; }
 .lib-seg button.on small { opacity: .9; }
+.lib-seg button.bb { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 12px; background: var(--sun); }
+.lib-seg button.bb .bb-ic { display: grid; place-items: center; width: 40px; height: 40px; flex: none; border-radius: 12px; background: #fff; border: var(--bw) solid var(--ink); }
+.lib-seg button.bb .bb-t { display: flex; flex-direction: column; gap: 2px; }
+.lib-seg button.bb.on { background: var(--mur); color: #fff; }
+.lib-seg button.bb.on .bb-ic { color: var(--ink); }
+.lib-lv .bb-note { font: 600 .82rem/1.3 var(--d); opacity: .8; }
 .lib-lv { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 0 0 14px; }
 .lib-lv[hidden] { display: none; }
 .lib-lv .lab { font: 800 .82rem var(--d); margin-right: 2px; }
@@ -2462,7 +2468,7 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
       <button class="mk-tile" type="button" onclick="openA2hs()"><span class="mk-ico" style="background:var(--mur);color:#fff"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4.5"/><path d="M12 8.5v7M8.5 12h7"/></svg></span><span class="mk-txt"><b>Ajouter à l'écran d'accueil</b><i>Un raccourci pour l'ouvrir comme une app</i></span></button>
     </div>
     <div class="section-title">Tes matières</div>
-    <div class="lib-seg" id="lib-seg" role="tablist"><button type="button" data-lib="socle" role="tab">Socle commun<small>Les fiches EcoLingo du programme officiel</small></button><button type="button" data-lib="ecole" role="tab">Mon école<small>Les fiches ajoutées par ton école</small></button></div>
+    <div class="lib-seg" id="lib-seg" role="tablist"><button type="button" data-lib="socle" role="tab">Socle commun<small>Les fiches EcoLingo du programme officiel</small></button><button type="button" data-lib="ecole" role="tab">Mon école<small>Les fiches ajoutées par ton école</small></button><button type="button" data-lib="bb" role="tab" class="bb"><span class="bb-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4"/></svg></span><span class="bb-t">Brevet blanc n°1<small>3e · tout le programme de septembre à fin novembre, avec quiz</small></span></button></div>
     <div class="lib-lv" id="lib-lv" hidden></div>
     <div id="subjects-grid" class="subjects-grid"></div>
   </main>
@@ -4531,7 +4537,7 @@ function renderFichesList(sub, animate) {
     card.innerHTML = `
         <div class="fiche-info">
           <div class="fiche-title">${escHtml(f.title)}</div>
-          <div class="fiche-meta">${SC.isSc(f.id) ? '<span class="sc-tag">Programme ' + escHtml(f.lv || "") + '</span>' : "Ajoutée le " + formatDate(f.createdAt)}${difOf(f) ? `<span class="fiche-dif" style="--c:${DIFS[difOf(f)].color}">${DIFS[difOf(f)].label}</span>` : ""}</div>
+          <div class="fiche-meta">${SC.isSc(f.id) ? '<span class="sc-tag">' + (f.lv === "bb" ? "Brevet blanc n°1" : "Programme " + escHtml(f.lv || "")) + '</span>' : "Ajoutée le " + formatDate(f.createdAt)}${difOf(f) ? `<span class="fiche-dif" style="--c:${DIFS[difOf(f)].color}">${DIFS[difOf(f)].label}</span>` : ""}</div>
         </div>
         <div class="fiche-actions">
           ${markBtns(sub.id, f.id)}
@@ -8327,7 +8333,8 @@ const SC = (() => {
   let idx = null, idxP = null; const files = new Map();
   const on = () => st.lib === "socle";
   const myLv = () => { try { return PROFILE && LV.includes(PROFILE.level) ? PROFILE.level : ""; } catch (e) { return ""; } };
-  const lv = () => LV.includes(st.lv) ? st.lv : (myLv() || "6e");
+  const lv = () => st.lv === "bb" ? "bb" : LV.includes(st.lv) ? st.lv : (myLv() || "6e");
+  const isBB = () => on() && st.lv === "bb";
   const isSc = id => typeof id === "string" && id.indexOf("sc-") === 0;
   const lvOf = id => (String(id).split("-")[1] || "");
   function index() {
@@ -8349,9 +8356,10 @@ const SC = (() => {
   }
   function paint() {
     const seg = document.getElementById("lib-seg"), box = document.getElementById("lib-lv"); if (!seg) return;
-    seg.querySelectorAll("button").forEach(b => { const o = b.dataset.lib === (on() ? "socle" : "ecole"); b.classList.toggle("on", o); b.setAttribute("aria-selected", o ? "true" : "false"); });
+    seg.querySelectorAll("button").forEach(b => { const o = b.dataset.lib === (isBB() ? "bb" : on() ? "socle" : "ecole"); b.classList.toggle("on", o); b.setAttribute("aria-selected", o ? "true" : "false"); });
     box.hidden = !on();
-    if (on()) box.innerHTML = '<span class="lab">Classe</span>' + LV.map(l => '<button type="button" class="sh-tab' + (l === lv() ? " on" : "") + (l === myLv() ? " me" : "") + '" data-lv="' + l + '">' + l + "</button>").join("");
+    if (isBB()) box.innerHTML = '<span class="lab">Brevet blanc n°1 · 3e</span><span class="bb-note">Français, maths, histoire-géo, EMC, SVT et techno : le programme vu de septembre à fin novembre.</span>';
+    else if (on()) box.innerHTML = '<span class="lab">Classe</span>' + LV.map(l => '<button type="button" class="sh-tab' + (l === lv() ? " on" : "") + (l === myLv() ? " me" : "") + '" data-lv="' + l + '">' + l + "</button>").join("");
   }
   function set(o) {
     Object.assign(st, o); save(); paint();
@@ -8360,9 +8368,11 @@ const SC = (() => {
   }
   document.addEventListener("click", e => {
     const b = e.target.closest && e.target.closest("#lib-seg button, #lib-lv button"); if (!b) return;
-    if (b.dataset.lib) set({ lib: b.dataset.lib }); else if (b.dataset.lv) set({ lv: b.dataset.lv });
+    if (b.dataset.lib === "bb") set({ lib: "socle", lv: "bb" });
+    else if (b.dataset.lib === "socle") set({ lib: "socle", lv: st.lv === "bb" ? (myLv() || "3e") : st.lv });
+    else if (b.dataset.lib) set({ lib: b.dataset.lib }); else if (b.dataset.lv) set({ lv: b.dataset.lv });
   });
-  return { on, lv, isSc, index, ready, meta, all, doc, paint, set, LV };
+  return { on, lv, isSc, isBB, index, ready, meta, all, doc, paint, set, LV };
 })();
 const libFiches = () => SC.on() ? SC.meta() : allFiches;           // la bibliothèque affichée
 const allLib = () => allFiches.concat(SC.all());                     // les deux (favoris, historique, titres)
