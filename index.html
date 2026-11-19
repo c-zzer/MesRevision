@@ -2145,9 +2145,9 @@ body.has-ipad-side .admin-menu { left: 314px; }
     <div class="au-in">
       <div class="au-icon" style="--i:0"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M20 8h60a16 16 0 0 1 16 16v36a16 16 0 0 1-16 16H54L34 94V76H20A16 16 0 0 1 4 60V24A16 16 0 0 1 20 8z" fill="#0F3B2E"/><path d="M50 20L82 36L50 52L18 36Z" fill="#D6F26B"/><path d="M32 48v10c0 6 8 10 18 10s18-4 18-10V48L50 58z" fill="#D6F26B"/><path d="M82 36v18" stroke="#D6F26B" stroke-width="4" stroke-linecap="round"/><circle cx="82" cy="57" r="4" fill="#D6F26B"/></svg></div>
       <h1 style="--i:1">Bienvenue sur<br><em>EcoLingo</em></h1>
-      <p class="au-sub" style="--i:2">Crée ton compte pour retrouver tes fiches et ta série de jours. Utilise-le sur tous tes appareils.</p>
-      <button class="au-btn" style="--i:3" type="button" onclick="authGo('create')">Créer mon compte</button>
-      <button class="au-btn ghost" style="--i:4" type="button" onclick="authGo('login')">J'ai déjà un compte</button>
+      <p class="au-sub" style="--i:2">Ton compte est créé par ton établissement. Connecte-toi avec l'identifiant et le mot de passe qu'il t'a donnés.</p>
+      <button class="au-btn" style="--i:3" type="button" onclick="authGo('login')">Me connecter</button>
+      <p class="au-note" style="--i:4">Pas encore d'identifiant&nbsp;? Demande-le à ton professeur principal ou à la vie scolaire.</p>
     </div>
   </section>
 
@@ -2211,10 +2211,10 @@ body.has-ipad-side .admin-menu { left: 314px; }
     <div class="au-in">
       <div class="au-top" style="--i:0"><button class="au-back" type="button" onclick="authGo('welcome')" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button></div>
       <h1 style="--i:1">Content de te <em>revoir</em></h1>
-      <p class="au-sub" style="--i:2">Avec ton e-mail et ton mot de passe. Face ID peut remplir pour toi.</p>
+      <p class="au-sub" style="--i:2">Avec l'identifiant donné par ton établissement (ex. lucas.martin). Face ID peut remplir pour toi.</p>
       <form id="au-form-login" autocomplete="on" onsubmit="authLogin(event)">
         <div class="au-card" style="--i:3">
-          <div class="au-field"><label for="au-l-name">Identifiant</label><input id="au-l-name" name="username" type="text" inputmode="email" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="e-mail (ou prénom)" maxlength="120" enterkeyhint="next"></div>
+          <div class="au-field"><label for="au-l-name">Identifiant</label><input id="au-l-name" name="username" type="text" inputmode="email" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="prenom.nom" maxlength="120" enterkeyhint="next"></div>
           <div class="au-field"><label for="au-l-pw">Mot de passe</label><input id="au-l-pw" name="password" type="password" autocomplete="current-password" placeholder="Mot de passe" maxlength="64" enterkeyhint="go"><button class="au-eye" type="button" onclick="authEye('au-l-pw',this)" aria-label="Afficher le mot de passe"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
         </div>
         <div class="au-err" id="au-err-login" role="alert"></div>
@@ -2277,6 +2277,7 @@ body.has-ipad-side .admin-menu { left: 314px; }
     <input type="file" id="import-file-input" accept="application/json,.json" style="display:none" onchange="importAllData(this.files[0])">
     <button id="btn-autobak" class="btn btn-ghost" style="display:none" onclick="openAutoBackups()" title="Copies automatiques des fiches (une par jour)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/><path d="M12 8v4l3 2"/></svg> Sauvegardes auto</button>
     <button id="btn-admin-admins" class="btn btn-ghost" style="display:none" onclick="openAdminsPanel(event)" title="Gérer les admins"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 7.6-8 9-4.8-1.4-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg> Admins</button>
+    <button id="btn-admin-etab" class="btn btn-ghost" style="display:none" onclick="openEtabPanel(event)" title="Créer les comptes d'un établissement"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-5h6v5M10 12h4"/></svg> Établissements</button>
     <button id="btn-admin-give" class="btn btn-ghost" style="display:none" onclick="openGrantPanel(event)" title="Gérer les inventaires"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg> Give inventaire</button>
     <button id="btn-admin-drive" class="btn btn-ghost" style="display:none" onclick="openDrivePanel(event)" title="Stockage Google Drive chiffré"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Stockage Drive</button>
     <button id="btn-admin-pw" class="btn btn-ghost" style="display:none" onclick="openPwModal()" title="Changer le mot de passe"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/></svg> Mot de passe</button>
@@ -2286,24 +2287,24 @@ body.has-ipad-side .admin-menu { left: 314px; }
 
 <style>
 /* Panel Give — palette pistache/mûre + contours francs d’EcoLingo · feuille du bas sur téléphone */
-:is(#grant-panel,#adm-panel){position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;padding:clamp(10px,3vw,22px);background:rgba(15,59,46,.62);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
-:is(#grant-panel,#adm-panel).open{display:flex;animation:gp-backdrop-in .18s ease-out both}
-:is(#grant-card,#adm-card){position:relative;width:min(680px,100%);max-height:min(92dvh,920px);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--cream);color:var(--ink);border:var(--bw) solid var(--ink);border-radius:var(--r-card);padding:0;box-shadow:7px 7px 0 var(--ink);font-family:var(--b);animation:gp-card-in .26s var(--ease-out) both}
-:is(#grant-card,#adm-card) .gp-head{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:12px;padding:clamp(14px,3.5vw,20px) clamp(14px,4vw,22px);background:var(--pis);border-bottom:var(--bw) solid var(--ink)}
-:is(#grant-card,#adm-card) .gp-logo{flex:none;width:46px;height:46px;border-radius:14px;border:2.5px solid var(--ink);background:var(--sun);display:grid;place-items:center;box-shadow:2px 2px 0 var(--ink);font-size:1.5rem}
-:is(#grant-card,#adm-card) .gp-ht{flex:1;min-width:0}
-:is(#grant-card,#adm-card) h2{margin:0;font:800 clamp(1.25rem,5vw,1.55rem)/1.1 var(--d)}
-:is(#grant-card,#adm-card) .gp-sub{margin:3px 0 0;color:var(--ink);opacity:.72;font-weight:700;font-size:.84rem;line-height:1.3}
-:is(#grant-card,#adm-card) .gp-x{flex:none;width:46px;height:46px;padding:0;border-radius:50%;border:2.5px solid var(--ink);background:var(--ink);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:3px 3px 0 rgba(15,59,46,.35);transition:transform .18s var(--ease-out),background .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
-:is(#grant-card,#adm-card) .gp-x svg{display:block;transition:transform .22s var(--ease-out)}
-:is(#grant-card,#adm-card) .gp-x:active{background:var(--mur);transform:scale(.92);box-shadow:0 0 0 transparent}
-:is(#grant-card,#adm-card) .gp-x:active svg{transform:rotate(90deg)}
-:is(#grant-card,#adm-card) .gp-body{padding:clamp(14px,4vw,22px);display:grid;gap:18px}
-:is(#grant-card,#adm-card) .gp-sec{display:grid;gap:9px}
-:is(#grant-card,#adm-card) .gp-lab{display:flex;align-items:center;gap:9px;font:800 .95rem var(--d);margin:0}
-:is(#grant-card,#adm-card) .gp-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--mur);color:#fff;border:2px solid var(--ink);display:grid;place-items:center;font:800 .78rem var(--b)}
-:is(#grant-card,#adm-card) input[type=text],:is(#grant-card,#adm-card) input[type=search],:is(#grant-card,#adm-card) input[type=number]{box-sizing:border-box;width:100%;min-height:48px;border:2px solid var(--ink);border-radius:15px;background:#fff;padding:11px 13px;font:700 1rem var(--b);color:var(--ink);outline:none;box-shadow:2px 2px 0 var(--ink);transition:border-color .15s,box-shadow .15s}
-:is(#grant-card,#adm-card) input:focus{border-color:var(--mur);box-shadow:3px 3px 0 var(--mur)}
+:is(#grant-panel,#adm-panel,#et-panel,#pt-panel){position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;padding:clamp(10px,3vw,22px);background:rgba(15,59,46,.62);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+:is(#grant-panel,#adm-panel,#et-panel,#pt-panel).open{display:flex;animation:gp-backdrop-in .18s ease-out both}
+:is(#grant-card,#adm-card,#et-card,#pt-card){position:relative;width:min(680px,100%);max-height:min(92dvh,920px);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--cream);color:var(--ink);border:var(--bw) solid var(--ink);border-radius:var(--r-card);padding:0;box-shadow:7px 7px 0 var(--ink);font-family:var(--b);animation:gp-card-in .26s var(--ease-out) both}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-head{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:12px;padding:clamp(14px,3.5vw,20px) clamp(14px,4vw,22px);background:var(--pis);border-bottom:var(--bw) solid var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-logo{flex:none;width:46px;height:46px;border-radius:14px;border:2.5px solid var(--ink);background:var(--sun);display:grid;place-items:center;box-shadow:2px 2px 0 var(--ink);font-size:1.5rem}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-ht{flex:1;min-width:0}
+:is(#grant-card,#adm-card,#et-card,#pt-card) h2{margin:0;font:800 clamp(1.25rem,5vw,1.55rem)/1.1 var(--d)}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-sub{margin:3px 0 0;color:var(--ink);opacity:.72;font-weight:700;font-size:.84rem;line-height:1.3}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-x{flex:none;width:46px;height:46px;padding:0;border-radius:50%;border:2.5px solid var(--ink);background:var(--ink);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:3px 3px 0 rgba(15,59,46,.35);transition:transform .18s var(--ease-out),background .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-x svg{display:block;transition:transform .22s var(--ease-out)}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-x:active{background:var(--mur);transform:scale(.92);box-shadow:0 0 0 transparent}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-x:active svg{transform:rotate(90deg)}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-body{padding:clamp(14px,4vw,22px);display:grid;gap:18px}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-sec{display:grid;gap:9px}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-lab{display:flex;align-items:center;gap:9px;font:800 .95rem var(--d);margin:0}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--mur);color:#fff;border:2px solid var(--ink);display:grid;place-items:center;font:800 .78rem var(--b)}
+:is(#grant-card,#adm-card,#et-card,#pt-card) input[type=text],:is(#grant-card,#adm-card,#et-card,#pt-card) input[type=search],:is(#grant-card,#adm-card,#et-card,#pt-card) input[type=number]{box-sizing:border-box;width:100%;min-height:48px;border:2px solid var(--ink);border-radius:15px;background:#fff;padding:11px 13px;font:700 1rem var(--b);color:var(--ink);outline:none;box-shadow:2px 2px 0 var(--ink);transition:border-color .15s,box-shadow .15s}
+:is(#grant-card,#adm-card,#et-card,#pt-card) input:focus{border-color:var(--mur);box-shadow:3px 3px 0 var(--mur)}
 #gp-accounts{display:grid;gap:7px;max-height:208px;overflow:auto;overscroll-behavior:contain;padding:2px 3px 5px 2px;margin:0 -3px 0 -2px}
 #gp-accounts .gp-acc{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:9px 11px;border:2px solid var(--ink);border-radius:15px;background:#fff;color:var(--ink);font-family:var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .12s,box-shadow .12s,background .12s}
 #gp-accounts .gp-acc:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
@@ -2316,16 +2317,16 @@ body.has-ipad-side .admin-menu { left: 314px; }
 #gp-accounts .gp-chk{margin-left:auto;font-weight:800;opacity:0}
 #gp-accounts .gp-acc.on .gp-chk{opacity:1}
 #gp-accounts .gp-empty,#grant-account-hint{font-size:.84rem;font-weight:700;color:var(--text-muted);line-height:1.4;padding:4px 2px}
-:is(#grant-card,#adm-card) .gp-chips{display:flex;flex-wrap:wrap;gap:8px}
-:is(#grant-card,#adm-card) .gp-chip{min-height:42px;padding:0 15px;border:2px solid var(--ink);border-radius:999px;background:#fff;color:var(--ink);font:800 .88rem var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .12s,box-shadow .12s,background .12s}
-:is(#grant-card,#adm-card) .gp-chip:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
-:is(#grant-card,#adm-card) .gp-chip.on{background:var(--sun)}
-:is(#grant-card,#adm-card) .gp-tabs{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding:2px 4px 6px 2px;margin:0 -4px 0 -2px}
-:is(#grant-card,#adm-card) .gp-tabs::-webkit-scrollbar{display:none}
-:is(#grant-card,#adm-card) .gp-tab{flex:1 0 auto;min-width:92px;scroll-snap-align:center;display:grid;justify-items:center;gap:2px;padding:9px 10px 8px;white-space:nowrap;border:2px solid var(--ink);border-radius:15px;background:#fff;color:var(--ink);font:800 .72rem var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .12s,box-shadow .12s,background .12s}
-:is(#grant-card,#adm-card) .gp-tab i{font-style:normal;font-size:1.35rem;line-height:1}
-:is(#grant-card,#adm-card) .gp-tab:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
-:is(#grant-card,#adm-card) .gp-tab.on{background:var(--mur);color:#fff;box-shadow:3px 3px 0 var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-chips{display:flex;flex-wrap:wrap;gap:8px}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-chip{min-height:42px;padding:0 15px;border:2px solid var(--ink);border-radius:999px;background:#fff;color:var(--ink);font:800 .88rem var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .12s,box-shadow .12s,background .12s}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-chip:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-chip.on{background:var(--sun)}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-tabs{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding:2px 4px 6px 2px;margin:0 -4px 0 -2px}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-tabs::-webkit-scrollbar{display:none}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-tab{flex:1 0 auto;min-width:92px;scroll-snap-align:center;display:grid;justify-items:center;gap:2px;padding:9px 10px 8px;white-space:nowrap;border:2px solid var(--ink);border-radius:15px;background:#fff;color:var(--ink);font:800 .72rem var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .12s,box-shadow .12s,background .12s}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-tab i{font-style:normal;font-size:1.35rem;line-height:1}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-tab:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-tab.on{background:var(--mur);color:#fff;box-shadow:3px 3px 0 var(--ink)}
 #gp-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));grid-auto-rows:max-content;align-content:start;gap:9px;padding:2px 4px 6px 2px;margin:0 -4px 0 -2px}
 #gp-items .gp-it{position:relative;display:grid;align-content:center;gap:3px;min-height:64px;flex:none;text-align:left;padding:10px 11px 10px 14px;border:2px solid var(--ink);border-radius:15px;background:#fff;color:var(--ink);font-family:var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);overflow:hidden;transition:transform .12s,box-shadow .12s,background .12s}
 #gp-items .gp-it:before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--rc,#ccc);border-right:2px solid var(--ink)}
@@ -2334,15 +2335,15 @@ body.has-ipad-side .admin-menu { left: 314px; }
 #gp-items .gp-it b{font:800 .9rem/1.15 var(--b)}
 #gp-items .gp-it small{font:800 .68rem var(--b);text-transform:uppercase;letter-spacing:.05em;opacity:.62}
 #gp-items .gp-sw{position:absolute;right:9px;top:9px;width:18px;height:18px;border-radius:50%;border:2px solid var(--ink)}
-:is(#grant-card,#adm-card) .gp-sum{padding:12px 14px;border:2px dashed var(--ink);border-radius:15px;background:rgba(214,242,107,.45);font-weight:800;font-size:.92rem;line-height:1.45}
-:is(#grant-card,#adm-card) .gp-sum em{font-style:normal;background:var(--sun);border-radius:7px;padding:0 6px;border:1.5px solid var(--ink)}
-:is(#grant-card,#adm-card) .gp-sum.warn{background:#fff;border-style:solid;color:#B3261E}
-:is(#grant-card,#adm-card) .gp-actions{position:sticky;bottom:0;z-index:3;display:grid;gap:11px;padding:12px calc(clamp(14px,4vw,22px) + 5px) calc(14px + env(safe-area-inset-bottom,0px)) clamp(14px,4vw,22px);background:var(--cream);border-top:var(--bw) solid var(--ink)}
-:is(#grant-card,#adm-card) .gp-actions button{min-height:52px;border-radius:var(--r-btn);font:800 1rem var(--d);cursor:pointer;border:var(--bw) solid var(--ink);box-shadow:4px 4px 0 var(--ink);transition:transform .1s,box-shadow .1s,opacity .15s}
-:is(#grant-card,#adm-card) .gp-actions button:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
-:is(#grant-card,#adm-card) .gp-actions button:disabled{opacity:.55;pointer-events:none}
-:is(#grant-card,#adm-card) .gp-actions .gp-go{background:var(--sun);color:var(--ink);min-height:58px;font-size:1.1rem}
-:is(#grant-card,#adm-card) .gp-actions .gp-all{background:var(--mur);color:#fff;min-height:48px;font-size:.95rem}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-sum{padding:12px 14px;border:2px dashed var(--ink);border-radius:15px;background:rgba(214,242,107,.45);font-weight:800;font-size:.92rem;line-height:1.45}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-sum em{font-style:normal;background:var(--sun);border-radius:7px;padding:0 6px;border:1.5px solid var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-sum.warn{background:#fff;border-style:solid;color:#B3261E}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions{position:sticky;bottom:0;z-index:3;display:grid;gap:11px;padding:12px calc(clamp(14px,4vw,22px) + 5px) calc(14px + env(safe-area-inset-bottom,0px)) clamp(14px,4vw,22px);background:var(--cream);border-top:var(--bw) solid var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions button{min-height:52px;border-radius:var(--r-btn);font:800 1rem var(--d);cursor:pointer;border:var(--bw) solid var(--ink);box-shadow:4px 4px 0 var(--ink);transition:transform .1s,box-shadow .1s,opacity .15s}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions button:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions button:disabled{opacity:.55;pointer-events:none}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions .gp-go{background:var(--sun);color:var(--ink);min-height:58px;font-size:1.1rem}
+:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions .gp-all{background:var(--mur);color:#fff;min-height:48px;font-size:.95rem}
 #grant-status{padding:11px 13px;border:2px solid var(--ink);border-radius:15px;background:#fff;font-weight:800;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
 #grant-status:empty{display:none}
 #grant-status.ok{background:#CFF5D8}
@@ -2351,12 +2352,12 @@ body.has-ipad-side .admin-menu { left: 314px; }
 @keyframes gp-card-in{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes gp-sheet-in{from{transform:translateY(100%)}to{transform:translateY(0)}}
 @media(max-width:560px){
-  :is(#grant-panel,#adm-panel){align-items:flex-end;padding:0}
-  :is(#grant-card,#adm-card){width:100%;max-height:94dvh;border-radius:26px 26px 0 0;border-bottom:0;box-shadow:none;animation:gp-sheet-in .3s var(--ease-out) both}
-  :is(#grant-card,#adm-card) .gp-actions{grid-template-columns:1fr}
+  :is(#grant-panel,#adm-panel,#et-panel,#pt-panel){align-items:flex-end;padding:0}
+  :is(#grant-card,#adm-card,#et-card,#pt-card){width:100%;max-height:94dvh;border-radius:26px 26px 0 0;border-bottom:0;box-shadow:none;animation:gp-sheet-in .3s var(--ease-out) both}
+  :is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions{grid-template-columns:1fr}
 }
-@media(min-width:561px){:is(#grant-card,#adm-card) .gp-actions{grid-template-columns:1.4fr 1fr}}
-@media(prefers-reduced-motion:reduce){:is(#grant-panel,#adm-panel).open,:is(#grant-card,#adm-card){animation:none}}
+@media(min-width:561px){:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions{grid-template-columns:1.4fr 1fr}}
+@media(prefers-reduced-motion:reduce){:is(#grant-panel,#adm-panel,#et-panel,#pt-panel).open,:is(#grant-card,#adm-card,#et-card,#pt-card){animation:none}}
 
 #btn-shop{position:relative;background:var(--gum)!important;border-right:4px solid var(--ink)!important}
 #btn-shop.has-gift:after{content:"";position:absolute;top:10px;right:18px;width:13px;height:13px;border-radius:50%;background:var(--pim);border:2.5px solid var(--ink)}
@@ -2443,6 +2444,72 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
       <div id="adm-list"><div class="gp-empty">Chargement…</div></div>
       <div id="adm-status" role="status"></div>
     </div>
+  </div>
+</div>
+
+<style>
+/* Établissements (admin) + mot de passe provisoire — même DA EcoLingo que les panneaux Give / Admins */
+#et-card,#pt-card{width:min(760px,100%)}
+#pt-card{width:min(460px,100%)}
+.et-body{padding:clamp(14px,4vw,22px);display:grid;gap:16px}
+.et-row{display:flex;align-items:center;gap:12px;padding:12px 13px;border:2px solid var(--ink);border-radius:16px;background:#fff;box-shadow:3px 3px 0 var(--ink)}
+.et-row .et-t{flex:1;min-width:0}.et-row b{display:block;font:800 1rem/1.2 var(--d)}
+.et-row small{display:block;margin-top:2px;font-size:.8rem;font-weight:700;opacity:.7;line-height:1.35;overflow-wrap:anywhere}
+.et-btn{flex:none;min-height:42px;padding:0 15px;border:2px solid var(--ink);border-radius:999px;background:var(--sun);color:var(--ink);font:800 .84rem var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .1s,box-shadow .1s;-webkit-tap-highlight-color:transparent}
+.et-btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+.et-btn.w{background:#fff}.et-btn.dg{background:#FFD9D4}.et-btn.big{min-height:54px;font-size:1rem;width:100%}
+.et-btn:disabled{opacity:.45;pointer-events:none}
+.et-acts{display:flex;gap:8px;flex-wrap:wrap}
+.et-sec{display:grid;gap:9px}
+.et-lab{margin:0;font:800 .78rem var(--b);letter-spacing:.06em;text-transform:uppercase;opacity:.75}
+.et-in{width:100%;min-height:46px;padding:0 13px;border:2px solid var(--ink);border-radius:13px;background:#fff;color:var(--ink);font:700 .95rem var(--b);box-sizing:border-box}
+.et-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px}
+.et-drop{display:grid;place-items:center;gap:6px;padding:22px 14px;border:2.5px dashed var(--ink);border-radius:18px;background:rgba(214,242,107,.35);text-align:center;font-weight:800;cursor:pointer}
+.et-drop small{font-weight:700;opacity:.7}
+.et-stats{display:flex;gap:8px;flex-wrap:wrap}
+.et-pill{padding:6px 12px;border:2px solid var(--ink);border-radius:999px;background:#fff;font:800 .82rem var(--b)}
+.et-grp{margin:8px 0 0;font:800 .95rem var(--d)}
+.et-list{display:grid;gap:8px}
+.et-mini{display:flex;align-items:center;gap:10px;padding:8px 11px;border:2px solid var(--ink);border-radius:13px;background:#fff}
+.et-mini .et-t{flex:1;min-width:0}.et-mini b{font-weight:800}.et-mini small{display:block;font-size:.78rem;font-weight:700;opacity:.7;overflow-wrap:anywhere}
+.et-code{font:800 .9rem ui-monospace,Menlo,monospace;background:var(--cream);border:1.5px solid var(--ink);border-radius:8px;padding:2px 7px;white-space:nowrap}
+.et-tag{font:800 .7rem var(--b);padding:2px 8px;border-radius:999px;border:1.5px solid var(--ink);background:var(--sun)}
+.et-tag.ok{background:#CFF5D8}
+.et-bar{height:14px;border:2px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden}.et-bar i{display:block;height:100%;width:0;background:var(--pis);transition:width .3s}
+.et-note{margin:0;font-size:.84rem;font-weight:700;line-height:1.45;opacity:.8}
+.et-warn{padding:11px 13px;border:2px solid var(--ink);border-radius:13px;background:#FFF4C2;font-weight:800;font-size:.86rem;line-height:1.4}
+#et-status:empty,#pt-err:empty{display:none}
+#et-status,#pt-err{padding:10px 12px;border:2px solid var(--ink);border-radius:12px;font-weight:800;font-size:.86rem}
+#et-status.ok{background:#CFF5D8}#et-status.err,#pt-err{background:#FFD9D4}
+</style>
+<div id="et-panel" role="dialog" aria-modal="true" aria-labelledby="et-title" onclick="if(event.target===this)closeEtabPanel()">
+  <div id="et-card">
+    <div class="gp-head">
+      <button type="button" class="gp-x" id="et-back" onclick="etBack()" aria-label="Retour" style="display:none;background:#fff;color:var(--ink)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <div class="gp-logo" aria-hidden="true">🏫</div>
+      <div class="gp-ht"><h2 id="et-title">Établissements</h2><p class="gp-sub" id="et-sub">Les comptes sont créés ici, et nulle part ailleurs</p></div>
+      <button type="button" class="gp-x" onclick="closeEtabPanel()" aria-label="Fermer"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="et-body" id="et-body"></div>
+    <div class="et-body" style="padding-top:0"><div id="et-status" role="status"></div></div>
+  </div>
+</div>
+<input type="file" id="et-file" accept=".xlsx,.xls,.csv,.numbers" style="display:none" onchange="etFile(this.files[0]);this.value=''">
+
+<div id="pt-panel" role="dialog" aria-modal="true" aria-labelledby="pt-title">
+  <div id="pt-card">
+    <div class="gp-head">
+      <div class="gp-logo" aria-hidden="true">🔑</div>
+      <div class="gp-ht"><h2 id="pt-title">Choisis ton mot de passe</h2><p class="gp-sub">Celui donné par ton établissement est provisoire</p></div>
+    </div>
+    <form class="et-body" onsubmit="tmpPwSave(event)" autocomplete="on">
+      <input type="text" name="username" id="pt-user" autocomplete="username" style="display:none">
+      <div class="et-sec"><p class="et-lab">Mot de passe provisoire</p><input class="et-in" id="pt-old" type="password" autocomplete="current-password" placeholder="Celui de ta feuille" maxlength="64"></div>
+      <div class="et-sec"><p class="et-lab">Nouveau mot de passe</p><input class="et-in" id="pt-new" type="password" autocomplete="new-password" placeholder="8 caractères, une lettre et un chiffre" maxlength="64">
+        <input class="et-in" id="pt-new2" type="password" autocomplete="new-password" placeholder="Retape-le" maxlength="64"></div>
+      <div id="pt-err" role="alert"></div>
+      <button class="et-btn big" type="submit" id="pt-go">Enregistrer</button>
+    </form>
   </div>
 </div>
 
@@ -5414,6 +5481,7 @@ function updateNav() {
   document.getElementById("btn-admin-pw").style.display = "none";   // plus de mot de passe admin partagé
   { const g = document.getElementById("btn-admin-admins"); if (g) g.style.display = isAdmin ? "inline-flex" : "none"; }
   { const g = document.getElementById("btn-admin-give"); if (g) g.style.display = isAdmin ? "inline-flex" : "none"; }
+  { const g = document.getElementById("btn-admin-etab"); if (g) g.style.display = isAdmin ? "inline-flex" : "none"; }
   { const g = document.getElementById("btn-admin-drive"); if (g) g.style.display = isAdmin ? "inline-flex" : "none"; }
   navSwap("btn-admin-menu", isAdmin, "inline-flex");
   navBooted = true;
@@ -8506,6 +8574,230 @@ async function admToggle(id, on, nm) {
 }
 
 
+// ─── COMPTES D'ÉTABLISSEMENT ─────────────────────────────
+// Plus personne ne crée son compte : l'admin importe le tableau de l'établissement (Excel / Numbers exporté / CSV),
+// le serveur crée tous les comptes (identifiant prenom.nom + mot de passe provisoire), puis on imprime les codes.
+const ETAB_DOMAIN = "eleve.mes-revision.vercel.app";
+const ET_ROLES = { personnel: "Direction et personnel", prof: "Professeurs", eleve: "Élèves" };
+const ET_RANGS = [[/proviseur(?!.*adjoint)|principal(?!.*adjoint)|chef d.?(e|é)tablissement|directeur(?!.*adjoint)|directrice(?!.*adjointe)/i, 1], [/adjoint|adjointe/i, 2], [/gestionnaire|intendan/i, 3], [/cpe|conseill(er|ère) principal/i, 4], [/secr(e|é)tari/i, 5], [/documentaliste|cdi/i, 6], [/infirmi|sant(e|é)/i, 7], [/psy|orientation/i, 8], [/aed|surveillant|assistant d.?(e|é)ducation|vie scolaire/i, 9], [/aesh/i, 10]];
+const etRang = m => { if (m.rang != null) return m.rang; if (m.role === "eleve") return 1000; if (m.role === "prof") return 100; for (const [re, n] of ET_RANGS) if (re.test(m.fonction || "")) return n; return 50; };
+const etOrdre = (a, b) => (etRang(a) - etRang(b)) || String(a.classe || "").localeCompare(String(b.classe || ""), "fr", { numeric: true }) || String(a.nom || "").localeCompare(String(b.nom || ""), "fr") || String(a.prenom || "").localeCompare(String(b.prenom || ""), "fr");
+const etN = s => String(s == null ? "" : s).trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+const etSub = m => [m.role === "personnel" ? (m.fonction || "Personnel") : m.role === "prof" ? "Prof · " + (m.matiere || "?") : "Élève · " + (m.classe || "?")].join("");
+let ET = { view: "list", etabs: [], cur: null, draft: null, membres: [], res: [], hist: [] };
+
+function etSay(t, k) { const s = document.getElementById("et-status"); if (!s) return; s.textContent = t || ""; s.className = k || ""; }
+function openEtabPanel(e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  if (!isAdmin) { showToast("Accès réservé aux admins", ""); return; }
+  try { closeAdminMenu(); } catch (x) {}
+  document.getElementById("et-panel").classList.add("open"); ET.hist = []; etGo("list");
+}
+function closeEtabPanel() {
+  if (ET.view === "res" && ET.res.length && !confirm("Les mots de passe provisoires ne seront plus affichés.\nTu les as bien imprimés ou téléchargés ?")) return;
+  document.getElementById("et-panel").classList.remove("open"); ET.res = [];
+}
+function etGo(v, keep) { if (!keep && ET.view !== v) ET.hist.push(ET.view); ET.view = v; etSay(""); etRender(); }
+function etBack() { if (ET.view === "res" && ET.res.length && !confirm("Les mots de passe provisoires ne seront plus affichés. Continuer ?")) return; const v = ET.hist.pop() || "list"; ET.view = v; etSay(""); if (v === "list") etLoad(); else etRender(); }
+function etHead(t, s) { document.getElementById("et-title").textContent = t; document.getElementById("et-sub").textContent = s; document.getElementById("et-back").style.display = ET.view === "list" ? "none" : ""; }
+
+async function etLoad() {
+  ET.view = "list"; etRender();
+  try { ET.etabs = (await api("etab", { action: "list" }, true)).etabs || []; } catch (e) { ET.etabs = []; etSay("❌ Impossible de charger les établissements (" + (e.code || "réseau") + ").", "err"); }
+  if (ET.view === "list") etRender();
+}
+function etRender() {
+  const b = document.getElementById("et-body"), v = ET.view;
+  if (v === "list") {
+    etHead("Établissements", "Les comptes sont créés ici, et nulle part ailleurs");
+    b.innerHTML = '<button class="et-btn big" type="button" onclick="etNew()">＋ Nouvel établissement</button>' +
+      (ET.etabs.length ? '<div class="et-list">' + ET.etabs.map(x => { const c = x.compte || {}; return '<div class="et-row"><div class="et-t"><b>' + escHtml(x.nom) + '</b><small>' + escHtml([x.type, x.ville, x.annee].filter(Boolean).join(" · ")) + '</small><small>' + (c.personnel || 0) + ' direction/personnel · ' + (c.prof || 0) + ' profs · ' + (c.eleve || 0) + ' élèves</small></div><div class="et-acts"><button class="et-btn w" type="button" data-v="' + escHtml(x.id) + '">Voir</button><button class="et-btn" type="button" data-a="' + escHtml(x.id) + '">Ajouter</button></div></div>'; }).join("") + '</div>'
+        : '<p class="et-note">Aucun établissement pour l’instant. Quand un établissement te choisit, clique sur « Nouvel établissement » et importe son tableau.</p>');
+    b.onclick = ev => { const t = ev.target.closest("button"); if (!t) return; if (t.dataset.v) etMembres(t.dataset.v); if (t.dataset.a) etAdd(t.dataset.a); };
+  } else if (v === "import") {
+    const d = ET.draft, cur = ET.cur;
+    etHead(cur ? cur.nom : "Nouvel établissement", cur ? "Ajouter des comptes" : "Importer le tableau de l’établissement");
+    const ms = d.membres.slice().sort(etOrdre), cnt = r => ms.filter(m => m.role === r).length;
+    b.innerHTML = (cur ? "" : '<div class="et-sec"><p class="et-lab">L’établissement</p><div class="et-grid"><input class="et-in" id="et-nom" placeholder="Nom de l’établissement" value="' + escHtml(d.nom) + '"><input class="et-in" id="et-type" placeholder="Collège / Lycée" value="' + escHtml(d.type) + '"><input class="et-in" id="et-ville" placeholder="Ville" value="' + escHtml(d.ville) + '"><input class="et-in" id="et-annee" placeholder="Année scolaire" value="' + escHtml(d.annee) + '"></div></div>') +
+      '<div class="et-sec"><p class="et-lab">Le tableau</p><label class="et-drop" onclick="document.getElementById(\'et-file\').click()">📄 Choisir le fichier<small>Excel (.xlsx) ou CSV · dans Numbers : Fichier › Exporter vers › Excel</small></label></div>' +
+      '<div class="et-sec"><p class="et-lab">Ou ajouter à la main</p><div class="et-grid"><select class="et-in" id="et-m-role"><option value="eleve">Élève</option><option value="prof">Prof</option><option value="personnel">Direction / personnel</option></select><input class="et-in" id="et-m-prenom" placeholder="Prénom"><input class="et-in" id="et-m-nom" placeholder="Nom"><input class="et-in" id="et-m-plus" placeholder="Classe / matière / fonction"></div><button class="et-btn w" type="button" onclick="etAddHand()">＋ Ajouter cette personne</button></div>' +
+      (ms.length ? '<div class="et-sec"><p class="et-lab">À créer</p><div class="et-stats"><span class="et-pill">' + cnt("personnel") + ' direction/personnel</span><span class="et-pill">' + cnt("prof") + ' profs</span><span class="et-pill">' + cnt("eleve") + ' élèves</span></div>' + etGroups(ms, m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.prenom + " " + m.nom) + '</b><small>' + escHtml(etSub(m)) + (m.err ? ' · ⚠️ ' + escHtml(m.err) : "") + '</small></div><button class="et-btn dg" type="button" data-x="' + m._i + '" aria-label="Retirer">✕</button></div>', 60) + '</div>' +
+        '<button class="et-btn big" type="button" id="et-go" onclick="etCreate()">Créer les ' + ms.length + ' comptes</button>' : "");
+    b.onclick = ev => { const t = ev.target.closest("button[data-x]"); if (t) { ET.draft.membres = ET.draft.membres.filter(m => m._i !== +t.dataset.x); etKeepDraft(); etRender(); } };
+  } else if (v === "res") {
+    etHead("Codes de connexion", (ET.cur ? ET.cur.nom : "") + " · à distribuer");
+    const ok = ET.res.filter(r => r.motdepasse).sort(etOrdre), deja = ET.res.filter(r => r.existe), err = ET.res.filter(r => r.erreur);
+    b.innerHTML = '<div class="et-warn">⚠️ Les mots de passe provisoires s’affichent UNE seule fois. Imprime-les ou télécharge-les maintenant. Chacun devra choisir son propre mot de passe à la première connexion.</div>' +
+      '<div class="et-acts"><button class="et-btn" type="button" onclick="etPrint()">🖨️ Imprimer les codes</button><button class="et-btn w" type="button" onclick="etCsv()">⬇️ Télécharger (Excel/CSV)</button></div>' +
+      '<div class="et-stats"><span class="et-pill">✅ ' + ok.length + ' comptes</span>' + (deja.length ? '<span class="et-pill">↩︎ ' + deja.length + ' déjà existants</span>' : "") + (err.length ? '<span class="et-pill" style="background:#FFD9D4">⚠️ ' + err.length + ' erreurs</span>' : "") + '</div>' +
+      (err.length ? '<p class="et-note">Erreurs : ' + err.map(r => escHtml((r.prenom || "?") + " " + (r.nom || "") + " (" + r.erreur + ")")).join(", ") + '</p>' : "") +
+      etGroups(ok, m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.prenom + " " + m.nom) + '</b><small>' + escHtml(etSub(m)) + '</small></div><span class="et-code">' + escHtml(m.identifiant) + '</span><span class="et-code">' + escHtml(m.motdepasse) + '</span></div>');
+    b.onclick = null;
+  } else if (v === "membres") {
+    const cur = ET.cur; etHead(cur.nom, "Tous les comptes, dans l’ordre");
+    const q = etN((document.getElementById("et-q") || {}).value || ""), ms = ET.membres.filter(m => !q || etN(m.prenom + " " + m.nom + " " + m.identifiant + " " + etSub(m)).includes(q));
+    b.innerHTML = '<input class="et-in" id="et-q" type="search" placeholder="Chercher un nom, une classe…" value="' + escHtml(q) + '" oninput="etRender();this.focus();this.setSelectionRange(this.value.length,this.value.length)">' +
+      '<div class="et-acts"><button class="et-btn" type="button" onclick="etAdd(ET.cur.id)">＋ Ajouter des comptes</button><button class="et-btn w" type="button" onclick="etResetAll()">🔑 Nouveaux codes pour ceux qui ne se sont pas connectés</button></div>' +
+      (ms.length ? etGroups(ms, m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.prenom + " " + m.nom) + '</b><small>' + escHtml(etSub(m)) + ' · <span class="et-code">' + escHtml(m.identifiant) + '</span> ' + (m.pwChanged ? '<span class="et-tag ok">connecté</span>' : '<span class="et-tag">provisoire</span>') + '</small></div><button class="et-btn w" type="button" data-p="' + m.uid + '" title="Nouveau mot de passe">🔑</button><button class="et-btn dg" type="button" data-d="' + m.uid + '" title="Supprimer">✕</button></div>') : '<p class="et-note">Aucun compte.</p>') +
+      '<button class="et-btn dg big" type="button" onclick="etDelEtab()">Supprimer l’établissement et tous ses comptes</button>';
+    b.onclick = ev => { const t = ev.target.closest("button"); if (!t) return; if (t.dataset.p) etReset([t.dataset.p]); if (t.dataset.d) etDelMembre(t.dataset.d); };
+  }
+}
+function etGroups(list, row, max) {
+  let h = "", g = null, n = 0;
+  for (const m of list) {
+    const k = m.role === "eleve" ? "Élèves · " + (m.classe || "sans classe") : ET_ROLES[m.role];
+    if (k !== g) { g = k; n = 0; h += '<p class="et-grp">' + escHtml(k) + '</p>'; }
+    if (max && ++n > max) { if (n === max + 1) h += '<p class="et-note">… et d’autres</p>'; continue; }
+    h += row(m);
+  }
+  return '<div class="et-list">' + h + '</div>';
+}
+function etNew() { ET.cur = null; ET.draft = { nom: "", type: "", ville: "", annee: "", membres: [] }; etGo("import"); }
+function etAdd(id) { ET.cur = ET.etabs.find(x => x.id === id) || ET.cur; ET.draft = { membres: [] }; etGo("import"); }
+function etKeepDraft() { ["nom", "type", "ville", "annee"].forEach(k => { const i = document.getElementById("et-" + k); if (i && ET.draft) ET.draft[k] = i.value.trim(); }); }
+let _etI = 0;
+function etPush(m) {
+  m.prenom = String(m.prenom || "").trim(); m.nom = String(m.nom || "").trim();
+  if (!m.prenom && !m.nom) return;
+  m.err = !m.prenom || !m.nom ? "nom ou prénom manquant" : m.role === "prof" && !m.matiere ? "matière manquante" : "";
+  m._i = ++_etI; ET.draft.membres.push(m);
+}
+function etAddHand() {
+  etKeepDraft();
+  const role = document.getElementById("et-m-role").value, plus = document.getElementById("et-m-plus").value.trim();
+  const m = { role, prenom: document.getElementById("et-m-prenom").value, nom: document.getElementById("et-m-nom").value };
+  if (role === "eleve") m.classe = plus; else if (role === "prof") m.matiere = plus; else m.fonction = plus;
+  if (!m.prenom.trim() || !m.nom.trim()) return etSay("Mets au moins le prénom et le nom.", "err");
+  if (role === "prof" && !plus) return etSay("Mets la matière du prof.", "err");
+  etPush(m); etRender();
+}
+async function etFile(f) {
+  if (!f) return; etKeepDraft();
+  if (/\.numbers$/i.test(f.name)) return etSay("Dans Numbers : Fichier › Exporter vers › Excel, puis choisis ce fichier .xlsx.", "err");
+  etSay("Lecture du fichier…");
+  try {
+    if (!window.XLSX) await loadScripts(["https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"]);
+    const wb = XLSX.read(await f.arrayBuffer(), { type: "array" });
+    let n = 0;
+    for (const name of wb.SheetNames) {
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, raw: true, defval: "" }), sn = etN(name);
+      if (/etablissement/.test(sn)) {   // fiche de l'établissement : « libellé | valeur »
+        rows.forEach(r => { const k = etN(r[0]), v = r[1] instanceof Date ? "" : String(r[1] || "").trim(); if (!v) return;
+          if (/^nom de l etablissement/.test(k) && !/^nom de l/i.test(v)) ET.draft.nom = ET.draft.nom || v; else if (/^type/.test(k)) ET.draft.type = ET.draft.type || v; else if (/^ville/.test(k)) ET.draft.ville = ET.draft.ville || v; else if (/^annee/.test(k)) ET.draft.annee = ET.draft.annee || v; });
+        continue;
+      }
+      const hi = rows.findIndex((r, i) => i < 20 && r.some(c => /^nom\b/.test(etN(c))) && r.some(c => /^prenom/.test(etN(c))));
+      if (hi < 0) continue;
+      const H = rows[hi].map(etN), col = re => H.findIndex(h => re.test(h));
+      const c = { nom: col(/^nom\b/), prenom: col(/^prenom/), mat: col(/^matiere/), cl: col(/^classe/), fo: col(/^fonction|^poste/), nai: col(/naissance/), ty: col(/^(type|role|statut du compte)$/) };
+      const def = /eleve/.test(sn) ? "eleve" : /enseignant|prof/.test(sn) ? "prof" : /personnel|direction|vie scolaire|administration/.test(sn) ? "personnel" : "";
+      for (const r of rows.slice(hi + 1)) {
+        const get = i => i < 0 ? "" : r[i] instanceof Date ? r[i] : String(r[i] == null ? "" : r[i]).trim();
+        let role = def; const t = etN(get(c.ty));
+        if (t) role = /eleve/.test(t) ? "eleve" : /prof|enseignant/.test(t) ? "prof" : "personnel";
+        if (!role) role = c.mat >= 0 && get(c.mat) ? "prof" : c.fo >= 0 && get(c.fo) ? "personnel" : "eleve";
+        let nai = c.nai >= 0 ? r[c.nai] : ""; if (typeof nai === "number") { const d = XLSX.SSF.parse_date_code(nai); nai = d ? d.y + "-" + String(d.m).padStart(2, "0") + "-" + String(d.d).padStart(2, "0") : ""; } else nai = String(nai || "").trim();
+        const before = ET.draft.membres.length;
+        etPush({ role, nom: get(c.nom), prenom: get(c.prenom), matiere: get(c.mat), classe: get(c.cl), fonction: get(c.fo), naissance: nai });
+        n += ET.draft.membres.length - before;
+      }
+    }
+    etRender(); etSay(n ? "✅ " + n + " personnes trouvées. Vérifie la liste puis crée les comptes." : "Aucune ligne trouvée : il faut des colonnes « Nom » et « Prénom ».", n ? "ok" : "err");
+  } catch (e) { console.warn(e); etSay("❌ Fichier illisible. Enregistre-le en Excel (.xlsx) ou en CSV.", "err"); }
+}
+async function etCreate() {
+  etKeepDraft();
+  const ok = ET.draft.membres.filter(m => !m.err), bad = ET.draft.membres.length - ok.length;
+  if (!ok.length) return etSay("Rien à créer.", "err");
+  if (!ET.cur && (ET.draft.nom || "").length < 2) return etSay("Donne le nom de l’établissement.", "err");
+  if (bad && !confirm(bad + " ligne(s) incomplète(s) seront ignorées. Continuer ?")) return;
+  if (!confirm("Créer " + ok.length + " comptes" + (ET.cur ? " pour " + ET.cur.nom : "") + " ?")) return;
+  const btn = document.getElementById("et-go"); if (btn) btn.disabled = true;
+  try {
+    if (!ET.cur) { const d = ET.draft, r = await api("etab", { action: "creerEtab", nom: d.nom, type: d.type, ville: d.ville, annee: d.annee }, true); ET.cur = { id: r.id, nom: d.nom }; }
+    const list = ok.slice().sort(etOrdre).map(({ _i, err, ...m }) => m), out = [];
+    const st = document.getElementById("et-status"); st.className = ""; st.innerHTML = '<div>Création des comptes… <span id="et-pc">0</span> / ' + list.length + '</div><div class="et-bar" style="margin-top:8px"><i id="et-pb"></i></div>';
+    for (let i = 0; i < list.length; i += 20) {
+      let r; for (let k = 0; ; k++) { try { r = await api("etab", { action: "importer", etab: ET.cur.id, membres: list.slice(i, i + 20) }, true); break; } catch (e) { if (k >= 2) throw e; await new Promise(z => setTimeout(z, 1500)); } }
+      out.push(...(r.resultats || []));
+      const d = Math.min(list.length, i + 20); document.getElementById("et-pc").textContent = d; document.getElementById("et-pb").style.width = (100 * d / list.length) + "%";
+    }
+    ET.res = out; ET.hist = ["list"]; etGo("res", true);
+  } catch (e) { if (btn) btn.disabled = false; etSay("❌ Échec (" + (e.code || "réseau") + "). Les comptes déjà créés sont gardés : réessaie, ils ne seront pas doublés.", "err"); }
+}
+async function etMembres(id) {
+  ET.cur = ET.etabs.find(x => x.id === id) || ET.cur; ET.membres = []; etGo("membres"); etSay("Chargement…");
+  try { ET.membres = (await api("etab", { action: "membres", etab: ET.cur.id }, true)).membres || []; etSay(""); etRender(); } catch (e) { etSay("❌ Chargement impossible.", "err"); }
+}
+async function etReset(uids) {
+  if (!uids.length) return etSay("Tout le monde s’est déjà connecté.", "ok");
+  if (!confirm(uids.length === 1 ? "Donner un nouveau mot de passe provisoire à cette personne ?" : "Nouveau mot de passe provisoire pour " + uids.length + " personnes ?")) return;
+  etSay("Génération…"); const out = [];
+  try { for (let i = 0; i < uids.length; i += 20) out.push(...((await api("etab", { action: "nouveauMdp", uids: uids.slice(i, i + 20) }, true)).resultats || [])); ET.res = out; etGo("res"); }
+  catch (e) { etSay("❌ Échec (" + (e.code || "réseau") + ").", "err"); }
+}
+function etResetAll() { etReset(ET.membres.filter(m => !m.pwChanged).map(m => m.uid)); }
+async function etDelMembre(uid) {
+  const m = ET.membres.find(x => x.uid === uid); if (!m || !confirm("Supprimer définitivement le compte de " + m.prenom + " " + m.nom + " ?\nSa progression sera perdue.")) return;
+  try { await api("etab", { action: "supprimerMembre", uid }, true); ET.membres = ET.membres.filter(x => x.uid !== uid); etRender(); etSay("Compte supprimé.", "ok"); } catch (e) { etSay("❌ Échec.", "err"); }
+}
+async function etDelEtab() {
+  const cur = ET.cur; if (!cur) return;
+  const t = prompt("Tous les comptes de « " + cur.nom + " » seront supprimés définitivement (" + ET.membres.length + " comptes).\n\nPour confirmer, tape : SUPPRIMER");
+  if (t !== "SUPPRIMER") return;
+  etSay("Suppression…");
+  try { for (let k = 0; k < 500; k++) { const r = await api("etab", { action: "supprimerEtab", etab: cur.id }, true); if (!r.reste) break; } ET.hist = []; await etLoad(); etSay("Établissement supprimé.", "ok"); }
+  catch (e) { etSay("❌ Échec, réessaie (la suppression reprend où elle s’est arrêtée).", "err"); }
+}
+function etCsv() {
+  const ok = ET.res.filter(r => r.motdepasse).sort(etOrdre), q = v => '"' + String(v || "").replace(/"/g, '""') + '"';
+  const csv = "﻿" + ["Type;Fonction / matière / classe;Nom;Prénom;Identifiant;Mot de passe provisoire"].concat(ok.map(m => [ET_ROLES[m.role], m.role === "eleve" ? m.classe : m.role === "prof" ? m.matiere : m.fonction, m.nom, m.prenom, m.identifiant, m.motdepasse].map(q).join(";"))).join("\r\n");
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  a.download = "codes-" + etN(ET.cur ? ET.cur.nom : "etablissement").replace(/ /g, "-") + ".csv"; document.body.appendChild(a); a.click(); a.remove();
+}
+function etPrint() {
+  const ok = ET.res.filter(r => r.motdepasse).sort(etOrdre), site = location.origin + location.pathname, nom = ET.cur ? ET.cur.nom : "";
+  const card = m => '<div class="c"><div class="e">' + escHtml(nom) + '</div><b>' + escHtml(m.prenom + " " + m.nom) + '</b><div class="s">' + escHtml(etSub(m)) + '</div><table><tr><td>Site</td><td>' + escHtml(site) + '</td></tr><tr><td>Identifiant</td><td class="k">' + escHtml(m.identifiant) + '</td></tr><tr><td>Mot de passe</td><td class="k">' + escHtml(m.motdepasse) + '</td></tr></table><div class="n">Mot de passe provisoire : tu en choisiras un nouveau à ta première connexion.</div></div>';
+  let h = "", g = null;
+  ok.forEach(m => { const k = m.role === "eleve" ? "Élèves · " + (m.classe || "sans classe") : ET_ROLES[m.role]; if (k !== g) { if (g) h += "</div>"; g = k; h += '<h2>' + escHtml(k) + '</h2><div class="g">'; } h += card(m); });
+  if (g) h += "</div>";
+  const w = window.open("", "_blank"); if (!w) return etSay("Autorise les fenêtres pop-up pour imprimer.", "err");
+  w.document.write('<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Codes · ' + escHtml(nom) + '</title><style>body{font-family:Arial,sans-serif;color:#0F3B2E;margin:18px}h1{font-size:22px;margin:0 0 4px}h2{font-size:15px;margin:18px 0 8px;break-after:avoid}.g{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.c{border:2px solid #0F3B2E;border-radius:12px;padding:10px 12px;break-inside:avoid}.e{font-size:10px;text-transform:uppercase;letter-spacing:.06em;opacity:.7}.c b{font-size:15px}.s{font-size:12px;margin-bottom:6px}table{font-size:12px;border-collapse:collapse;width:100%}td{padding:2px 0;vertical-align:top}td:first-child{width:90px;opacity:.75}.k{font:700 14px Menlo,monospace}.n{font-size:10px;margin-top:6px;opacity:.75}@media print{.np{display:none}}</style></head><body><h1>' + escHtml(nom) + '</h1><p class="np"><button onclick="print()">Imprimer</button> · Découpe chaque carte et donne-la à la bonne personne.</p>' + h + '</body></html>');
+  w.document.close(); setTimeout(() => { try { w.print(); } catch (e) {} }, 400);
+}
+
+// ── Mot de passe provisoire : obligatoire à changer à la première connexion ──
+async function tmpPwCheck() {
+  try {
+    if (FBA.mock() || !window.firebase || !firebase.auth) return;
+    const u = firebase.auth().currentUser; if (!u) return;
+    const t = await u.getIdTokenResult(); if (!t.claims || !t.claims.tmp) return;
+    document.getElementById("pt-user").value = (u.email || "").replace("@" + ETAB_DOMAIN, "");
+    document.getElementById("pt-panel").classList.add("open");
+  } catch (e) {}
+}
+async function tmpPwSave(ev) {
+  ev.preventDefault();
+  const old = document.getElementById("pt-old").value, a = document.getElementById("pt-new").value, b = document.getElementById("pt-new2").value, err = document.getElementById("pt-err"), btn = document.getElementById("pt-go");
+  err.textContent = "";
+  if (!old) return err.textContent = "Entre le mot de passe provisoire de ta feuille.";
+  if (!pwOk(a)) return err.textContent = "Trop faible : 8 caractères minimum, avec une lettre et un chiffre.";
+  if (a !== b) return err.textContent = "Les deux mots de passe ne sont pas pareils.";
+  if (a === old) return err.textContent = "Choisis un mot de passe différent du provisoire.";
+  btn.disabled = true;
+  try {
+    await FBA.reauth(old);
+    await firebase.auth().currentUser.updatePassword(a);
+    await api("compte", { action: "pwDone" }, true);
+    await FBA.idToken(true);
+    ["pt-old", "pt-new", "pt-new2"].forEach(i => document.getElementById(i).value = "");
+    document.getElementById("pt-panel").classList.remove("open");
+    showToast("Mot de passe enregistré ✅", "success");
+  } catch (e) { err.textContent = /invalid-credential|wrong-password/.test((e && e.code) || "") ? "Mot de passe provisoire incorrect." : fbMsg(e); }
+  btn.disabled = false;
+}
+
 // ─── COMPTES (1 compte = 1 téléphone) ─────────────────────
 // Un compte = prénom + mot de passe (haché PBKDF2, jamais en clair). Il est lié à l'identifiant du téléphone qui l'a créé.
 // Une autre personne qui se connecte avec ce compte sur un autre téléphone est refusée.
@@ -8774,7 +9066,8 @@ async function authRecover(ev) {
 }
 async function authLogin(ev) {
   ev.preventDefault(); if (_authBusy) return;
-  { const raw = document.getElementById("au-l-name").value; if (raw.includes("@")) return fbLogin(raw, document.getElementById("au-l-pw").value); }
+  { const raw = document.getElementById("au-l-name").value.trim(); if (raw.includes("@")) return fbLogin(raw, document.getElementById("au-l-pw").value);
+    if (raw.includes(".")) return fbLogin(raw.toLowerCase() + "@" + ETAB_DOMAIN, document.getElementById("au-l-pw").value); }
   const name = cleanName(document.getElementById("au-l-name").value), pw = document.getElementById("au-l-pw").value, id = normName(name);
   if (!id || !pw) return authErr("login", "Entre ton prénom et ton mot de passe.");
   if (IS_CLAUDE_PREVIEW && id === "test") return authSuccess({ id: "test", name: "Test" }, false);
@@ -9014,7 +9307,7 @@ const LEGAL = { controller: "", contact: "" };           // à compléter : édi
 const EMAIL_RE = /^[^\s@]{1,64}@[^\s@]+\.[^\s@]{2,}$/;
 let NAME_RE; try { NAME_RE = new RegExp("^[\\p{L}][\\p{L} '’.-]{0,59}$", "u"); } catch (e) { NAME_RE = /^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ '’.-]{0,59}$/; }
 const cleanLast = s => String(s || "").trim().replace(/\s+/g, " ").slice(0, 60);
-const fmtBirth = b => { try { return new Date(b + "T12:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }); } catch (e) { return b; } };
+const fmtBirth = b => { if (!b || b === "1900-01-01") return "Non renseignée"; try { return new Date(b + "T12:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }); } catch (e) { return b; } };
 function ageOf(b) { const d = new Date(b + "T12:00:00"), n = new Date(); let a = n.getFullYear() - d.getFullYear(); if (n < new Date(n.getFullYear(), d.getMonth(), d.getDate())) a--; return a; }
 function birthErr(b) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(b || "")) return "Entre ta date de naissance.";
@@ -9231,6 +9524,8 @@ async function fbLogin(raw, pw) {
 }
 async function authForgot() {
   const raw = norm0($a("au-l-name").value).toLowerCase();
+  if (!raw.includes("@") && raw.includes(".")) return iosSheet({ title: "Mot de passe oublié", sub: "Demande un nouveau mot de passe à ton établissement (professeur principal ou vie scolaire). Il te donnera un mot de passe provisoire.", btns: [{ t: "OK", v: "" }] });
+  if (raw.endsWith("@" + ETAB_DOMAIN)) return authErr("login", "Demande un nouveau mot de passe à ton établissement.");
   if (!raw.includes("@")) return authGo("recover");             // ancien compte : code de récupération
   if (!EMAIL_RE.test(raw)) return authErr("login", "Adresse e-mail invalide.");
   try { await FBA.reset(raw); } catch (e) { if (/network|offline/.test(((e && e.code) || "") + ((e && e.message) || ""))) return authErr("login", fbMsg(e)); }
@@ -9242,6 +9537,7 @@ async function syncAuthState() {
   try {
     const u = await FBA.ready();
     if (!u) { if (!FBA.mock()) logoutAcct("Reconnecte-toi."); return; }
+    tmpPwCheck();
     IS_FB_ADMIN = await FBA.isAdmin(u.uid);
     let p = await FBA.getProfile(u.uid); PROFILE = p;
     if (p && (p.email !== u.email || !!p.emailVerified !== u.verified)) { p = { ...p, email: u.email, emailVerified: u.verified, updatedAt: Date.now() }; try { await FBA.setProfile(u.uid, p); PROFILE = p; } catch (e) {} }
@@ -9257,7 +9553,7 @@ async function completeProfileSheet() {
 
 // ── Anciens comptes (prénom + mot de passe) : proposition de passer au compte sécurisé ──
 async function offerUpgrade(force) {
-  if (!acct || acct.fb || FBA.mock()) return;
+  return;   // création de compte fermée : les comptes viennent de l'établissement
   const k = "rev_upg_ask"; let last = 0; try { last = +localStorage.getItem(k) || 0; } catch (e) {}
   if (!force && Date.now() - last < 864e5) return;
   try { localStorage.setItem(k, String(Date.now())); } catch (e) {}

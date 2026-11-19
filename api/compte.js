@@ -25,16 +25,17 @@ async function legacyCaller(req) {
 }
 
 const actions = {
-  async create(b) {
-    const name = L.cleanName(b.name), id = L.normName(name), dev = devOf(b);
-    if (name.length < 2 || !id || id.length > 40) throw L.httpErr(400, "name");
-    if (!L.pwOk(b.pw)) throw L.httpErr(400, "weak");
-    if (await L.getAcct(id)) throw L.httpErr(409, "taken");
-    // un compte e-mail ne doit jamais avoir le même identifiant
-    try { await L.auth().getUser(id); throw L.httpErr(409, "taken"); } catch (e) { if (e.status) throw e; }
-    const salt = L.randHex(16), now = Date.now(), rc = await recFields();
-    await L.putAcct(id, { name, salt, hash: await L.pbkdf(b.pw, salt), ...rc.f, devices: { [dev]: { brand: brandOf(b), added: now, last: now } }, createdAt: now, lastLogin: now });
-    return { id, name, token: await token(id), recCode: rc.code };
+  // Création de compte fermée : les comptes sont créés par l'établissement (admin → api/etab)
+  async create() { throw L.httpErr(403, "closed"); },
+
+  // Après le changement du mot de passe provisoire : on retire la marque « provisoire »
+  async pwDone(b, req) {
+    const u = await L.caller(req);
+    if (!u.tmp) return { ok: true };
+    const db = L.fs(), ref = db.doc("membres/" + u.uid), s = await ref.get();
+    await L.auth().setCustomUserClaims(u.uid, s.exists ? { etab: s.data().etab } : null);
+    if (s.exists) await ref.update({ pwChanged: true });
+    return { ok: true };
   },
 
   async login(b) {
