@@ -2028,6 +2028,15 @@ body.has-ipad-side .admin-menu { left: 314px; }
 .rv.rv-up{translate:0 -22px}
 .rv.rv-in{opacity:1;translate:0 0;scale:1}
 @media (prefers-reduced-motion: reduce){.rv{opacity:1!important;translate:none!important;scale:none!important;transition:none!important}}
+
+/* Boutons « faits main » : chacun est un peu penché, pas parfaitement droit (se redresse quand on appuie) */
+:where(.btn:not(.btn-round):not(.dock-btn),.et-btn,.au-btn,.ac-btn,.adm-btn,.a2-btn,.ish-btn,.mk-tile,.subject-card,.es-chip,.sh-chip,.lib-seg button,.gp-tab,.au-suggest,.et-pill,.fl-chip,.au-types span,.es-tile){rotate:var(--tilt,-.9deg);transition:rotate .25s cubic-bezier(.3,1.6,.5,1)}
+:where(.btn:not(.btn-round):not(.dock-btn),.et-btn,.au-btn,.ac-btn,.adm-btn,.a2-btn,.ish-btn,.mk-tile,.subject-card,.es-chip,.sh-chip,.lib-seg button,.gp-tab,.au-suggest,.et-pill,.fl-chip,.au-types span,.es-tile):nth-child(4n+2){--tilt:.7deg}
+:where(.btn:not(.btn-round):not(.dock-btn),.et-btn,.au-btn,.ac-btn,.adm-btn,.a2-btn,.ish-btn,.mk-tile,.subject-card,.es-chip,.sh-chip,.lib-seg button,.gp-tab,.au-suggest,.et-pill,.fl-chip,.au-types span,.es-tile):nth-child(4n+3){--tilt:-.4deg}
+:where(.btn:not(.btn-round):not(.dock-btn),.et-btn,.au-btn,.ac-btn,.adm-btn,.a2-btn,.ish-btn,.mk-tile,.subject-card,.es-chip,.sh-chip,.lib-seg button,.gp-tab,.au-suggest,.et-pill,.fl-chip,.au-types span,.es-tile):nth-child(4n+4){--tilt:1.1deg}
+:where(.btn:not(.btn-round):not(.dock-btn),.et-btn,.au-btn,.ac-btn,.adm-btn,.a2-btn,.ish-btn,.mk-tile,.subject-card,.es-chip,.sh-chip,.lib-seg button,.gp-tab,.au-suggest,.et-pill,.fl-chip,.au-types span,.es-tile):active{rotate:0deg}
+:where(.et-btn.big,.au-btn,.lib-seg button.bb){--tilt:-.5deg}
+@media (prefers-reduced-motion: reduce){:where(.btn:not(.btn-round):not(.dock-btn),.et-btn,.au-btn,.ac-btn,.adm-btn,.a2-btn,.ish-btn,.mk-tile,.subject-card,.es-chip,.sh-chip,.lib-seg button,.gp-tab,.au-suggest,.et-pill,.fl-chip,.au-types span,.es-tile){transition:none}}
 </style>
 </head>
 <body>
