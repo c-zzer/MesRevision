@@ -65,7 +65,7 @@ async function freeId(base) {
   throw L.httpErr(409, "id");
 }
 const pub = (uid, m) => ({ uid, role: m.role, fonction: m.fonction || "", prenom: m.prenom, nom: m.nom, classe: m.classe || "", matiere: m.matiere || "", identifiant: m.identifiant, rang: m.rang, pwChanged: !!m.pwChanged,
-  enfants: m.enfants || undefined, famille: m.famille || undefined, secu: !!m.qh });
+  enfants: m.enfants || undefined, famille: m.famille || undefined, secu: !!m.qh, gest: !!m.gest });
 
 // ── Question secrète (comme École Directe : demandée quand on se connecte depuis un nouvel appareil) ──
 const QUESTIONS = [
@@ -126,6 +126,7 @@ async function effacer(uid) {
     const fr = db.doc("membres/" + m.famille), f = await fr.get();
     if (f.exists) await fr.update({ enfants: (f.data().enfants || []).filter(x => x !== uid) });
   }
+  if (m.role === "eleve") await db.collection("invitations").where("eleve", "==", uid).get().then(q => Promise.all(q.docs.map(d => d.ref.delete()))).catch(() => {});
   if (m.role === "famille") await Promise.all((m.enfants || []).map(e => db.doc("membres/" + e).update({ famille: L.admin.firestore.FieldValue.delete() }).catch(() => {})));
   await Promise.all(["membres", "profiles", "progress", "lingo", "presence"].map(c => db.doc(c + "/" + uid).delete().catch(() => {})));
   await L.auth().deleteUser(uid).catch(() => {});
@@ -182,6 +183,62 @@ async function suivi(uid) {
 async function lireMembre(uid) { const s = await L.fs().doc("membres/" + uid).get(); if (!s.exists) throw L.httpErr(403, "pasmembre"); return s.data(); }
 const estPersonnel = m => m.role === "personnel" || m.role === "prof";
 
+// ── Code « parents » (comme l'activation du compte famille sur École Directe / ÉduConnect) ──
+// L'élève génère un code ; ses parents créent eux-mêmes leur compte Famille avec ce code.
+const INV = h => L.fs().doc("invitations/" + h), INV_DAYS = 14;
+const invHash = c => crypto.createHash("sha256").update(String(c || "").toUpperCase().replace(/[^A-Z0-9]/g, "")).digest("hex");
+function invCode() { const A = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", b = crypto.randomBytes(8); let s = ""; for (let i = 0; i < 8; i++) s += A[b[i] % A.length]; return s.slice(0, 4) + "-" + s.slice(4); }
+async function lireInvitation(code) {
+  const ref = INV(invHash(code)), s = await ref.get();
+  if (!s.exists || s.data().exp < Date.now()) throw L.httpErr(404, "code");
+  return { ref, inv: s.data() };
+}
+const _essais = new Map();   // limite les essais de codes par adresse IP
+function limiteIp(req) {
+  const ip = String((req.headers && (req.headers["x-forwarded-for"] || "")) || "").split(",")[0].trim() || "?", now = Date.now(), e = _essais.get(ip) || { n: 0, t: now };
+  if (now - e.t > 15 * 60000) { e.n = 0; e.t = now; }
+  if (++e.n > 20) throw L.httpErr(429, "locked");
+  if (_essais.size > 5000) _essais.clear(); _essais.set(ip, e);
+}
+const publicActions = {
+  // Étape 1 : le code est-il bon ? (affiche le prénom de l'enfant et l'établissement)
+  async verifierCode(b, req) {
+    limiteIp(req);
+    const { inv } = await lireInvitation(b.code), e = await lireMembre(inv.eleve).catch(() => null);
+    if (!e) throw L.httpErr(404, "code");
+    const et = await L.fs().doc("etabs/" + e.etab).get();
+    let deja = null; if (e.famille) { const f = await lireMembre(e.famille).catch(() => null); if (f && f.pwChanged) deja = f.identifiant; }
+    return { enfant: e.prenom + " " + e.nom, classe: e.classe || "", etab: et.exists ? et.data().nom : "", deja };
+  },
+  // Étape 2 : création (ou activation) du compte Famille par les parents eux-mêmes
+  async activerFamille(b, req) {
+    limiteIp(req);
+    const { ref, inv } = await lireInvitation(b.code), db = L.fs();
+    if (!L.pwOk(b.pw)) throw L.httpErr(400, "weak");
+    const q = Number(b.q), r = normRep(b.r);
+    if (!(q >= 0 && q < QUESTIONS.length) || r.length < 2) throw L.httpErr(400, "question");
+    const e = await lireMembre(inv.eleve);
+    const qs = L.randHex(16), secu = { q, qs, qh: await L.pbkdf(r, qs), pwChanged: true };
+    let uid, membre;
+    if (e.famille) {
+      const f = await lireMembre(e.famille).catch(() => null);
+      if (f && f.pwChanged) throw Object.assign(L.httpErr(409, "famille"), { extra: { identifiant: f.identifiant } });
+      if (f) { uid = e.famille; membre = f; await L.auth().updateUser(uid, { password: b.pw }); }
+    }
+    if (!uid) {
+      const id = await freeId(("famille." + slug(e.nom).replace(/-/g, "")).slice(0, 40));
+      const u = await L.auth().createUser({ email: id + "@" + DOMAIN, password: b.pw, emailVerified: true, displayName: "Famille " + e.nom });
+      uid = u.uid; membre = { etab: e.etab, role: "famille", prenom: "Famille", nom: e.nom, enfants: [inv.eleve], classe: "", identifiant: id, createdAt: Date.now(), rang: 1100, parLesParents: true };
+      await db.doc("membres/" + inv.eleve).update({ famille: uid });
+    }
+    await L.auth().setCustomUserClaims(uid, { etab: e.etab, fam: 1 });
+    await db.doc("membres/" + uid).set({ ...membre, ...secu, devices: addDevice({}, devOf(b) || "inconnu", b.brand), qFail: L.admin.firestore.FieldValue.delete() }, { merge: true });
+    await ref.delete();
+    L.devForget(uid);
+    return { identifiant: membre.identifiant };
+  }
+};
+
 // ── Actions des comptes d'établissement eux-mêmes (pas besoin d'être admin) ──
 const moiActions = {
   // Qui suis-je ? + l'établissement + cet appareil est-il reconnu ?
@@ -217,6 +274,29 @@ const moiActions = {
     await ref.update({ devices: addDevice(m, dev, b.brand), qFail: L.admin.firestore.FieldValue.delete() });
     L.devForget(u.uid);
     return { ok: true };
+  },
+  // Élève : code pour que ses parents créent leur compte Famille
+  async inviterParents(b, u, m) {
+    if (m.role !== "eleve") throw L.httpErr(403, "eleve");
+    if (m.famille) { const f = await lireMembre(m.famille).catch(() => null); if (f && f.pwChanged) return { deja: f.identifiant }; }
+    const db = L.fs(), old = await db.collection("invitations").where("eleve", "==", u.uid).get();
+    await Promise.all(old.docs.map(d => d.ref.delete()));
+    const code = invCode(), exp = Date.now() + INV_DAYS * 864e5;
+    await INV(invHash(code)).set({ eleve: u.uid, etab: m.etab, exp, createdAt: Date.now() });
+    return { code, exp };
+  },
+  // Famille : ajouter un frère / une sœur avec son code parents
+  async ajouterEnfant(b, u, m) {
+    if (m.role !== "famille") throw L.httpErr(403, "famille");
+    const { ref, inv } = await lireInvitation(b.code), db = L.fs(), e = await lireMembre(inv.eleve);
+    if (e.etab !== m.etab) throw L.httpErr(400, "etab");
+    if (e.famille && e.famille !== u.uid) {
+      const f = await lireMembre(e.famille).catch(() => null);
+      if (f && f.pwChanged) throw L.httpErr(409, "famille");
+      if (f) await effacer(e.famille);
+    }
+    await Promise.all([db.doc("membres/" + u.uid).update({ enfants: [...new Set([...(m.enfants || []), inv.eleve])] }), db.doc("membres/" + inv.eleve).update({ famille: u.uid }), ref.delete()]);
+    return { enfant: e.prenom + " " + e.nom };
   },
   // Mes appareils reconnus
   async appareils(b, u, m) { return { appareils: Object.entries(m.devices || {}).map(([id, x]) => ({ id, ...x })).sort((a, b) => (b.last || 0) - (a.last || 0)) }; },
@@ -325,6 +405,13 @@ const actions = {
     return { ok: true };
   },
   async suivi(b) { return suivi(String(b.uid || "")); },
+  // Administrateur de l'établissement (direction / secrétariat) : gère lui-même les comptes de son établissement
+  async setGest(b) {
+    const uid = String(b.uid || ""), m = await lireMembre(uid);
+    if (!["personnel", "prof"].includes(m.role)) throw L.httpErr(400, "role");
+    await L.fs().doc("membres/" + uid).update({ gest: !!b.on });
+    return { ok: true };
+  },
 
   async supprimerMembre(b) {
     const uid = String(b.uid || "");
@@ -347,6 +434,25 @@ const actions = {
   }
 };
 
+// ── Administrateur d'établissement : mêmes outils que l'admin, mais SEULEMENT pour son établissement ──
+const GEST = ["membres", "importer", "nouveauMdp", "supprimerMembre", "creerFamilles", "lierEnfant", "suivi"];
+async function gestion(b, u, req) {
+  const m = await lireMembre(u.uid);
+  if (!m.gest || !GEST.includes(b.action)) throw L.httpErr(403, "notadmin");
+  await L.devGate(u, req);
+  b.etab = m.etab;
+  const mien = async uid => { const x = await lireMembre(String(uid)).catch(() => null); return x && x.etab === m.etab ? x : null; };
+  if (b.action === "nouveauMdp") {
+    const ok = [];
+    for (const id of (Array.isArray(b.uids) ? b.uids : [b.uid]).map(String).slice(0, MAX_BATCH)) { const x = await mien(id); if (x && id !== u.uid && !x.gest) ok.push(id); }
+    b.uids = ok;
+  }
+  if (b.action === "supprimerMembre") { const x = await mien(b.uid); if (!x || b.uid === u.uid || x.gest) throw L.httpErr(403, "acces"); }
+  if (b.action === "lierEnfant" && (!(await mien(b.famille)) || !(await mien(b.eleve)))) throw L.httpErr(403, "acces");
+  if (b.action === "suivi" && !(await mien(b.uid))) throw L.httpErr(403, "acces");
+  return actions[b.action](b, req);
+}
+
 module.exports = L.handler(async (b, req) => {
   if (moiActions[b.action] && !b.adminEtab) {
     const u = await L.caller(req);
@@ -355,7 +461,9 @@ module.exports = L.handler(async (b, req) => {
     if (b.action === "securite" && m.qh) throw L.httpErr(409, "deja");
     return moiActions[b.action](b, u, m);
   }
-  await L.requireAdmin(req);
+  if (publicActions[b.action]) return publicActions[b.action](b, req);
+  const u = await L.caller(req);
+  if (!(await L.isAdminUid(u.uid))) return gestion(b, u, req);
   const fn = actions[b.action];
   if (!fn) throw L.httpErr(400, "action");
   return fn(b, req);
