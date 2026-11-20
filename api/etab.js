@@ -340,9 +340,10 @@ const moiActions = {
 
 const actions = {
   async list() {
-    const db = L.fs(), [e, m] = await Promise.all([db.collection("etabs").get(), db.collection("membres").select("etab", "role").get()]);
-    const n = {}; m.docs.forEach(d => { const x = d.data(), k = x.etab; n[k] = n[k] || { eleve: 0, prof: 0, personnel: 0 }; n[k][x.role] = (n[k][x.role] || 0) + 1; });
-    return { etabs: e.docs.map(d => ({ id: d.id, ...d.data(), compte: n[d.id] || { eleve: 0, prof: 0, personnel: 0 } })).sort((a, b) => String(a.nom).localeCompare(String(b.nom), "fr")) };
+    const db = L.fs(), [e, m] = await Promise.all([db.collection("etabs").get(), db.collection("membres").select("etab", "role", "gest", "prenom", "nom").get()]);
+    const n = {}, g = {};
+    m.docs.forEach(d => { const x = d.data(), k = x.etab; n[k] = n[k] || { eleve: 0, prof: 0, personnel: 0, famille: 0 }; n[k][x.role] = (n[k][x.role] || 0) + 1; if (x.gest) (g[k] = g[k] || []).push(x.prenom + " " + x.nom); });
+    return { etabs: e.docs.map(d => ({ id: d.id, ...d.data(), compte: n[d.id] || { eleve: 0, prof: 0, personnel: 0, famille: 0 }, gestion: g[d.id] || [] })).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)) };
   },
 
   async creerEtab(b) {
