@@ -27,7 +27,7 @@ function handler(fn) {
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("X-Content-Type-Options", "nosniff");
     const o = req.headers.origin || "";
-    if (OK_ORIGIN.test(o)) { res.setHeader("Access-Control-Allow-Origin", o); res.setHeader("Vary", "Origin"); res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization"); res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS"); res.setHeader("Access-Control-Max-Age", "600"); }
+    if (OK_ORIGIN.test(o)) { res.setHeader("Access-Control-Allow-Origin", o); res.setHeader("Vary", "Origin"); res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Dev"); res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS"); res.setHeader("Access-Control-Max-Age", "600"); }
     if (req.method === "OPTIONS") return res.status(204).end();
     if (req.method !== "POST") return res.status(405).json({ error: "method" });
     try {
@@ -57,6 +57,20 @@ async function isAdminUid(uid) {
   const ids = (c.exists && Array.isArray(c.data().ids)) ? c.data().ids.map(String) : [];
   return ids.includes(uid) || a.exists;
 }
+// ── Comptes d'établissement : appareil reconnu ? (question secrète demandée sur un nouvel appareil) ──
+const _dv = new Map();
+async function devGate(u, req) {
+  if (!u || !u.etab) return;
+  const dev = String((req.headers && req.headers["x-dev"]) || "").slice(0, 80), k = u.uid + "|" + dev, c = _dv.get(k);
+  if (c && c > Date.now()) return;
+  const s = await fs().doc("membres/" + u.uid).get();
+  if (!s.exists) throw httpErr(401, "noauth");
+  const m = s.data();
+  if (m.qh && !(dev && m.devices && m.devices[dev])) throw httpErr(403, "device");
+  if (_dv.size > 5000) _dv.clear();
+  _dv.set(k, Date.now() + 300000);
+}
+function devForget(uid) { for (const k of _dv.keys()) if (k.startsWith(uid + "|")) _dv.delete(k); }
 async function requireAdmin(req) {
   const u = await caller(req);
   if (!(await isAdminUid(u.uid))) throw httpErr(403, "notadmin");
@@ -211,5 +225,5 @@ async function listAcctIds() {
 const devsOf = a => { const d = { ...(a.devices || {}) }; if (a.deviceId && !d[a.deviceId]) d[a.deviceId] = { brand: "Appareil", added: a.createdAt || 0, last: a.lastLogin || 0 }; return d; };
 const publicAcct = (id, a) => ({ id, name: a.name, devices: devsOf(a), createdAt: a.createdAt || 0, lastLogin: a.lastLogin || 0, migratedTo: a.migratedTo || null, hasRec: !!a.recHash });
 
-module.exports = { admin, fs, auth, httpErr, handler, caller, isAdminUid, requireAdmin, pbkdf, randHex, same, normName, cleanName, normCode, pwOk, genRecCode,
+module.exports = { admin, fs, auth, httpErr, handler, caller, devGate, devForget, isAdminUid, requireAdmin, pbkdf, randHex, same, normName, cleanName, normCode, pwOk, genRecCode,
   secrets, seal, open, SCOPE, readFile, writeFile, deleteFile, listFiles, getAcct, putAcct, delAcct, listAcctIds, devsOf, publicAcct, acctFile };
