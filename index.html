@@ -733,7 +733,7 @@ input.sw:focus-visible { outline: 3px solid var(--mur); outline-offset: 3px; }
 .ac-btn.mur{background:var(--mur);color:#fff}
 .ac-btn.out{background:#fff}
 .ac-empty{text-align:center;padding:26px 10px;font-weight:700;color:var(--text-muted)}
-.ac-empty b{display:block;font-size:2rem;margin-bottom:6px}
+.ac-empty b{display:block;margin-bottom:6px}
 .ac-note{font-size:.76rem;font-weight:700;color:var(--text-muted);text-align:center;padding:2px 8px 0}
 
 .dv-title { font: 800 18px/1.1 var(--d); letter-spacing: -.03em; margin: 20px 4px 8px; }
@@ -956,7 +956,7 @@ html.fx-off *, html.fx-off *::before, html.fx-off *::after { animation: none !im
 .reader-content.rich ol > li:nth-child(3n+2)::before { background: var(--gum); }
 .reader-content.rich ol > li:nth-child(3n)::before { background: var(--pis); }
 .reader-content.rich blockquote { position: relative; background: var(--gum) !important; border: var(--bw) solid var(--ink) !important; border-left-width: var(--bw) !important; border-radius: 20px !important; box-shadow: 4px 4px 0 var(--ink); padding: 14px 16px 12px 52px !important; margin: 16px 4px 16px 0 !important; transform: rotate(-.7deg); font-weight: 700; }
-.reader-content.rich blockquote::before { content: "💡"; position: absolute; left: 12px; top: 10px; font-size: 26px; line-height: 1; }
+.reader-content.rich blockquote::before { content: ""; position: absolute; left: 12px; top: 10px; width: 28px; height: 28px; background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230F3B2E' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z'/%3E%3C/svg%3E"); }
 .reader-content.rich blockquote b { background: none; }
 .reader-content.rich mark { background: var(--sun); box-shadow: 0 3px 0 var(--ink); border-radius: 4px; padding: 0 4px; }
 .reader-content.rich hr { border-top: 4px dotted var(--ink) !important; opacity: .35; margin: 20px 0; }
@@ -1101,11 +1101,11 @@ html:has(#reader-view.rd-paged) body { overflow: hidden; }
 #reader-content .fx-sec[data-n]::before { content: attr(data-n) " — "; }
 #reader-content .fx-sub { display: inline-block; margin: 16px 0 6px !important; padding: 0 2px; font: 800 1rem/1.2 var(--d); color: var(--ink); background: linear-gradient(transparent 62%, var(--pis) 62%); }
 #reader-content blockquote[class^="fx-"] { transform: rotate(-.6deg); }
-#reader-content blockquote.fx-key { background: var(--sun) !important; } #reader-content blockquote.fx-key::before { content: "⭐"; }
-#reader-content blockquote.fx-tip { background: #DCD2FF !important; } #reader-content blockquote.fx-tip::before { content: "💡"; }
-#reader-content blockquote.fx-warn { background: #FFC2C2 !important; } #reader-content blockquote.fx-warn::before { content: "⚠️"; }
-#reader-content blockquote.fx-ex { background: #E6F7A8 !important; } #reader-content blockquote.fx-ex::before { content: "🧪"; }
-#reader-content blockquote.fx-def { background: var(--cream, #FBFFEA) !important; } #reader-content blockquote.fx-def::before { content: "📖"; }
+#reader-content blockquote.fx-key { background: var(--sun) !important; } #reader-content blockquote.fx-key::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230F3B2E' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9 6.8 19.7l1-5.9L3.5 9.7l5.9-.8z'/%3E%3C/svg%3E"); }
+#reader-content blockquote.fx-tip { background: #DCD2FF !important; } #reader-content blockquote.fx-tip::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230F3B2E' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z'/%3E%3C/svg%3E"); }
+#reader-content blockquote.fx-warn { background: #FFC2C2 !important; } #reader-content blockquote.fx-warn::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230F3B2E' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5L2.5 20h19zM12 10v4.5M12 17.2v.1'/%3E%3C/svg%3E"); }
+#reader-content blockquote.fx-ex { background: #E6F7A8 !important; } #reader-content blockquote.fx-ex::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230F3B2E' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3h6M10 3v6L4.2 18.6A1.6 1.6 0 0 0 5.6 21h12.8a1.6 1.6 0 0 0 1.4-2.4L14 9V3M7 15h10'/%3E%3C/svg%3E"); }
+#reader-content blockquote.fx-def { background: var(--cream, #FBFFEA) !important; } #reader-content blockquote.fx-def::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230F3B2E' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5V5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2zM8 7h8M8 11h6'/%3E%3C/svg%3E"); }
 #reader-content blockquote[data-l] > p:first-child::before { content: attr(data-l) " : "; font-weight: 800; }
 #reader-content blockquote > p { margin: 0 0 6px; background: none; }
 #reader-content b.fx-num { background: var(--sun) !important; border-radius: 7px; padding: 0 5px; box-shadow: 0 2px 0 var(--ink); font-weight: 800; white-space: nowrap; }
@@ -2146,7 +2146,7 @@ body.has-ipad-side .admin-menu { left: 314px; }
       <div class="au-icon" style="--i:0"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M20 8h60a16 16 0 0 1 16 16v36a16 16 0 0 1-16 16H54L34 94V76H20A16 16 0 0 1 4 60V24A16 16 0 0 1 20 8z" fill="#0F3B2E"/><path d="M50 20L82 36L50 52L18 36Z" fill="#D6F26B"/><path d="M32 48v10c0 6 8 10 18 10s18-4 18-10V48L50 58z" fill="#D6F26B"/><path d="M82 36v18" stroke="#D6F26B" stroke-width="4" stroke-linecap="round"/><circle cx="82" cy="57" r="4" fill="#D6F26B"/></svg></div>
       <h1 style="--i:1">Bienvenue sur<br><em>EcoLingo</em></h1>
       <p class="au-sub" style="--i:2">Ton compte est créé par ton établissement. Connecte-toi avec l'identifiant et le mot de passe qu'il t'a donnés.</p>
-      <div class="au-types" style="--i:2"><span>🎒 Élève</span><span>🏠 Famille</span><span>🏫 Personnel</span></div>
+      <div class="au-types" style="--i:2"><span>Élève</span><span>Famille</span><span>Personnel</span></div>
       <button class="au-btn" style="--i:3" type="button" onclick="authGo('login')">Me connecter</button>
       <button class="au-link" style="--i:4;margin-top:6px" type="button" onclick="famStart()">Je suis parent : créer mon compte Famille</button>
       <p class="au-note" style="--i:4">Pas encore d'identifiant&nbsp;? Demande-le à ton professeur principal ou à la vie scolaire.</p>
@@ -2429,7 +2429,7 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
 <div id="grant-panel" role="dialog" aria-modal="true" aria-labelledby="grant-title" onclick="if(event.target===this)closeGrantPanel()">
   <div id="grant-card">
     <div class="gp-head">
-      <div class="gp-logo" aria-hidden="true">🎁</div>
+      <div class="gp-logo" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8c-2-4-6-4-6-1.5S10 8 12 8zm0 0c2-4 6-4 6-1.5S14 8 12 8z"/></svg></div>
       <div class="gp-ht"><h2 id="grant-title">Give inventaire</h2><p class="gp-sub">Outils admin</p></div>
       <button type="button" class="gp-x" onclick="closeGrantPanel()" aria-label="Fermer"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
@@ -2456,8 +2456,8 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
       <div id="grant-status" role="status"></div>
     </div>
     <div class="gp-actions">
-      <button type="button" id="gp-btn-go" class="gp-go" onclick="grantApply(false)">🎁 Donner</button>
-      <button type="button" id="gp-btn-all" class="gp-all" onclick="grantApply(true)">✨ Tout give</button>
+      <button type="button" id="gp-btn-go" class="gp-go" onclick="grantApply(false)">Donner</button>
+      <button type="button" id="gp-btn-all" class="gp-all" onclick="grantApply(true)">Tout give</button>
     </div>
   </div>
 </div>
@@ -2465,7 +2465,7 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
 <div id="adm-panel" role="dialog" aria-modal="true" aria-labelledby="adm-title" onclick="if(event.target===this)closeAdminsPanel()">
   <div id="adm-card">
     <div class="gp-head">
-      <div class="gp-logo" aria-hidden="true">🛡️</div>
+      <div class="gp-logo" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
       <div class="gp-ht"><h2 id="adm-title">Admins</h2><p class="gp-sub">Seuls les admins peuvent nommer un admin</p></div>
       <button type="button" class="gp-x" onclick="closeAdminsPanel()" aria-label="Fermer"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
@@ -2541,7 +2541,7 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
   <div id="et-card">
     <div class="gp-head">
       <button type="button" class="gp-x" id="et-back" onclick="etBack()" aria-label="Retour" style="display:none;background:#fff;color:var(--ink)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
-      <div class="gp-logo" aria-hidden="true">🏫</div>
+      <div class="gp-logo" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-5h6v5M10 12h4"/></svg></div>
       <div class="gp-ht"><h2 id="et-title">Établissements</h2><p class="gp-sub" id="et-sub">Les comptes sont créés ici, et nulle part ailleurs</p></div>
       <button type="button" class="gp-x" onclick="closeEtabPanel()" aria-label="Fermer"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
@@ -2554,7 +2554,7 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
 <div id="pt-panel" role="dialog" aria-modal="true" aria-labelledby="pt-title">
   <div id="pt-card">
     <div class="gp-head">
-      <div class="gp-logo" aria-hidden="true">🏫</div>
+      <div class="gp-logo" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-5h6v5M10 12h4"/></svg></div>
       <div class="gp-ht"><h2 id="pt-title">Première connexion</h2><p class="gp-sub" id="pt-sub">Bienvenue dans ton espace</p></div>
     </div>
     <div class="et-body">
@@ -2580,7 +2580,7 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
         <button class="et-btn big" type="submit" id="pt-go3">Enregistrer</button>
       </form>
       <section class="pt-s" data-s="4" style="text-align:center" hidden>
-        <div class="pt-ok">✅</div>
+        <div class="pt-ok"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16.5 9.5"/></svg></div>
         <p class="et-note">Ton mot de passe et ta question secrète sont enregistrés. Cet appareil est reconnu. Garde ta feuille de codes dans un endroit sûr, ou jette-la.</p>
         <button class="et-btn big" type="button" onclick="ptDone()">C'est parti</button>
       </section>
@@ -2590,7 +2590,7 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
 <div id="dv-panel" role="dialog" aria-modal="true" aria-labelledby="dv-title">
   <div id="dv-card">
     <div class="gp-head">
-      <div class="gp-logo" aria-hidden="true">🔐</div>
+      <div class="gp-logo" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></div>
       <div class="gp-ht"><h2 id="dv-title">Confirme que c'est toi</h2><p class="gp-sub" id="dv-who"></p></div>
     </div>
     <form class="et-body" onsubmit="dvSend(event)" autocomplete="off">
@@ -2606,7 +2606,7 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
   <div id="es-card">
     <div class="gp-head">
       <button type="button" class="gp-x" id="es-back" onclick="esBack()" aria-label="Retour" style="display:none;background:#fff;color:var(--ink)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="gp-logo" aria-hidden="true" id="es-logo">🏫</div>
+      <div class="gp-logo" aria-hidden="true" id="es-logo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-5h6v5M10 12h4"/></svg></div>
       <div class="gp-ht"><h2 id="es-title">Mon établissement</h2><p class="gp-sub" id="es-sub"></p></div>
       <button type="button" class="gp-x" id="es-x" onclick="esClose()" aria-label="Fermer"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
@@ -2614,7 +2614,7 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
     <div class="et-body" style="padding-top:0"><div id="es-status" role="status"></div></div>
   </div>
 </div>
-<button type="button" id="es-fam-back" hidden onclick="esFamBack()">🏠 Espace famille</button>
+<button type="button" id="es-fam-back" hidden onclick="esFamBack()">Espace famille</button>
 
 <div id="inline-bar" class="inline-bar" aria-hidden="true"><div id="inline-title" class="inline-title"></div></div>
 
@@ -3315,7 +3315,7 @@ function acListHtml(rows) {
   else if (STX.f === "idle") list = list.filter(r => !r.last || now - r.last >= AC_WEEK);
   else if (STX.f === "admin") list = list.filter(r => ADMIN_IDS.includes(r.id));
   list.sort((a, b) => (b.last || 0) - (a.last || 0));
-  if (!list.length) return '<div class="ac-empty"><b>🔍</b>' + (rows.length ? "Aucun compte ne correspond." : "Aucun compte pour l’instant.") + '</div>';
+  if (!list.length) return '<div class="ac-empty"><b><svg width=\"34\" height=\"34\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"6.5\"/><path d=\"M16 16l4.5 4.5\"/></svg></b>' + (rows.length ? "Aucun compte ne correspond." : "Aucun compte pour l’instant.") + '</div>';
   const chev = '<svg class="ac-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
   return list.map(r => {
     const isAdm = ADMIN_IDS.includes(r.id), me = acct && acct.id === r.id, open = STX.open === r.id, live = r.last && now - r.last < 10 * 60000;
@@ -3341,7 +3341,7 @@ function renderAcctList() { const l = document.getElementById("ac-list"); if (l)
 function stxAccountsHtml(rows) {
   const now = Date.now(), act = rows.filter(r => r.last && now - r.last < AC_WEEK).length, adm = rows.filter(r => ADMIN_IDS.includes(r.id)).length;
   const F = [["all", "Tous"], ["active", "Actifs 7 j"], ["idle", "Inactifs"], ["admin", "Admins"]].map(f => '<button type="button" class="ac-chip' + (STX.f === f[0] ? " on" : "") + '" data-f="' + f[0] + '">' + f[1] + '</button>').join("");
-  const warn = PROFS_ERR ? '<div class="ac-note" style="margin:0 0 12px;padding:10px 12px;background:var(--sun);border:2.5px solid var(--ink);border-radius:14px;font-weight:700">⚠ Les profils e-mail ne sont pas lisibles (' + escHtml(PROFS_ERR) + '). Les comptes ci-dessous sont retrouvés via leurs données de jeu : e-mail et mot de passe indisponibles, et ceux qui n’ont jamais joué peuvent manquer. Il faut autoriser la lecture de « profiles » aux admins dans les règles Firestore.</div>' : "";
+  const warn = PROFS_ERR ? '<div class="ac-note" style="margin:0 0 12px;padding:10px 12px;background:var(--sun);border:2.5px solid var(--ink);border-radius:14px;font-weight:700">Les profils e-mail ne sont pas lisibles (' + escHtml(PROFS_ERR) + '). Les comptes ci-dessous sont retrouvés via leurs données de jeu : e-mail et mot de passe indisponibles, et ceux qui n’ont jamais joué peuvent manquer. Il faut autoriser la lecture de « profiles » aux admins dans les règles Firestore.</div>' : "";
   return warn + '<div class="stx-hero"><div class="stx-big">' + rows.length + '</div><div class="stx-cap">comptes</div></div>' +
     '<div class="st-tiles"><div class="st-tile"><b>' + act + '</b><span>Actifs (7 j)</span></div><div class="st-tile"><b>' + (rows.length - act) + '</b><span>Inactifs</span></div><div class="st-tile"><b>' + adm + '</b><span>Admins</span></div></div>' +
     '<div class="ac-tools"><input id="ac-q" class="ac-search" type="search" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Chercher un prénom ou un e-mail…" value="' + escHtml(STX.q) + '"><div class="ac-chips">' + F + '</div></div>' +
@@ -6523,7 +6523,7 @@ function qmRank(kind) {
   qmEl().querySelectorAll(".qm-tab[data-k]").forEach(b => b.onclick = () => { if (b.dataset.k !== kind) qmRank(b.dataset.k); });
   document.getElementById("qm-go").onclick = duel ? qmFriends : qmCompStart; qmMe(); rkLoad((rk, rks) => { const e = document.getElementById("rk-me"); if (e) e.innerHTML = rkCard(RK.view(duel ? rk : rks)); });
   const lb = document.getElementById("qm-lb");
-  if (!qmOn()) { lb.innerHTML = '<div class="rs-lock"><i>🔒</i><span>Connecte-toi à ton compte pour voir le classement en direct et faire compter tes parties.</span></div>'; return; }
+  if (!qmOn()) { lb.innerHTML = '<div class="rs-lock"><i><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></i><span>Connecte-toi à ton compte pour voir le classement en direct et faire compter tes parties.</span></div>'; return; }
   lb.onclick = e => { const r = e.target.closest(".lb-row[data-id]"); if (r) plOpen(r.dataset.id, kind); };
   QM.un.push(db.collection("lingo").orderBy(fld, "desc").limit(30).onSnapshot(s => {
     const L = s.docs.filter(x => byLg ? (x.data().solo || 0) > 0 : !!(x.data()[rkf] && x.data()[rkf].ok));
@@ -7185,7 +7185,7 @@ function shRender() {
     if (!nb) body = '<div class="inv-empty"><div class="sh-art r-commun">' + shArt("patate", [], "", 140).replace("<svg ", '<svg style="opacity:.3;filter:grayscale(1)" ') + '</div><b>Ton inventaire est vide</b><div class="sh-sub">Adopte ta première bestiole pour la personnaliser !</div><button type="button" class="btn btn-primary" style="margin-top:10px" data-go="b">Voir les bestioles</button></div>';
     else {
       const bd = SH_BETES.find(b => b.id === m) || SH_BETES.find(b => b.id === (sh.mo || [])[0]), ownC = SH_COS.filter(c => (sh.co || []).includes(c.id)), ownA = SH_COLORS.filter(c => (sh.own || []).includes(c.id));
-      const top = '<div class="inv-top r-' + bd.rar + (SHV.bounce ? " bounce" : "") + '"><div class="inv-pv">' + (shDcur(sh) ? shDanceArt(bd.id, shDcur(sh), ce, col, 96) : shArt(bd.id, ce, col, 96)) + '</div><div class="inv-in"><b>' + escHtml(bd.name) + '</b><span class="sh-rtag">' + SH_RAR[bd.rar].n + "</span><small>" + ce.length + " accessoire" + (ce.length > 1 ? "s" : "") + " porté" + (ce.length > 1 ? "s" : "") + '</small><div class="inv-btns"><button type="button" class="sh-chip" data-eq="r:">🎲 Au hasard</button><button type="button" class="sh-chip" data-eq="x:">Tout retirer</button>' + (shDcur(sh) ? '<button type="button" class="sh-chip" data-eq="d:">Arrêter la danse</button>' : "") + '</div></div></div>';
+      const top = '<div class="inv-top r-' + bd.rar + (SHV.bounce ? " bounce" : "") + '"><div class="inv-pv">' + (shDcur(sh) ? shDanceArt(bd.id, shDcur(sh), ce, col, 96) : shArt(bd.id, ce, col, 96)) + '</div><div class="inv-in"><b>' + escHtml(bd.name) + '</b><span class="sh-rtag">' + SH_RAR[bd.rar].n + "</span><small>" + ce.length + " accessoire" + (ce.length > 1 ? "s" : "") + " porté" + (ce.length > 1 ? "s" : "") + '</small><div class="inv-btns"><button type="button" class="sh-chip" data-eq="r:">Au hasard</button><button type="button" class="sh-chip" data-eq="x:">Tout retirer</button>' + (shDcur(sh) ? '<button type="button" class="sh-chip" data-eq="d:">Arrêter la danse</button>' : "") + '</div></div></div>';
       const CH = [["b", "Bestioles", nb + "/" + SH_BETES.length], ["c", "Cosmétiques", ownC.length + "/" + SH_COS.length], ["d", "Danses", (sh.dn || []).length + "/" + SH_DANCES.length], ["a", "Teintes", ownA.length + "/" + SH_COLORS.length], ["p", "Avantages", ""]];
       const chips = '<div class="sh-chips inv-chips">' + CH.map(x => '<button type="button" class="sh-chip' + (IV === x[0] ? " on" : "") + '" data-iv="' + x[0] + '">' + x[1] + (x[2] ? " <i>" + x[2] + "</i>" : "") + "</button>").join("") + "</div>";
       const ot = sh.ot || [];
@@ -8676,8 +8676,8 @@ async function admToggle(id, on, nm) {
     await db.doc("config/admins").set({ ids: next });
     ADMIN_IDS = next; admRender();
     try { if (document.getElementById("modal-stats").classList.contains("open")) renderStatsSheet(); } catch (e) {}
-    admSay("✅ " + (r ? r.name : id) + (on ? " est maintenant admin." : " n’est plus admin."), "ok");
-  } catch (e) { admSay("❌ Échec : " + (e && e.message ? e.message : "écriture refusée."), "err"); }
+    admSay((r ? r.name : id) + (on ? " est maintenant admin." : " n’est plus admin."), "ok");
+  } catch (e) { admSay("Échec : " + (e && e.message ? e.message : "écriture refusée."), "err"); }
 }
 
 
@@ -8710,7 +8710,7 @@ function etHead(t, s) { document.getElementById("et-title").textContent = t; doc
 
 async function etLoad() {
   ET.view = "list"; ET.loading = true; etRender();
-  try { ET.etabs = (await api("etab", { action: "list" }, true)).etabs || []; ET.loading = false; } catch (e) { ET.loading = false; ET.etabs = []; etSay("❌ Impossible de charger les établissements (" + (e.code || "réseau") + ").", "err"); }
+  try { ET.etabs = (await api("etab", { action: "list" }, true)).etabs || []; ET.loading = false; } catch (e) { ET.loading = false; ET.etabs = []; etSay("Impossible de charger les établissements (" + (e.code || "réseau") + ").", "err"); }
   if (ET.view === "list") etRender();
 }
 function etRender() {
@@ -8721,8 +8721,8 @@ function etRender() {
       (ET.etabs.length ? '<p class="et-lab">' + ET.etabs.length + ' établissement' + (ET.etabs.length > 1 ? "s" : "") + ' · le plus récent en haut</p><div class="et-list">' + ET.etabs.map(x => { const c = x.compte || {}, neuf = x.createdAt && Date.now() - x.createdAt < 2 * 864e5, d = x.createdAt ? new Date(x.createdAt) : null;
         return '<div class="et-card' + (x.id === ET.lastId ? " hi" : "") + '"><div class="et-ct"><b>' + escHtml(x.nom) + '</b>' + (neuf ? '<span class="et-tag ok">Nouveau</span>' : "") + '</div>' +
           '<small>' + escHtml([x.type, x.ville, x.annee].filter(Boolean).join(" · ") || "—") + (d ? " · créé le " + d.toLocaleDateString("fr-FR") + " à " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "") + '</small>' +
-          '<div class="et-stats"><span class="et-pill">🎒 ' + (c.eleve || 0) + ' élèves</span><span class="et-pill">👩‍🏫 ' + (c.prof || 0) + ' profs</span><span class="et-pill">🏫 ' + (c.personnel || 0) + ' direction</span><span class="et-pill">🏠 ' + (c.famille || 0) + ' familles</span></div>' +
-          '<small class="et-gst">' + ((x.gestion || []).length ? "⚙️ Géré par " + escHtml(x.gestion.join(", ")) : "⚠️ Pas encore d’admin d’établissement : ouvre-le et appuie sur ⚙️ à côté de la direction") + '</small>' +
+          '<div class="et-stats"><span class="et-pill">' + (c.eleve || 0) + ' élèves</span><span class="et-pill">' + (c.prof || 0) + ' profs</span><span class="et-pill">' + (c.personnel || 0) + ' direction</span><span class="et-pill">' + (c.famille || 0) + ' familles</span></div>' +
+          '<small class="et-gst">' + ((x.gestion || []).length ? "Géré par " + escHtml(x.gestion.join(", ")) : "Pas encore d’admin d’établissement : ouvre-le et appuie sur « Gestion » à côté de la direction") + '</small>' +
           '<div class="et-acts"><button class="et-btn" type="button" data-v="' + escHtml(x.id) + '">Ouvrir</button><button class="et-btn w" type="button" data-a="' + escHtml(x.id) + '">＋ Ajouter des comptes</button></div></div>'; }).join("") + '</div>'
         : ET.loading ? '<p class="et-note">Chargement des établissements…</p>' : '<p class="et-note">Aucun établissement pour l’instant. Quand un établissement te choisit, clique sur « Nouvel établissement » et importe son tableau.</p>');
     b.onclick = ev => { const t = ev.target.closest("button"); if (!t) return; if (t.dataset.v) etMembres(t.dataset.v); if (t.dataset.a) etAdd(t.dataset.a); };
@@ -8731,17 +8731,17 @@ function etRender() {
     etHead(cur ? cur.nom : "Nouvel établissement", cur ? "Ajouter des comptes" : "Importer le tableau de l’établissement");
     const ms = d.membres.slice().sort(etOrdre), cnt = r => ms.filter(m => m.role === r).length;
     b.innerHTML = (cur ? "" : '<div class="et-sec"><p class="et-lab">L’établissement</p><div class="et-grid"><input class="et-in" id="et-nom" placeholder="Nom de l’établissement" value="' + escHtml(d.nom) + '"><input class="et-in" id="et-type" placeholder="Collège / Lycée" value="' + escHtml(d.type) + '"><input class="et-in" id="et-ville" placeholder="Ville" value="' + escHtml(d.ville) + '"><input class="et-in" id="et-annee" placeholder="Année scolaire" value="' + escHtml(d.annee) + '"></div></div>') +
-      '<div class="et-sec"><p class="et-lab">Le tableau</p><label class="et-drop" onclick="document.getElementById(\'et-file\').click()">📄 Choisir le fichier<small>Excel (.xlsx) ou CSV · dans Numbers : Fichier › Exporter vers › Excel</small></label></div>' +
+      '<div class="et-sec"><p class="et-lab">Le tableau</p><label class="et-drop" onclick="document.getElementById(\'et-file\').click()">Choisir le fichier<small>Excel (.xlsx) ou CSV · dans Numbers : Fichier › Exporter vers › Excel</small></label></div>' +
       '<div class="et-sec"><p class="et-lab">Ou ajouter à la main</p><div class="et-grid"><select class="et-in" id="et-m-role"><option value="eleve">Élève</option><option value="prof">Prof</option><option value="personnel">Direction / personnel</option></select><input class="et-in" id="et-m-prenom" placeholder="Prénom"><input class="et-in" id="et-m-nom" placeholder="Nom"><input class="et-in" id="et-m-plus" placeholder="Classe / matière / fonction"></div><button class="et-btn w" type="button" onclick="etAddHand()">＋ Ajouter cette personne</button></div>' +
-      (ms.length ? '<div class="et-sec"><p class="et-lab">À créer</p><div class="et-stats"><span class="et-pill">' + cnt("personnel") + ' direction/personnel</span><span class="et-pill">' + cnt("prof") + ' profs</span><span class="et-pill">' + cnt("eleve") + ' élèves</span></div>' + etGroups(ms, m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.prenom + " " + m.nom) + '</b><small>' + escHtml(etSub(m)) + (m.err ? ' · ⚠️ ' + escHtml(m.err) : "") + '</small></div><button class="et-btn dg" type="button" data-x="' + m._i + '" aria-label="Retirer">✕</button></div>', 60) + '</div>' +
+      (ms.length ? '<div class="et-sec"><p class="et-lab">À créer</p><div class="et-stats"><span class="et-pill">' + cnt("personnel") + ' direction/personnel</span><span class="et-pill">' + cnt("prof") + ' profs</span><span class="et-pill">' + cnt("eleve") + ' élèves</span></div>' + etGroups(ms, m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.prenom + " " + m.nom) + '</b><small>' + escHtml(etSub(m)) + (m.err ? ' · ' + escHtml(m.err) : "") + '</small></div><button class="et-btn dg" type="button" data-x="' + m._i + '" aria-label="Retirer">✕</button></div>', 60) + '</div>' +
         '<button class="et-btn big" type="button" id="et-go" onclick="etCreate()">Créer les ' + ms.length + ' comptes</button>' : "");
     b.onclick = ev => { const t = ev.target.closest("button[data-x]"); if (t) { ET.draft.membres = ET.draft.membres.filter(m => m._i !== +t.dataset.x); etKeepDraft(); etRender(); } };
   } else if (v === "res") {
     etHead("Codes de connexion", (ET.cur ? ET.cur.nom : "") + " · à distribuer");
     const ok = ET.res.filter(r => r.motdepasse).sort(etOrdre), deja = ET.res.filter(r => r.existe), err = ET.res.filter(r => r.erreur);
-    b.innerHTML = '<div class="et-warn">⚠️ Les mots de passe provisoires s’affichent UNE seule fois. Imprime-les ou télécharge-les maintenant. Chacun devra choisir son propre mot de passe à la première connexion.</div>' +
-      '<div class="et-acts"><button class="et-btn" type="button" onclick="etPrint()">🖨️ Imprimer les codes</button><button class="et-btn w" type="button" onclick="etCsv()">⬇️ Télécharger (Excel/CSV)</button></div>' +
-      '<div class="et-stats"><span class="et-pill">✅ ' + ok.length + ' comptes</span>' + (deja.length ? '<span class="et-pill">↩︎ ' + deja.length + ' déjà existants</span>' : "") + (err.length ? '<span class="et-pill" style="background:#FFD9D4">⚠️ ' + err.length + ' erreurs</span>' : "") + '</div>' +
+    b.innerHTML = '<div class="et-warn">Les mots de passe provisoires s’affichent UNE seule fois. Imprime-les ou télécharge-les maintenant. Chacun devra choisir son propre mot de passe à la première connexion.</div>' +
+      '<div class="et-acts"><button class="et-btn" type="button" onclick="etPrint()">Imprimer les codes</button><button class="et-btn w" type="button" onclick="etCsv()">Télécharger (Excel/CSV)</button></div>' +
+      '<div class="et-stats"><span class="et-pill">' + ok.length + ' comptes</span>' + (deja.length ? '<span class="et-pill">' + deja.length + ' déjà existants</span>' : "") + (err.length ? '<span class="et-pill" style="background:#FFD9D4">' + err.length + ' erreurs</span>' : "") + '</div>' +
       (err.length ? '<p class="et-note">Erreurs : ' + err.map(r => escHtml((r.prenom || "?") + " " + (r.nom || "") + " (" + r.erreur + ")")).join(", ") + '</p>' : "") +
       etGroups(ok, m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.prenom + " " + m.nom) + '</b><small>' + escHtml(etSub(m)) + '</small></div><span class="et-code">' + escHtml(m.identifiant) + '</span><span class="et-code">' + escHtml(m.motdepasse) + '</span></div>');
     b.onclick = null;
@@ -8749,8 +8749,8 @@ function etRender() {
     const cur = ET.cur; etHead(cur.nom, "Tous les comptes, dans l’ordre");
     const q = etN((document.getElementById("et-q") || {}).value || ""), ms = ET.membres.filter(m => !q || etN(m.prenom + " " + m.nom + " " + m.identifiant + " " + etSub(m)).includes(q));
     b.innerHTML = '<input class="et-in" id="et-q" type="search" placeholder="Chercher un nom, une classe…" value="' + escHtml(q) + '" oninput="etRender();this.focus();this.setSelectionRange(this.value.length,this.value.length)">' +
-      '<div class="et-acts"><button class="et-btn" type="button" onclick="etAdd(ET.cur.id)">＋ Ajouter des comptes</button><button class="et-btn w" type="button" onclick="etResetAll()">🔑 Nouveaux codes pour ceux qui ne se sont pas connectés</button><button class="et-btn w" type="button" onclick="etFamilles()">🏠 Créer les comptes Famille</button></div>' +
-      (ms.length ? etGroups(ms, m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.prenom + " " + m.nom) + '</b><small>' + escHtml(etSub(m)) + ' · <span class="et-code">' + escHtml(m.identifiant) + '</span> ' + (m.pwChanged ? '<span class="et-tag ok">connecté</span>' : '<span class="et-tag">provisoire</span>') + (m.secu ? ' <span class="et-tag ok">🔐 sécurisé</span>' : "") + (m.gest ? ' <span class="et-tag" style="background:#E5DBFF">⚙️ admin établissement</span>' : "") + '</small></div>' + (!ET.gest && (m.role === "personnel" || m.role === "prof") ? '<button class="et-btn w" type="button" data-g="' + m.uid + '" title="Administrateur de l’établissement">⚙️</button>' : "") + (m.role === "eleve" ? '<button class="et-btn w" type="button" data-s="' + m.uid + '" title="Suivi de la progression">📊</button>' : m.role === "famille" ? '<button class="et-btn w" type="button" data-l="' + m.uid + '" title="Relier un frère ou une sœur">＋ enfant</button>' : "") + '<button class="et-btn w" type="button" data-p="' + m.uid + '" title="Nouveau mot de passe">🔑</button><button class="et-btn dg" type="button" data-d="' + m.uid + '" title="Supprimer">✕</button></div>') : '<p class="et-note">Aucun compte.</p>') +
+      '<div class="et-acts"><button class="et-btn" type="button" onclick="etAdd(ET.cur.id)">＋ Ajouter des comptes</button><button class="et-btn w" type="button" onclick="etResetAll()">Nouveaux codes pour ceux qui ne se sont pas connectés</button><button class="et-btn w" type="button" onclick="etFamilles()">Créer les comptes Famille</button></div>' +
+      (ms.length ? etGroups(ms, m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.prenom + " " + m.nom) + '</b><small>' + escHtml(etSub(m)) + ' · <span class="et-code">' + escHtml(m.identifiant) + '</span> ' + (m.pwChanged ? '<span class="et-tag ok">connecté</span>' : '<span class="et-tag">provisoire</span>') + (m.secu ? ' <span class="et-tag ok">sécurisé</span>' : "") + (m.gest ? ' <span class="et-tag" style="background:#E5DBFF">admin établissement</span>' : "") + '</small></div>' + (!ET.gest && (m.role === "personnel" || m.role === "prof") ? '<button class="et-btn w" type="button" data-g="' + m.uid + '" title="Administrateur de l’établissement">Gestion</button>' : "") + (m.role === "eleve" ? '<button class="et-btn w" type="button" data-s="' + m.uid + '" title="Suivi de la progression">Suivi</button>' : m.role === "famille" ? '<button class="et-btn w" type="button" data-l="' + m.uid + '" title="Relier un frère ou une sœur">＋ enfant</button>' : "") + '<button class="et-btn w" type="button" data-p="' + m.uid + '" title="Nouveau mot de passe">Code</button><button class="et-btn dg" type="button" data-d="' + m.uid + '" title="Supprimer">✕</button></div>') : '<p class="et-note">Aucun compte.</p>') +
       (ET.gest ? "" : '<button class="et-btn dg big" type="button" onclick="etDelEtab()">Supprimer l’établissement et tous ses comptes</button>');
     b.onclick = ev => { const t = ev.target.closest("button"); if (!t) return; if (t.dataset.p) etReset([t.dataset.p]); if (t.dataset.d) etDelMembre(t.dataset.d); if (t.dataset.s) esSuiviAdmin(t.dataset.s); if (t.dataset.l) etLier(t.dataset.l); if (t.dataset.g) etSetGest(t.dataset.g); };
   }
@@ -8815,8 +8815,8 @@ async function etFile(f) {
         n += ET.draft.membres.length - before;
       }
     }
-    etRender(); etSay(n ? "✅ " + n + " personnes trouvées. Vérifie la liste puis crée les comptes." : "Aucune ligne trouvée : il faut des colonnes « Nom » et « Prénom ».", n ? "ok" : "err");
-  } catch (e) { console.warn(e); etSay("❌ Fichier illisible. Enregistre-le en Excel (.xlsx) ou en CSV.", "err"); }
+    etRender(); etSay(n ? "" + n + " personnes trouvées. Vérifie la liste puis crée les comptes." : "Aucune ligne trouvée : il faut des colonnes « Nom » et « Prénom ».", n ? "ok" : "err");
+  } catch (e) { console.warn(e); etSay("Fichier illisible. Enregistre-le en Excel (.xlsx) ou en CSV.", "err"); }
 }
 async function etCreate() {
   etKeepDraft();
@@ -8844,23 +8844,23 @@ async function etCreate() {
       const d = Math.min(list.length, i + 20); document.getElementById("et-pc").textContent = d; document.getElementById("et-pb").style.width = (100 * d / list.length) + "%";
     }
     ET.res = out; ET.hist = ["list"]; etGo("res", true);
-  } catch (e) { if (btn) btn.disabled = false; etSay("❌ Échec (" + (e.code || "réseau") + "). Les comptes déjà créés sont gardés : réessaie, ils ne seront pas doublés.", "err"); }
+  } catch (e) { if (btn) btn.disabled = false; etSay("Échec (" + (e.code || "réseau") + "). Les comptes déjà créés sont gardés : réessaie, ils ne seront pas doublés.", "err"); }
 }
 async function etMembres(id) {
   ET.cur = ET.etabs.find(x => x.id === id) || ET.cur; ET.membres = []; etGo("membres"); etSay("Chargement…");
-  try { ET.membres = (await api("etab", { action: "membres", etab: ET.cur.id }, true)).membres || []; etSay(""); etRender(); } catch (e) { etSay("❌ Chargement impossible.", "err"); }
+  try { ET.membres = (await api("etab", { action: "membres", etab: ET.cur.id }, true)).membres || []; etSay(""); etRender(); } catch (e) { etSay("Chargement impossible.", "err"); }
 }
 async function etReset(uids) {
   if (!uids.length) return etSay("Tout le monde s’est déjà connecté.", "ok");
   if (!confirm(uids.length === 1 ? "Donner un nouveau mot de passe provisoire à cette personne ?" : "Nouveau mot de passe provisoire pour " + uids.length + " personnes ?")) return;
   etSay("Génération…"); const out = [];
   try { for (let i = 0; i < uids.length; i += 20) out.push(...((await api("etab", { action: "nouveauMdp", uids: uids.slice(i, i + 20) }, true)).resultats || [])); ET.res = out; etGo("res"); }
-  catch (e) { etSay("❌ Échec (" + (e.code || "réseau") + ").", "err"); }
+  catch (e) { etSay("Échec (" + (e.code || "réseau") + ").", "err"); }
 }
 function etResetAll() { etReset(ET.membres.filter(m => !m.pwChanged).map(m => m.uid)); }
 async function etDelMembre(uid) {
   const m = ET.membres.find(x => x.uid === uid); if (!m || !confirm("Supprimer définitivement le compte de " + m.prenom + " " + m.nom + " ?\nSa progression sera perdue.")) return;
-  try { await api("etab", { action: "supprimerMembre", uid }, true); ET.membres = ET.membres.filter(x => x.uid !== uid); etRender(); etSay("Compte supprimé.", "ok"); } catch (e) { etSay("❌ Échec.", "err"); }
+  try { await api("etab", { action: "supprimerMembre", uid }, true); ET.membres = ET.membres.filter(x => x.uid !== uid); etRender(); etSay("Compte supprimé.", "ok"); } catch (e) { etSay("Échec.", "err"); }
 }
 async function etDelEtab() {
   const cur = ET.cur; if (!cur) return;
@@ -8868,7 +8868,7 @@ async function etDelEtab() {
   if (t !== "SUPPRIMER") return;
   etSay("Suppression…");
   try { for (let k = 0; k < 500; k++) { const r = await api("etab", { action: "supprimerEtab", etab: cur.id }, true); if (!r.reste) break; } ET.hist = []; await etLoad(); etSay("Établissement supprimé.", "ok"); }
-  catch (e) { etSay("❌ Échec, réessaie (la suppression reprend où elle s’est arrêtée).", "err"); }
+  catch (e) { etSay("Échec, réessaie (la suppression reprend où elle s’est arrêtée).", "err"); }
 }
 function etCsv() {
   const ok = ET.res.filter(r => r.motdepasse).sort(etOrdre), q = v => '"' + String(v || "").replace(/"/g, '""') + '"';
@@ -8922,6 +8922,7 @@ async function tmpPwSave(ev) {
 // ════════ COMPTES D'ÉTABLISSEMENT « comme École Directe » ════════
 // Élève, Famille (parents) ou personnel/prof · 1re connexion guidée (mot de passe + question secrète)
 // · question secrète demandée sur un nouvel appareil · espace famille · espace établissement (tous les élèves).
+const ES_IC = { home: "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 11l9-7 9 7\"/><path d=\"M5 10v10h14V10M10 20v-5h4v5\"/></svg>", school: "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 21h18M5 21V10l7-5 7 5v11\"/><path d=\"M9 21v-5h6v5M10 12h4\"/></svg>" };
 let ME = null, ES = { mode: "", view: "list", eleves: [], cur: null, kids: [], kid: 0, classe: "", q: "", peutCodes: false, res: null };
 const esUser = () => { try { const u = firebase.auth().currentUser; return u && (u.email || "").endsWith("@" + ETAB_DOMAIN) ? u : null; } catch (e) { return null; } };
 async function etabBoot() {
@@ -8939,7 +8940,7 @@ async function etabBoot() {
 }
 function etabUi() {
   const c = document.getElementById("es-chip"), m = ME && ME.moi; if (!c || !m) return;
-  c.textContent = "🏫 " + ME.etab.nom + (m.role === "eleve" && m.classe ? " · " + m.classe : m.role === "famille" ? " · Espace famille" : m.role === "prof" ? " · Prof" : m.role === "personnel" ? " · " + (m.fonction || "Personnel") : "");
+  c.textContent = ME.etab.nom + (m.role === "eleve" && m.classe ? " · " + m.classe : m.role === "famille" ? " · Espace famille" : m.role === "prof" ? " · Prof" : m.role === "personnel" ? " · " + (m.fonction || "Personnel") : "");
   c.hidden = false;
   if (m.role === "famille" && acct && acct.name !== "Famille " + m.nom) { saveAcct({ ...acct, name: "Famille " + m.nom }); try { updateNav(); } catch (e) {} }
   const r = document.getElementById("es-row"); if (r) r.style.display = "";
@@ -8953,7 +8954,7 @@ const PT_TITRES = { 1: ["Première connexion", "Bienvenue dans ton espace"], 2: 
 function ptOpen(n) {
   const m = ME && ME.moi, u = esUser();
   document.getElementById("pt-user").value = u ? (u.email || "").replace("@" + ETAB_DOMAIN, "") : "";
-  if (m) document.getElementById("pt-who").innerHTML = '<span class="pt-etab">🏫 ' + escHtml(ME.etab.nom) + '</span><b>' + escHtml(m.role === "famille" ? "Famille " + m.nom : m.prenom + " " + m.nom) + '</b><small>' + escHtml(m.role === "famille" ? "Compte parents" : m.role === "eleve" ? "Élève" + (m.classe ? " · " + m.classe : "") : m.role === "prof" ? "Professeur" + (m.matiere ? " · " + m.matiere : "") : (m.fonction || "Personnel")) + '</small><span class="et-code">' + escHtml(m.identifiant) + '</span>';
+  if (m) document.getElementById("pt-who").innerHTML = '<span class="pt-etab">' + escHtml(ME.etab.nom) + '</span><b>' + escHtml(m.role === "famille" ? "Famille " + m.nom : m.prenom + " " + m.nom) + '</b><small>' + escHtml(m.role === "famille" ? "Compte parents" : m.role === "eleve" ? "Élève" + (m.classe ? " · " + m.classe : "") : m.role === "prof" ? "Professeur" + (m.matiere ? " · " + m.matiere : "") : (m.fonction || "Personnel")) + '</small><span class="et-code">' + escHtml(m.identifiant) + '</span>';
   const qs = (ME && ME.questions) || []; document.getElementById("pt-q").innerHTML = '<option value="">Choisis une question…</option>' + qs.map((q, i) => '<option value="' + i + '">' + escHtml(q) + '</option>').join("");
   document.getElementById("pt-panel").classList.add("open"); ptGo(n);
 }
@@ -8978,7 +8979,7 @@ async function ptSecu(ev) {
 async function ptDone() {
   document.getElementById("pt-panel").classList.remove("open");
   try { ME = await api("etab", { action: "moi", ...apiDev() }, true); etabUi(); } catch (e) {}
-  showToast("Bienvenue sur EcoLingo ✅", "success");
+  showToast("Bienvenue sur EcoLingo", "success");
   etabHome();
 }
 
@@ -9001,7 +9002,7 @@ async function dvSend(ev) {
   try {
     await api("etab", { action: "confirmer", r, ...apiDev() }, true);
     document.getElementById("dv-panel").classList.remove("open"); _dvOpen = false;
-    showToast("Appareil reconnu ✅", "success"); setTimeout(() => location.reload(), 700);
+    showToast("Appareil reconnu", "success"); setTimeout(() => location.reload(), 700);
   } catch (e) {
     err.textContent = e.code === "faux" ? "Mauvaise réponse." + (e.data && e.data.reste != null ? " Encore " + e.data.reste + " essai(s)." : "")
       : e.code === "locked" ? "Trop d'essais. Réessaie dans " + ((e.data && e.data.min) || 15) + " min." : "Impossible pour le moment (" + (e.code || "réseau") + ").";
@@ -9022,7 +9023,7 @@ function esSay(t, k) { const s = document.getElementById("es-status"); if (s) { 
 async function esOpen(mode) {
   ES.mode = mode || (ME && ME.moi && ME.moi.role === "famille" ? "famille" : "staff"); ES.res = null;
   const p = document.getElementById("es-panel"); p.classList.add("open"); p.classList.toggle("fam", ES.mode === "famille");
-  document.getElementById("es-logo").textContent = ES.mode === "famille" ? "🏠" : "🏫";
+  document.getElementById("es-logo").innerHTML = ES.mode === "famille" ? ES_IC.home : ES_IC.school;
   document.getElementById("es-title").textContent = ES.mode === "famille" ? "Espace famille" : ES.mode === "admin" ? "Suivi de l'élève" : "Mon établissement";
   document.getElementById("es-sub").textContent = ME && ME.etab ? ME.etab.nom : (ET.cur ? ET.cur.nom : "");
   if (ES.mode === "admin") return;
@@ -9031,14 +9032,14 @@ async function esOpen(mode) {
     if (ES.mode === "famille") { ES.kids = (await api("etab", { action: "enfants" }, true)).enfants || []; ES.kid = Math.min(ES.kid, Math.max(0, ES.kids.length - 1)); }
     else { const r = await api("etab", { action: "eleves" }, true); ES.eleves = r.eleves || []; ES.peutCodes = !!r.peutCodes; }
     esSay(""); esRender();
-  } catch (e) { esSay("❌ Chargement impossible (" + (e.code || "réseau") + ").", "err"); }
+  } catch (e) { esSay("Chargement impossible (" + (e.code || "réseau") + ").", "err"); }
 }
 function esClose() { if (ES.mode === "famille") return; document.getElementById("es-panel").classList.remove("open"); }
 function esBack() { if (ES.mode === "admin") return esClose(); ES.view = "list"; ES.cur = null; ES.res = null; esRender(); }
 async function esEleve(uid) {
   ES.view = "eleve"; ES.cur = null; ES.res = null; esRender(); esSay("Chargement…");
   try { ES.cur = await api("etab", ES.mode === "admin" ? { action: "suivi", uid, adminEtab: true } : { action: "suivi", uid }, true); esSay(""); esRender(); }
-  catch (e) { esSay("❌ Chargement impossible (" + (e.code || "réseau") + ").", "err"); }
+  catch (e) { esSay("Chargement impossible (" + (e.code || "réseau") + ").", "err"); }
 }
 async function esSuiviAdmin(uid) { await esOpen("admin"); esEleve(uid); }
 function esSuivi(d, staff) {
@@ -9046,7 +9047,7 @@ function esSuivi(d, staff) {
   const jours = []; for (let i = 13; i >= 0; i--) { const k = new Date(Date.now() - i * 864e5).toISOString().slice(0, 10); jours.push({ k, n: (d.jours || {})[k] || 0, j: new Date(k).toLocaleDateString("fr-FR", { weekday: "narrow" }) }); }
   const mx = Math.max(1, ...jours.map(j => j.n));
   let h = '<div class="es-hero"><div><b>' + escHtml(e.prenom + " " + e.nom) + '</b><small>' + escHtml("Élève" + (e.classe ? " · " + e.classe : "")) + (staff ? ' · <span class="et-code">' + escHtml(e.identifiant) + '</span>' : "") + '</small></div><span class="et-tag' + (r.actif && Date.now() - r.actif < 3 * 864e5 ? " ok" : "") + '">' + (r.actif ? "Actif " + esTemps(r.actif) : "Pas encore actif") + '</span></div>' +
-    '<div class="es-tiles">' + tile(r.quiz, "quiz faits", r.quiz7 + " cette semaine") + tile(r.moyenne == null ? "–" : r.moyenne + " %", "moyenne", "dernier essai par fiche") + tile("🔥 " + r.serie, "série quiz du jour", "record : " + r.record) +
+    '<div class="es-tiles">' + tile(r.quiz, "quiz faits", r.quiz7 + " cette semaine") + tile(r.moyenne == null ? "–" : r.moyenne + " %", "moyenne", "dernier essai par fiche") + tile(r.serie, "série quiz du jour", "record : " + r.record) +
     tile(r.fiches, "fiches travaillées") + tile(r.lingo, "Lingo") + tile(escHtml(r.rang), "rang") + '</div>' +
     '<div class="et-sec"><p class="et-lab">Activité · 14 derniers jours</p><div class="es-cal">' + jours.map(j => '<div title="' + j.k + " : " + j.n + ' quiz"><i style="height:' + Math.round(6 + 54 * j.n / mx) + 'px"' + (j.n ? "" : ' class="z"') + '></i><span>' + j.j + '</span></div>').join("") + '</div></div>';
   h += '<div class="et-sec"><p class="et-lab">Par matière</p>' + (d.matieres.length ? '<div class="et-list">' + d.matieres.map(m => { const s = esSub(m.sid); return '<div class="es-mat"><span class="es-dot" style="background:' + s.bg + '"></span><div class="et-t"><b>' + escHtml(s.name) + '</b><small>' + m.quiz + " quiz · " + m.fiches + ' fiche(s)</small><div class="es-bar"><i style="width:' + m.moyenne + '%"></i></div></div><b class="es-pc">' + m.moyenne + ' %</b></div>'; }).join("") + '</div>' : '<p class="et-note">Pas encore de quiz.</p>') + '</div>';
@@ -9060,33 +9061,33 @@ function esRender() {
     const k = ES.kids;
     b.innerHTML = (k.length > 1 ? '<div class="es-chips">' + k.map((x, i) => '<button type="button" class="es-chip' + (i === ES.kid ? " on" : "") + '" data-k="' + i + '">' + escHtml(x.eleve.prenom) + '</button>').join("") + '</div>' : "") +
       (k.length ? esSuivi(k[ES.kid]) : '<p class="et-note">Aucun enfant n’est encore relié à ce compte. Contacte l’établissement.</p>') +
-      '<div class="et-acts"><button class="et-btn" type="button" onclick="esAjouterEnfant()">＋ Ajouter un enfant</button><button class="et-btn w" type="button" onclick="esFamFiches()">📚 Voir les fiches de révision</button><button class="et-btn dg" type="button" onclick="esFamLogout()">Se déconnecter</button></div>';
+      '<div class="et-acts"><button class="et-btn" type="button" onclick="esAjouterEnfant()">＋ Ajouter un enfant</button><button class="et-btn w" type="button" onclick="esFamFiches()">Voir les fiches de révision</button><button class="et-btn dg" type="button" onclick="esFamLogout()">Se déconnecter</button></div>';
     b.onclick = ev => { const t = ev.target.closest("button[data-k]"); if (t) { ES.kid = +t.dataset.k; esRender(); } };
     return;
   }
   if (ES.view === "eleve") {
     const d = ES.cur;
-    b.innerHTML = d ? esSuivi(d, true) + (ES.mode === "staff" && ES.peutCodes ? '<div class="et-sec"><p class="et-lab">Mot de passe oublié</p><div class="et-acts"><button class="et-btn" type="button" onclick="esCodes(false)">🔑 Nouveau code pour l’élève</button>' + (d.eleve.famille ? '<button class="et-btn w" type="button" onclick="esCodes(true)">🔑 Élève + famille</button>' : "") + '</div><p class="et-note">Le mot de passe actuel ne marchera plus. La personne choisira un nouveau mot de passe et une nouvelle question secrète.</p></div>' : "") + esResHtml() : "";
+    b.innerHTML = d ? esSuivi(d, true) + (ES.mode === "staff" && ES.peutCodes ? '<div class="et-sec"><p class="et-lab">Mot de passe oublié</p><div class="et-acts"><button class="et-btn" type="button" onclick="esCodes(false)">Nouveau code pour l’élève</button>' + (d.eleve.famille ? '<button class="et-btn w" type="button" onclick="esCodes(true)">Nouveau code élève + famille</button>' : "") + '</div><p class="et-note">Le mot de passe actuel ne marchera plus. La personne choisira un nouveau mot de passe et une nouvelle question secrète.</p></div>' : "") + esResHtml() : "";
     b.onclick = null; return;
   }
   const cls = [...new Set(ES.eleves.map(e => e.classe || "Sans classe"))].sort((a, c) => a.localeCompare(c, "fr", { numeric: true }));
   const q = etN(ES.q), list = ES.eleves.filter(e => (!ES.classe || (e.classe || "Sans classe") === ES.classe) && (!q || etN(e.prenom + " " + e.nom + " " + e.classe + " " + e.identifiant).includes(q)));
   const actifs = ES.eleves.filter(e => e.resume.actif && Date.now() - e.resume.actif < 7 * 864e5).length;
-  b.innerHTML = (ME && ME.moi && ME.moi.gest ? '<button class="et-btn big" type="button" onclick="etGest()">⚙️ Gérer les comptes de l’établissement</button>' : "") + '<div class="et-stats"><span class="et-pill">' + ES.eleves.length + ' élèves</span><span class="et-pill">' + cls.length + ' classes</span><span class="et-pill">' + actifs + ' actifs cette semaine</span></div>' +
+  b.innerHTML = (ME && ME.moi && ME.moi.gest ? '<button class="et-btn big" type="button" onclick="etGest()">Gérer les comptes de l’établissement</button>' : "") + '<div class="et-stats"><span class="et-pill">' + ES.eleves.length + ' élèves</span><span class="et-pill">' + cls.length + ' classes</span><span class="et-pill">' + actifs + ' actifs cette semaine</span></div>' +
     '<input class="et-in" id="es-q" type="search" placeholder="Chercher un élève, une classe…" value="' + escHtml(ES.q) + '">' +
     '<div class="es-chips"><button type="button" class="es-chip' + (!ES.classe ? " on" : "") + '" data-c="">Toutes</button>' + cls.map(c => '<button type="button" class="es-chip' + (ES.classe === c ? " on" : "") + '" data-c="' + escHtml(c) + '">' + escHtml(c) + '</button>').join("") + '</div>' +
-    (list.length ? etGroups(list, e => '<button type="button" class="et-mini es-row" data-u="' + e.uid + '"><div class="et-t"><b>' + escHtml(e.prenom + " " + e.nom) + '</b><small>' + (e.resume.actif ? "Actif " + esTemps(e.resume.actif) : "Pas encore actif") + " · 🔥 " + e.resume.serie + " · " + e.resume.quiz + " quiz" + (e.resume.moyenne != null ? " · " + e.resume.moyenne + " %" : "") + '</small></div><span class="es-go">›</span></button>') : '<p class="et-note">Aucun élève.</p>');
+    (list.length ? etGroups(list, e => '<button type="button" class="et-mini es-row" data-u="' + e.uid + '"><div class="et-t"><b>' + escHtml(e.prenom + " " + e.nom) + '</b><small>' + (e.resume.actif ? "Actif " + esTemps(e.resume.actif) : "Pas encore actif") + " · série " + e.resume.serie + " · " + e.resume.quiz + " quiz" + (e.resume.moyenne != null ? " · " + e.resume.moyenne + " %" : "") + '</small></div><span class="es-go">›</span></button>') : '<p class="et-note">Aucun élève.</p>');
   const qi = document.getElementById("es-q"); qi.oninput = () => { ES.q = qi.value; esRender(); const n = document.getElementById("es-q"); n.focus(); n.setSelectionRange(n.value.length, n.value.length); };
   b.onclick = ev => { const t = ev.target.closest("button"); if (!t) return; if (t.dataset.u) esEleve(t.dataset.u); else if (t.dataset.c != null) { ES.classe = t.dataset.c; esRender(); } };
 }
 function esResHtml() {
   if (!ES.res) return "";
-  return '<div class="et-warn">⚠️ À noter maintenant : ce code ne s’affichera plus.</div>' + ES.res.map(m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.role === "famille" ? "Famille " + m.nom : m.prenom + " " + m.nom) + '</b><small>Identifiant</small><span class="et-code">' + escHtml(m.identifiant) + '</span></div><div class="et-t"><small>Mot de passe provisoire</small><span class="et-code">' + escHtml(m.motdepasse) + '</span></div></div>').join("");
+  return '<div class="et-warn">À noter maintenant : ce code ne s’affichera plus.</div>' + ES.res.map(m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.role === "famille" ? "Famille " + m.nom : m.prenom + " " + m.nom) + '</b><small>Identifiant</small><span class="et-code">' + escHtml(m.identifiant) + '</span></div><div class="et-t"><small>Mot de passe provisoire</small><span class="et-code">' + escHtml(m.motdepasse) + '</span></div></div>').join("");
 }
 async function esCodes(fam) {
   const d = ES.cur; if (!d || !confirm("Donner un nouveau mot de passe provisoire à " + d.eleve.prenom + " " + d.eleve.nom + (fam ? " et à sa famille" : "") + " ?")) return;
   try { ES.res = (await api("etab", { action: "codesEleve", uid: d.eleve.uid, famille: !!fam }, true)).resultats || []; esRender(); }
-  catch (e) { esSay("❌ Échec (" + (e.code || "réseau") + ").", "err"); }
+  catch (e) { esSay("Échec (" + (e.code || "réseau") + ").", "err"); }
 }
 function esFamFiches() { document.getElementById("es-panel").classList.remove("open"); const b = document.getElementById("es-fam-back"); if (b) b.hidden = false; }
 function esFamBack() { const b = document.getElementById("es-fam-back"); if (b) b.hidden = true; esOpen("famille"); }
@@ -9113,7 +9114,7 @@ async function famSubmit(ev) {
       authBusy("famille", false);
       if (r.deja) { document.getElementById("au-l-name").value = r.deja; authGo("login"); return setTimeout(() => authErr("login", "Un compte Famille existe déjà pour " + r.enfant + " : connectez-vous avec l'identifiant " + r.deja + "."), 450); }
       _famCode = code;
-      const k = document.getElementById("au-f-kid"); k.innerHTML = '✅ <b>' + escHtml(r.enfant) + '</b>' + (r.classe ? " · " + escHtml(r.classe) : "") + '<br><small>' + escHtml(r.etab) + '</small>'; k.hidden = false;
+      const k = document.getElementById("au-f-kid"); k.innerHTML = '<b>' + escHtml(r.enfant) + '</b>' + (r.classe ? " · " + escHtml(r.classe) : "") + '<br><small>' + escHtml(r.etab) + '</small>'; k.hidden = false;
       document.getElementById("au-f-more").hidden = false; document.getElementById("au-btn-famille").textContent = "Créer mon compte Famille";
       setTimeout(() => { try { document.getElementById("au-f-pw").focus(); } catch (e) {} }, 200);
     } catch (e) { authBusy("famille", false); authErr("famille", e.code === "locked" ? "Trop d'essais. Réessayez dans 15 minutes." : e.code === "code" ? "Code inconnu ou expiré. Demandez à votre enfant d'en générer un nouveau." : "Impossible pour le moment (" + (e.code || "réseau") + ")."); }
@@ -9129,7 +9130,7 @@ async function famSubmit(ev) {
     const out = await api("etab", { action: "activerFamille", code: _famCode, pw, q: +q, r, ...apiDev() });
     authBusy("famille", false);
     ["au-f-pw", "au-f-pw2", "au-f-r", "au-f-code"].forEach(i => document.getElementById(i).value = "");
-    await iosSheet({ title: "Compte Famille créé ✅", sub: "Votre identifiant est « " + out.identifiant + " ». Notez-le : il vous servira à chaque connexion.", btns: [{ t: "Continuer", v: "" }] });
+    await iosSheet({ title: "Compte Famille créé", sub: "Votre identifiant est « " + out.identifiant + " ». Notez-le : il vous servira à chaque connexion.", btns: [{ t: "Continuer", v: "" }] });
     document.getElementById("au-l-name").value = out.identifiant;
     await fbLogin(out.identifiant + "@" + ETAB_DOMAIN, pw);
   } catch (e) {
@@ -9148,7 +9149,7 @@ async function esInviter() {
 }
 async function esAjouterEnfant() {
   const c = prompt("Code parents de votre autre enfant (il le trouve sur son compte EcoLingo, tuile « Code parents ») :"); if (!c) return;
-  try { const r = await api("etab", { action: "ajouterEnfant", code: c.trim() }, true); showToast(r.enfant + " ajouté(e) ✅", "success"); esOpen("famille"); }
+  try { const r = await api("etab", { action: "ajouterEnfant", code: c.trim() }, true); showToast(r.enfant + " ajouté(e)", "success"); esOpen("famille"); }
   catch (e) { showToast(e.code === "code" ? "Code inconnu ou expiré" : e.code === "famille" ? "Cet enfant a déjà un autre compte Famille actif" : "Impossible (" + (e.code || "réseau") + ")", ""); }
 }
 function esTile() {
@@ -9166,8 +9167,8 @@ function etGest() {
 async function etSetGest(uid) {
   const m = ET.membres.find(x => x.uid === uid); if (!m) return;
   if (!confirm(m.gest ? "Retirer à " + m.prenom + " " + m.nom + " la gestion des comptes de l'établissement ?" : "Faire de " + m.prenom + " " + m.nom + " l'administrateur de l'établissement ?\nIl pourra importer les élèves, imprimer les codes, créer les comptes Famille et donner de nouveaux mots de passe, seulement pour " + ET.cur.nom + ".")) return;
-  try { await api("etab", { action: "setGest", uid, on: !m.gest }, true); m.gest = !m.gest; etRender(); etSay(m.gest ? "✅ " + m.prenom + " gère maintenant les comptes de l'établissement." : "Gestion retirée.", "ok"); }
-  catch (e) { etSay("❌ Échec (" + (e.code || "réseau") + ").", "err"); }
+  try { await api("etab", { action: "setGest", uid, on: !m.gest }, true); m.gest = !m.gest; etRender(); etSay(m.gest ? "" + m.prenom + " gère maintenant les comptes de l'établissement." : "Gestion retirée.", "ok"); }
+  catch (e) { etSay("Échec (" + (e.code || "réseau") + ").", "err"); }
 }
 
 // ── Admin : comptes Famille ──
@@ -9178,15 +9179,15 @@ async function etFamilles() {
   if (!confirm("Créer un compte Famille pour " + sans + " élève(s) ?\nPour les frères et sœurs, tu pourras ensuite les relier au même compte (bouton ＋ enfant).")) return;
   const out = []; etSay("Création des comptes Famille…");
   try { for (let k = 0; k < 200; k++) { const r = await api("etab", { action: "creerFamilles", etab: ET.cur.id }, true); out.push(...(r.resultats || [])); etSay("Création des comptes Famille… " + out.length + " / " + sans); if (!r.reste || !(r.resultats || []).length) break; } ET.res = out; etGo("res"); }
-  catch (e) { if (out.length) { ET.res = out; etGo("res"); } etSay("❌ Échec (" + (e.code || "réseau") + "). Réessaie : ceux déjà créés ne seront pas doublés.", "err"); }
+  catch (e) { if (out.length) { ET.res = out; etGo("res"); } etSay("Échec (" + (e.code || "réseau") + "). Réessaie : ceux déjà créés ne seront pas doublés.", "err"); }
 }
 async function etLier(famId) {
   const f = ET.membres.find(x => x.uid === famId); if (!f) return;
   const v = prompt("Ajouter un enfant au compte Famille " + f.nom + "\n(" + etKids(f) + ")\n\nTape l'identifiant de l'enfant (ex. lea.martin) :"); if (!v) return;
   const e = ET.membres.find(x => x.role === "eleve" && x.identifiant === v.trim().toLowerCase()); if (!e) return etSay("Aucun élève avec cet identifiant.", "err");
   if (e.famille && e.famille !== famId && !confirm(e.prenom + " a déjà un compte Famille : il sera retiré de l'ancien (supprimé s'il n'a plus d'enfant). Continuer ?")) return;
-  try { await api("etab", { action: "lierEnfant", famille: famId, eleve: e.uid }, true); await etMembres(ET.cur.id); etSay("✅ " + e.prenom + " est relié(e) au compte Famille " + f.nom + ".", "ok"); }
-  catch (x) { etSay("❌ Échec (" + (x.code || "réseau") + ").", "err"); }
+  try { await api("etab", { action: "lierEnfant", famille: famId, eleve: e.uid }, true); await etMembres(ET.cur.id); etSay(e.prenom + " est relié(e) au compte Famille " + f.nom + ".", "ok"); }
+  catch (x) { etSay("Échec (" + (x.code || "réseau") + ").", "err"); }
 }
 
 // ─── COMPTES (1 compte = 1 téléphone) ─────────────────────
@@ -10008,7 +10009,7 @@ async function acctEtabPw() {
   if (a === old) return showToast("Choisis un mot de passe différent", "");
   const r2 = await iosSheet({ title: "Confirme", sub: "Retape le nouveau mot de passe.", html: '<input class="ish-in" type="password" autocomplete="new-password" placeholder="Retape-le">', btns: [{ t: "Enregistrer", v: "go" }, { t: "Annuler", v: "", cls: "sec" }] });
   if (r2.v !== "go") return; if (r2.val !== a) return showToast("Les deux mots de passe ne sont pas pareils", "");
-  try { await FBA.reauth(old); await firebase.auth().currentUser.updatePassword(a); showToast("Mot de passe changé ✅", "success"); }
+  try { await FBA.reauth(old); await firebase.auth().currentUser.updatePassword(a); showToast("Mot de passe changé", "success"); }
   catch (e) { showToast(/invalid-credential|wrong-password/.test((e && e.code) || "") ? "Mot de passe actuel incorrect" : fbMsg(e), ""); }
 }
 async function acctEtabDevices() {
@@ -11065,13 +11066,13 @@ const ECO = (function () {
 
 // ─── OUTILS ADMIN : cadeaux d'inventaire ─────────────────────
 let _grantAccounts = [];
-const GP_CATS = [["b", "🐾", "Bestioles"], ["d", "💃", "Danses"], ["c", "🎩", "Cosmétiques"], ["a", "🎨", "Teintes"], ["p", "⚡", "Avantages"]];
+const GP_CATS = [["b", "", "Bestioles"], ["d", "", "Danses"], ["c", "", "Cosmétiques"], ["a", "", "Teintes"], ["p", "", "Avantages"]];
 const GP_RAR_COL = { commun: "#B9C9A0", rare: "#7CCBFF", epique: "#B9A5FF", legendaire: "#FFD23F", mythique: "#FF8F7A" };
 const GP_LINGOTS = [0, 100, 1000, 10000, 100000];
 function gpSay(v) {
   const el = document.getElementById("grant-status"); if (!el) return;
   v = String(v || ""); el.textContent = v;
-  el.className = /^✅/.test(v) ? "ok" : /^(❌|Refusé|Saisis|Le nombre)/.test(v) ? "err" : "";
+  el.className = /^(Tout donné|Cadeau)/.test(v) ? "ok" : /^(Échec|Refusé|Saisis|Le nombre)/.test(v) ? "err" : "";
   if (v) try { el.scrollIntoView({ block: "nearest", behavior: "smooth" }); } catch (e) {}
 }
 // ── Stockage Google Drive chiffré (admin) : connexion du Drive + transfert des comptes ──
@@ -11086,7 +11087,7 @@ async function openDrivePanel(e) {
     try { location.href = (await api("admin", { action: "driveConnect" }, true)).url; } catch (x) { showToast("Connexion impossible (" + ((x && x.code) || "erreur") + ")", ""); }
     return;
   }
-  const r = await iosSheet({ title: "Google Drive connecté ✅", sub: "Les comptes sont stockés chiffrés dans le dossier « EcoLingo - donnees chiffrees ». Tu peux y transférer les comptes qui sont encore dans l'ancienne base.", btns: [{ t: "Transférer les comptes", v: "mig" }, { t: "Fermer", v: "", cls: "sec" }] });
+  const r = await iosSheet({ title: "Google Drive connecté", sub: "Les comptes sont stockés chiffrés dans le dossier « EcoLingo - donnees chiffrees ». Tu peux y transférer les comptes qui sont encore dans l'ancienne base.", btns: [{ t: "Transférer les comptes", v: "mig" }, { t: "Fermer", v: "", cls: "sec" }] });
   if (r.v !== "mig") return;
   try { const m = await api("admin", { action: "migrate" }, true); showToast(m.moved + " compte(s) transféré(s)" + (m.left ? ", " + m.left + " restant(s)" : ""), m.left ? "" : "success"); }
   catch (x) { showToast("Transfert impossible (" + ((x && x.code) || "erreur") + ")", ""); }
@@ -11100,7 +11101,7 @@ function openGrantPanel(e) {
   lc.innerHTML = GP_LINGOTS.map(n => '<button type="button" class="gp-chip" data-n="' + n + '">' + (n ? "+" + n.toLocaleString("fr-FR") : "Aucun") + '</button>').join("");
   lc.onclick = ev => { const b = ev.target.closest(".gp-chip"); if (!b) return; document.getElementById("gp-lingots").value = b.dataset.n; grantLingotTyped(); };
   const tabs = document.getElementById("gp-tabs"), cur = document.getElementById("gp-category").value || "b";
-  tabs.innerHTML = GP_CATS.map(c => '<button type="button" class="gp-tab' + (c[0] === cur ? " on" : "") + '" role="tab" data-c="' + c[0] + '"><i>' + c[1] + '</i>' + c[2] + '</button>').join("");
+  tabs.innerHTML = GP_CATS.map(c => '<button type="button" class="gp-tab' + (c[0] === cur ? " on" : "") + '" role="tab" data-c="' + c[0] + '">' + c[2] + '</button>').join("");
   tabs.onclick = ev => { const b = ev.target.closest(".gp-tab"); if (!b) return; document.getElementById("gp-category").value = b.dataset.c; tabs.querySelectorAll(".gp-tab").forEach(x => x.classList.toggle("on", x === b)); try { b.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" }); } catch (e) {} grantRefreshItems(); };
   document.getElementById("gp-items").onclick = ev => { const b = ev.target.closest(".gp-it"); if (!b) return; document.getElementById("gp-item").value = b.dataset.id; document.querySelectorAll("#gp-items .gp-it").forEach(x => x.classList.toggle("on", x === b)); grantSummary(); };
   grantLingotTyped(); grantRefreshItems(); grantLoadAccounts();
@@ -11200,11 +11201,24 @@ async function grantApply(all) {
     if (IS_CLAUDE_PREVIEW || !qmOn()) throw new Error("Connecte-toi à un compte et vérifie que Firestore est disponible.");
     try { await api("admin", { action: "donner", id, amount, all, cat, item }, true); }
     catch (e) { throw new Error(e.code === "compte" ? "Compte introuvable. Vérifie son identifiant exact." : e.code === "notadmin" ? "Accès administrateur requis." : "Le serveur a refusé (" + (e.code || "erreur") + ")."); }
-    status.textContent = all ? "✅ Tout donné : +100 000 lingots minimum et tous les objets de la boutique." : "✅ Cadeau enregistré pour « " + id + " » : " + amount.toLocaleString("fr-FR") + " lingots ajoutés et objet attribué.";
-  } catch (err) { status.textContent = "❌ Échec : " + (err && err.message ? err.message : "Firestore a refusé l’écriture."); }
+    status.textContent = all ? "Tout donné : +100 000 lingots minimum et tous les objets de la boutique." : "Cadeau enregistré pour « " + id + " » : " + amount.toLocaleString("fr-FR") + " lingots ajoutés et objet attribué.";
+  } catch (err) { status.textContent = "Échec : " + (err && err.message ? err.message : "Firestore a refusé l’écriture."); }
   finally { _busy(false); }
 }
 
+</script>
+<script>
+// ── Aucun emoji sur le site : filet de sécurité pour les textes venus d'ailleurs (fiches de l'école, noms, messages) ──
+(function () {
+  const RE = /(?![©®™])[\p{Extended_Pictographic}\p{Regional_Indicator}][️\u{1F3FB}-\u{1F3FF}]?(?:‍(?![©®™])\p{Extended_Pictographic}[️\u{1F3FB}-\u{1F3FF}]?)*️?|️|⃣/gu;
+  const skip = n => { const e = n.parentElement; return !e || e.closest("script,style,textarea,input,[contenteditable=''],[contenteditable='true']"); };
+  const clean = n => { if (n.nodeType === 3) { RE.lastIndex = 0; if (RE.test(n.data) && !skip(n)) { RE.lastIndex = 0; n.data = n.data.replace(RE, "").replace(/ {2,}/g, " "); } RE.lastIndex = 0; return; }
+    if (n.nodeType !== 1 || /^(SCRIPT|STYLE|TEXTAREA|INPUT)$/.test(n.nodeName)) return;
+    const w = document.createTreeWalker(n, NodeFilter.SHOW_TEXT); let t; const all = []; while ((t = w.nextNode())) all.push(t); all.forEach(clean); };
+  window.sansEmoji = s => String(s == null ? "" : s).replace(RE, "");
+  const start = () => { clean(document.body); new MutationObserver(ms => { for (const m of ms) { if (m.type === "characterData") clean(m.target); else m.addedNodes.forEach(clean); } }).observe(document.body, { childList: true, subtree: true, characterData: true }); };
+  if (document.body) start(); else document.addEventListener("DOMContentLoaded", start);
+})();
 </script>
 </body>
 </html>
