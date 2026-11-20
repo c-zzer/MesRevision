@@ -2146,6 +2146,7 @@ body.has-ipad-side .admin-menu { left: 314px; }
       <div class="au-icon" style="--i:0"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M20 8h60a16 16 0 0 1 16 16v36a16 16 0 0 1-16 16H54L34 94V76H20A16 16 0 0 1 4 60V24A16 16 0 0 1 20 8z" fill="#0F3B2E"/><path d="M50 20L82 36L50 52L18 36Z" fill="#D6F26B"/><path d="M32 48v10c0 6 8 10 18 10s18-4 18-10V48L50 58z" fill="#D6F26B"/><path d="M82 36v18" stroke="#D6F26B" stroke-width="4" stroke-linecap="round"/><circle cx="82" cy="57" r="4" fill="#D6F26B"/></svg></div>
       <h1 style="--i:1">Bienvenue sur<br><em>EcoLingo</em></h1>
       <p class="au-sub" style="--i:2">Ton compte est créé par ton établissement. Connecte-toi avec l'identifiant et le mot de passe qu'il t'a donnés.</p>
+      <div class="au-types" style="--i:2"><span>🎒 Élève</span><span>🏠 Famille</span><span>🏫 Personnel</span></div>
       <button class="au-btn" style="--i:3" type="button" onclick="authGo('login')">Me connecter</button>
       <p class="au-note" style="--i:4">Pas encore d'identifiant&nbsp;? Demande-le à ton professeur principal ou à la vie scolaire.</p>
     </div>
@@ -2210,8 +2211,8 @@ body.has-ipad-side .admin-menu { left: 314px; }
   <section class="au-step" id="au-login" data-step="login">
     <div class="au-in">
       <div class="au-top" style="--i:0"><button class="au-back" type="button" onclick="authGo('welcome')" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button></div>
-      <h1 style="--i:1">Content de te <em>revoir</em></h1>
-      <p class="au-sub" style="--i:2">Avec l'identifiant donné par ton établissement (ex. lucas.martin). Face ID peut remplir pour toi.</p>
+      <h1 style="--i:1"><em>Connexion</em></h1>
+      <p class="au-sub" style="--i:2">Élèves, familles et personnels : avec l'identifiant donné par ton établissement (ex. lucas.martin ou famille.martin). Face ID peut remplir pour toi.</p>
       <form id="au-form-login" autocomplete="on" onsubmit="authLogin(event)">
         <div class="au-card" style="--i:3">
           <div class="au-field"><label for="au-l-name">Identifiant</label><input id="au-l-name" name="username" type="text" inputmode="email" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="prenom.nom" maxlength="120" enterkeyhint="next"></div>
@@ -2219,7 +2220,7 @@ body.has-ipad-side .admin-menu { left: 314px; }
         </div>
         <div class="au-err" id="au-err-login" role="alert"></div>
         <button class="au-btn" style="--i:4" type="submit" id="au-btn-login">Se connecter</button>
-        <button class="au-link" type="button" onclick="authForgot()">Mot de passe oublié ?</button>
+        <button class="au-link" type="button" onclick="authForgot()">Identifiant ou mot de passe oublié ?</button>
       </form>
     </div>
   </section>
@@ -2287,24 +2288,24 @@ body.has-ipad-side .admin-menu { left: 314px; }
 
 <style>
 /* Panel Give — palette pistache/mûre + contours francs d’EcoLingo · feuille du bas sur téléphone */
-:is(#grant-panel,#adm-panel,#et-panel,#pt-panel){position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;padding:clamp(10px,3vw,22px);background:rgba(15,59,46,.62);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
-:is(#grant-panel,#adm-panel,#et-panel,#pt-panel).open{display:flex;animation:gp-backdrop-in .18s ease-out both}
-:is(#grant-card,#adm-card,#et-card,#pt-card){position:relative;width:min(680px,100%);max-height:min(92dvh,920px);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--cream);color:var(--ink);border:var(--bw) solid var(--ink);border-radius:var(--r-card);padding:0;box-shadow:7px 7px 0 var(--ink);font-family:var(--b);animation:gp-card-in .26s var(--ease-out) both}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-head{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:12px;padding:clamp(14px,3.5vw,20px) clamp(14px,4vw,22px);background:var(--pis);border-bottom:var(--bw) solid var(--ink)}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-logo{flex:none;width:46px;height:46px;border-radius:14px;border:2.5px solid var(--ink);background:var(--sun);display:grid;place-items:center;box-shadow:2px 2px 0 var(--ink);font-size:1.5rem}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-ht{flex:1;min-width:0}
-:is(#grant-card,#adm-card,#et-card,#pt-card) h2{margin:0;font:800 clamp(1.25rem,5vw,1.55rem)/1.1 var(--d)}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-sub{margin:3px 0 0;color:var(--ink);opacity:.72;font-weight:700;font-size:.84rem;line-height:1.3}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-x{flex:none;width:46px;height:46px;padding:0;border-radius:50%;border:2.5px solid var(--ink);background:var(--ink);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:3px 3px 0 rgba(15,59,46,.35);transition:transform .18s var(--ease-out),background .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-x svg{display:block;transition:transform .22s var(--ease-out)}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-x:active{background:var(--mur);transform:scale(.92);box-shadow:0 0 0 transparent}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-x:active svg{transform:rotate(90deg)}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-body{padding:clamp(14px,4vw,22px);display:grid;gap:18px}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-sec{display:grid;gap:9px}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-lab{display:flex;align-items:center;gap:9px;font:800 .95rem var(--d);margin:0}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--mur);color:#fff;border:2px solid var(--ink);display:grid;place-items:center;font:800 .78rem var(--b)}
-:is(#grant-card,#adm-card,#et-card,#pt-card) input[type=text],:is(#grant-card,#adm-card,#et-card,#pt-card) input[type=search],:is(#grant-card,#adm-card,#et-card,#pt-card) input[type=number]{box-sizing:border-box;width:100%;min-height:48px;border:2px solid var(--ink);border-radius:15px;background:#fff;padding:11px 13px;font:700 1rem var(--b);color:var(--ink);outline:none;box-shadow:2px 2px 0 var(--ink);transition:border-color .15s,box-shadow .15s}
-:is(#grant-card,#adm-card,#et-card,#pt-card) input:focus{border-color:var(--mur);box-shadow:3px 3px 0 var(--mur)}
+:is(#grant-panel,#adm-panel,#et-panel,#pt-panel,#dv-panel,#es-panel){position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;padding:clamp(10px,3vw,22px);background:rgba(15,59,46,.62);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+:is(#grant-panel,#adm-panel,#et-panel,#pt-panel,#dv-panel,#es-panel).open{display:flex;animation:gp-backdrop-in .18s ease-out both}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card){position:relative;width:min(680px,100%);max-height:min(92dvh,920px);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--cream);color:var(--ink);border:var(--bw) solid var(--ink);border-radius:var(--r-card);padding:0;box-shadow:7px 7px 0 var(--ink);font-family:var(--b);animation:gp-card-in .26s var(--ease-out) both}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-head{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:12px;padding:clamp(14px,3.5vw,20px) clamp(14px,4vw,22px);background:var(--pis);border-bottom:var(--bw) solid var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-logo{flex:none;width:46px;height:46px;border-radius:14px;border:2.5px solid var(--ink);background:var(--sun);display:grid;place-items:center;box-shadow:2px 2px 0 var(--ink);font-size:1.5rem}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-ht{flex:1;min-width:0}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) h2{margin:0;font:800 clamp(1.25rem,5vw,1.55rem)/1.1 var(--d)}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-sub{margin:3px 0 0;color:var(--ink);opacity:.72;font-weight:700;font-size:.84rem;line-height:1.3}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-x{flex:none;width:46px;height:46px;padding:0;border-radius:50%;border:2.5px solid var(--ink);background:var(--ink);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:3px 3px 0 rgba(15,59,46,.35);transition:transform .18s var(--ease-out),background .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-x svg{display:block;transition:transform .22s var(--ease-out)}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-x:active{background:var(--mur);transform:scale(.92);box-shadow:0 0 0 transparent}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-x:active svg{transform:rotate(90deg)}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-body{padding:clamp(14px,4vw,22px);display:grid;gap:18px}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-sec{display:grid;gap:9px}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-lab{display:flex;align-items:center;gap:9px;font:800 .95rem var(--d);margin:0}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--mur);color:#fff;border:2px solid var(--ink);display:grid;place-items:center;font:800 .78rem var(--b)}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) input[type=text],:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) input[type=search],:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) input[type=number]{box-sizing:border-box;width:100%;min-height:48px;border:2px solid var(--ink);border-radius:15px;background:#fff;padding:11px 13px;font:700 1rem var(--b);color:var(--ink);outline:none;box-shadow:2px 2px 0 var(--ink);transition:border-color .15s,box-shadow .15s}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) input:focus{border-color:var(--mur);box-shadow:3px 3px 0 var(--mur)}
 #gp-accounts{display:grid;gap:7px;max-height:208px;overflow:auto;overscroll-behavior:contain;padding:2px 3px 5px 2px;margin:0 -3px 0 -2px}
 #gp-accounts .gp-acc{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:9px 11px;border:2px solid var(--ink);border-radius:15px;background:#fff;color:var(--ink);font-family:var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .12s,box-shadow .12s,background .12s}
 #gp-accounts .gp-acc:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
@@ -2317,16 +2318,16 @@ body.has-ipad-side .admin-menu { left: 314px; }
 #gp-accounts .gp-chk{margin-left:auto;font-weight:800;opacity:0}
 #gp-accounts .gp-acc.on .gp-chk{opacity:1}
 #gp-accounts .gp-empty,#grant-account-hint{font-size:.84rem;font-weight:700;color:var(--text-muted);line-height:1.4;padding:4px 2px}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-chips{display:flex;flex-wrap:wrap;gap:8px}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-chip{min-height:42px;padding:0 15px;border:2px solid var(--ink);border-radius:999px;background:#fff;color:var(--ink);font:800 .88rem var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .12s,box-shadow .12s,background .12s}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-chip:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-chip.on{background:var(--sun)}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-tabs{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding:2px 4px 6px 2px;margin:0 -4px 0 -2px}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-tabs::-webkit-scrollbar{display:none}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-tab{flex:1 0 auto;min-width:92px;scroll-snap-align:center;display:grid;justify-items:center;gap:2px;padding:9px 10px 8px;white-space:nowrap;border:2px solid var(--ink);border-radius:15px;background:#fff;color:var(--ink);font:800 .72rem var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .12s,box-shadow .12s,background .12s}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-tab i{font-style:normal;font-size:1.35rem;line-height:1}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-tab:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-tab.on{background:var(--mur);color:#fff;box-shadow:3px 3px 0 var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-chips{display:flex;flex-wrap:wrap;gap:8px}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-chip{min-height:42px;padding:0 15px;border:2px solid var(--ink);border-radius:999px;background:#fff;color:var(--ink);font:800 .88rem var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .12s,box-shadow .12s,background .12s}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-chip:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-chip.on{background:var(--sun)}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-tabs{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding:2px 4px 6px 2px;margin:0 -4px 0 -2px}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-tabs::-webkit-scrollbar{display:none}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-tab{flex:1 0 auto;min-width:92px;scroll-snap-align:center;display:grid;justify-items:center;gap:2px;padding:9px 10px 8px;white-space:nowrap;border:2px solid var(--ink);border-radius:15px;background:#fff;color:var(--ink);font:800 .72rem var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .12s,box-shadow .12s,background .12s}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-tab i{font-style:normal;font-size:1.35rem;line-height:1}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-tab:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-tab.on{background:var(--mur);color:#fff;box-shadow:3px 3px 0 var(--ink)}
 #gp-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));grid-auto-rows:max-content;align-content:start;gap:9px;padding:2px 4px 6px 2px;margin:0 -4px 0 -2px}
 #gp-items .gp-it{position:relative;display:grid;align-content:center;gap:3px;min-height:64px;flex:none;text-align:left;padding:10px 11px 10px 14px;border:2px solid var(--ink);border-radius:15px;background:#fff;color:var(--ink);font-family:var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);overflow:hidden;transition:transform .12s,box-shadow .12s,background .12s}
 #gp-items .gp-it:before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--rc,#ccc);border-right:2px solid var(--ink)}
@@ -2335,15 +2336,15 @@ body.has-ipad-side .admin-menu { left: 314px; }
 #gp-items .gp-it b{font:800 .9rem/1.15 var(--b)}
 #gp-items .gp-it small{font:800 .68rem var(--b);text-transform:uppercase;letter-spacing:.05em;opacity:.62}
 #gp-items .gp-sw{position:absolute;right:9px;top:9px;width:18px;height:18px;border-radius:50%;border:2px solid var(--ink)}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-sum{padding:12px 14px;border:2px dashed var(--ink);border-radius:15px;background:rgba(214,242,107,.45);font-weight:800;font-size:.92rem;line-height:1.45}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-sum em{font-style:normal;background:var(--sun);border-radius:7px;padding:0 6px;border:1.5px solid var(--ink)}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-sum.warn{background:#fff;border-style:solid;color:#B3261E}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions{position:sticky;bottom:0;z-index:3;display:grid;gap:11px;padding:12px calc(clamp(14px,4vw,22px) + 5px) calc(14px + env(safe-area-inset-bottom,0px)) clamp(14px,4vw,22px);background:var(--cream);border-top:var(--bw) solid var(--ink)}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions button{min-height:52px;border-radius:var(--r-btn);font:800 1rem var(--d);cursor:pointer;border:var(--bw) solid var(--ink);box-shadow:4px 4px 0 var(--ink);transition:transform .1s,box-shadow .1s,opacity .15s}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions button:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions button:disabled{opacity:.55;pointer-events:none}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions .gp-go{background:var(--sun);color:var(--ink);min-height:58px;font-size:1.1rem}
-:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions .gp-all{background:var(--mur);color:#fff;min-height:48px;font-size:.95rem}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-sum{padding:12px 14px;border:2px dashed var(--ink);border-radius:15px;background:rgba(214,242,107,.45);font-weight:800;font-size:.92rem;line-height:1.45}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-sum em{font-style:normal;background:var(--sun);border-radius:7px;padding:0 6px;border:1.5px solid var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-sum.warn{background:#fff;border-style:solid;color:#B3261E}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-actions{position:sticky;bottom:0;z-index:3;display:grid;gap:11px;padding:12px calc(clamp(14px,4vw,22px) + 5px) calc(14px + env(safe-area-inset-bottom,0px)) clamp(14px,4vw,22px);background:var(--cream);border-top:var(--bw) solid var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-actions button{min-height:52px;border-radius:var(--r-btn);font:800 1rem var(--d);cursor:pointer;border:var(--bw) solid var(--ink);box-shadow:4px 4px 0 var(--ink);transition:transform .1s,box-shadow .1s,opacity .15s}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-actions button:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-actions button:disabled{opacity:.55;pointer-events:none}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-actions .gp-go{background:var(--sun);color:var(--ink);min-height:58px;font-size:1.1rem}
+:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-actions .gp-all{background:var(--mur);color:#fff;min-height:48px;font-size:.95rem}
 #grant-status{padding:11px 13px;border:2px solid var(--ink);border-radius:15px;background:#fff;font-weight:800;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
 #grant-status:empty{display:none}
 #grant-status.ok{background:#CFF5D8}
@@ -2352,12 +2353,12 @@ body.has-ipad-side .admin-menu { left: 314px; }
 @keyframes gp-card-in{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes gp-sheet-in{from{transform:translateY(100%)}to{transform:translateY(0)}}
 @media(max-width:560px){
-  :is(#grant-panel,#adm-panel,#et-panel,#pt-panel){align-items:flex-end;padding:0}
-  :is(#grant-card,#adm-card,#et-card,#pt-card){width:100%;max-height:94dvh;border-radius:26px 26px 0 0;border-bottom:0;box-shadow:none;animation:gp-sheet-in .3s var(--ease-out) both}
-  :is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions{grid-template-columns:1fr}
+  :is(#grant-panel,#adm-panel,#et-panel,#pt-panel,#dv-panel,#es-panel){align-items:flex-end;padding:0}
+  :is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card){width:100%;max-height:94dvh;border-radius:26px 26px 0 0;border-bottom:0;box-shadow:none;animation:gp-sheet-in .3s var(--ease-out) both}
+  :is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-actions{grid-template-columns:1fr}
 }
-@media(min-width:561px){:is(#grant-card,#adm-card,#et-card,#pt-card) .gp-actions{grid-template-columns:1.4fr 1fr}}
-@media(prefers-reduced-motion:reduce){:is(#grant-panel,#adm-panel,#et-panel,#pt-panel).open,:is(#grant-card,#adm-card,#et-card,#pt-card){animation:none}}
+@media(min-width:561px){:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card) .gp-actions{grid-template-columns:1.4fr 1fr}}
+@media(prefers-reduced-motion:reduce){:is(#grant-panel,#adm-panel,#et-panel,#pt-panel,#dv-panel,#es-panel).open,:is(#grant-card,#adm-card,#et-card,#pt-card,#dv-card,#es-card){animation:none}}
 
 #btn-shop{position:relative;background:var(--gum)!important;border-right:4px solid var(--ink)!important}
 #btn-shop.has-gift:after{content:"";position:absolute;top:10px;right:18px;width:13px;height:13px;border-radius:50%;background:var(--pim);border:2.5px solid var(--ink)}
@@ -2478,7 +2479,28 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
 .et-bar{height:14px;border:2px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden}.et-bar i{display:block;height:100%;width:0;background:var(--pis);transition:width .3s}
 .et-note{margin:0;font-size:.84rem;font-weight:700;line-height:1.45;opacity:.8}
 .et-warn{padding:11px 13px;border:2px solid var(--ink);border-radius:13px;background:#FFF4C2;font-weight:800;font-size:.86rem;line-height:1.4}
-#et-status:empty,#pt-err:empty{display:none}
+#et-status:empty,#pt-err:empty,#pt-err3:empty,#dv-err:empty,#es-status:empty{display:none}
+#pt-err3,#dv-err,#es-status{padding:10px 12px;border:2px solid var(--ink);border-radius:12px;font-weight:800;font-size:.86rem;background:#FFD9D4}#es-status{background:#fff}#es-status.err{background:#FFD9D4}
+.pt-dots{display:flex;gap:6px;justify-content:center}.pt-dots i{width:28px;height:7px;border-radius:9px;border:1.5px solid var(--ink);background:#fff}.pt-dots i.on{background:var(--mur)}
+.pt-who{display:grid;justify-items:center;gap:5px;padding:18px 14px;border:2.5px solid var(--ink);border-radius:18px;background:#fff;box-shadow:3px 3px 0 var(--ink);text-align:center}
+.pt-who b{font:800 1.3rem/1.15 var(--d)}.pt-who small{font-weight:700;opacity:.7}.pt-etab{font:800 .8rem var(--b);padding:4px 11px;border-radius:999px;background:var(--sun);border:1.5px solid var(--ink)}
+.pt-steps{display:grid;gap:8px;margin:0;padding:0;list-style:none}.pt-steps li{display:flex;gap:10px;align-items:flex-start;font-weight:700;font-size:.9rem;line-height:1.35}.pt-steps li span{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);background:var(--pis);display:grid;place-items:center;font:800 .8rem var(--b)}
+.pt-s{display:grid;gap:16px}.pt-s[hidden]{display:none}
+.pt-ok{font-size:3.2rem;text-align:center;line-height:1}
+#es-panel.fam{background:var(--cream)}#es-panel.fam #es-card{width:min(760px,100%)}#es-panel.fam #es-x{display:none}
+.es-chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none}.es-chips::-webkit-scrollbar{display:none}
+.es-chip{flex:none;min-height:38px;padding:0 14px;border:2px solid var(--ink);border-radius:999px;background:#fff;color:var(--ink);font:800 .84rem var(--b);cursor:pointer}.es-chip.on{background:var(--mur);color:#fff}
+.es-hero{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px;border:2.5px solid var(--ink);border-radius:18px;background:var(--pis);box-shadow:3px 3px 0 var(--ink)}.es-hero b{display:block;font:800 1.25rem/1.15 var(--d)}.es-hero small{font-weight:700;opacity:.75}
+.es-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}@media(max-width:520px){.es-tiles{grid-template-columns:repeat(2,1fr)}}
+.es-tile{display:grid;gap:2px;padding:11px 12px;border:2px solid var(--ink);border-radius:15px;background:#fff}.es-tile b{font:800 1.25rem/1.1 var(--d);overflow-wrap:anywhere}.es-tile span{font:800 .76rem var(--b);opacity:.8}.es-tile small{font-size:.72rem;font-weight:700;opacity:.6}
+.es-cal{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;align-items:end;padding:10px;border:2px solid var(--ink);border-radius:15px;background:#fff}.es-cal div{display:grid;justify-items:center;gap:4px}.es-cal i{width:100%;max-width:18px;border-radius:6px;background:var(--mur);border:1.5px solid var(--ink)}.es-cal i.z{background:var(--cream)}.es-cal span{font:800 .62rem var(--b);opacity:.6;text-transform:uppercase}
+.es-mat{display:flex;align-items:center;gap:10px;padding:9px 11px;border:2px solid var(--ink);border-radius:13px;background:#fff}.es-mat .et-t{flex:1;min-width:0}.es-mat small{display:block;font-size:.76rem;font-weight:700;opacity:.65}
+.es-dot{flex:none;width:16px;height:16px;border-radius:50%;border:2px solid var(--ink)}.es-pc{font:800 1rem var(--d)}
+.es-bar{height:8px;margin-top:5px;border-radius:9px;border:1.5px solid var(--ink);background:var(--cream);overflow:hidden}.es-bar i{display:block;height:100%;background:var(--pis)}
+.es-row{width:100%;text-align:left;font:inherit;color:var(--ink);cursor:pointer}.es-go{font:800 1.4rem var(--d);opacity:.5}
+.es-chip-top{display:inline-block;margin-top:6px;padding:5px 12px;border:2px solid var(--ink);border-radius:999px;background:#fff;font:800 .82rem var(--b);color:var(--ink)}
+#es-fam-back{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:9000;min-height:48px;padding:0 20px;border:2.5px solid var(--ink);border-radius:999px;background:var(--mur);color:#fff;font:800 .95rem var(--b);box-shadow:3px 3px 0 var(--ink);cursor:pointer}
+.au-types{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}.au-types span{padding:6px 12px;border:2px solid var(--ink);border-radius:999px;background:#fff;font:800 .8rem var(--b);color:var(--ink)}
 #et-status,#pt-err{padding:10px 12px;border:2px solid var(--ink);border-radius:12px;font-weight:800;font-size:.86rem}
 #et-status.ok{background:#CFF5D8}#et-status.err,#pt-err{background:#FFD9D4}
 </style>
@@ -2499,19 +2521,67 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
 <div id="pt-panel" role="dialog" aria-modal="true" aria-labelledby="pt-title">
   <div id="pt-card">
     <div class="gp-head">
-      <div class="gp-logo" aria-hidden="true">🔑</div>
-      <div class="gp-ht"><h2 id="pt-title">Choisis ton mot de passe</h2><p class="gp-sub">Celui donné par ton établissement est provisoire</p></div>
+      <div class="gp-logo" aria-hidden="true">🏫</div>
+      <div class="gp-ht"><h2 id="pt-title">Première connexion</h2><p class="gp-sub" id="pt-sub">Bienvenue dans ton espace</p></div>
     </div>
-    <form class="et-body" onsubmit="tmpPwSave(event)" autocomplete="on">
-      <input type="text" name="username" id="pt-user" autocomplete="username" style="display:none">
-      <div class="et-sec"><p class="et-lab">Mot de passe provisoire</p><input class="et-in" id="pt-old" type="password" autocomplete="current-password" placeholder="Celui de ta feuille" maxlength="64"></div>
-      <div class="et-sec"><p class="et-lab">Nouveau mot de passe</p><input class="et-in" id="pt-new" type="password" autocomplete="new-password" placeholder="8 caractères, une lettre et un chiffre" maxlength="64">
-        <input class="et-in" id="pt-new2" type="password" autocomplete="new-password" placeholder="Retape-le" maxlength="64"></div>
-      <div id="pt-err" role="alert"></div>
-      <button class="et-btn big" type="submit" id="pt-go">Enregistrer</button>
+    <div class="et-body">
+      <div class="pt-dots" id="pt-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <section class="pt-s" data-s="1">
+        <div class="pt-who" id="pt-who"></div>
+        <ol class="pt-steps"><li><span>1</span>Tu remplaces le mot de passe provisoire de ta feuille par le tien.</li><li><span>2</span>Tu choisis une question secrète : on te la posera si tu te connectes depuis un autre téléphone ou ordinateur.</li></ol>
+        <button class="et-btn big" type="button" onclick="ptGo(2)">Commencer</button>
+      </section>
+      <form class="pt-s" data-s="2" onsubmit="tmpPwSave(event)" autocomplete="on" hidden>
+        <input type="text" name="username" id="pt-user" autocomplete="username" style="display:none">
+        <div class="et-sec"><p class="et-lab">Mot de passe provisoire</p><input class="et-in" id="pt-old" type="password" autocomplete="current-password" placeholder="Celui de ta feuille" maxlength="64"></div>
+        <div class="et-sec"><p class="et-lab">Nouveau mot de passe</p><input class="et-in" id="pt-new" type="password" autocomplete="new-password" placeholder="8 caractères, une lettre et un chiffre" maxlength="64">
+          <input class="et-in" id="pt-new2" type="password" autocomplete="new-password" placeholder="Retape-le" maxlength="64"></div>
+        <div id="pt-err" role="alert"></div>
+        <button class="et-btn big" type="submit" id="pt-go">Continuer</button>
+      </form>
+      <form class="pt-s" data-s="3" onsubmit="ptSecu(event)" autocomplete="off" hidden>
+        <div class="et-sec"><p class="et-lab">Question</p><select class="et-in" id="pt-q"></select></div>
+        <div class="et-sec"><p class="et-lab">Ta réponse</p><input class="et-in" id="pt-r" type="password" autocomplete="off" maxlength="60" placeholder="Ta réponse secrète"><input class="et-in" id="pt-r2" type="password" autocomplete="off" maxlength="60" placeholder="Retape-la"></div>
+        <p class="et-note">Les majuscules et les accents ne comptent pas. Ne la dis à personne, et choisis une réponse que tes copains ne peuvent pas deviner.</p>
+        <div id="pt-err3" role="alert"></div>
+        <button class="et-btn big" type="submit" id="pt-go3">Enregistrer</button>
+      </form>
+      <section class="pt-s" data-s="4" style="text-align:center" hidden>
+        <div class="pt-ok">✅</div>
+        <p class="et-note">Ton mot de passe et ta question secrète sont enregistrés. Cet appareil est reconnu. Garde ta feuille de codes dans un endroit sûr, ou jette-la.</p>
+        <button class="et-btn big" type="button" onclick="ptDone()">C'est parti</button>
+      </section>
+    </div>
+  </div>
+</div>
+<div id="dv-panel" role="dialog" aria-modal="true" aria-labelledby="dv-title">
+  <div id="dv-card">
+    <div class="gp-head">
+      <div class="gp-logo" aria-hidden="true">🔐</div>
+      <div class="gp-ht"><h2 id="dv-title">Confirme que c'est toi</h2><p class="gp-sub" id="dv-who"></p></div>
+    </div>
+    <form class="et-body" onsubmit="dvSend(event)" autocomplete="off">
+      <div class="et-warn">Tu te connectes depuis un nouvel appareil. Pour protéger ton compte, réponds à ta question secrète.</div>
+      <div class="et-sec"><p class="et-lab" id="dv-q"></p><input class="et-in" id="dv-r" type="password" autocomplete="off" maxlength="60" placeholder="Ta réponse"></div>
+      <div id="dv-err" role="alert"></div>
+      <button class="et-btn big" type="submit" id="dv-go">Confirmer</button>
+      <div class="et-acts" style="justify-content:center"><button class="et-btn w" type="button" onclick="dvForgot()">Je ne m'en souviens plus</button><button class="et-btn dg" type="button" onclick="dvLogout()">Me déconnecter</button></div>
     </form>
   </div>
 </div>
+<div id="es-panel" role="dialog" aria-modal="true" aria-labelledby="es-title" onclick="if(event.target===this)esClose()">
+  <div id="es-card">
+    <div class="gp-head">
+      <button type="button" class="gp-x" id="es-back" onclick="esBack()" aria-label="Retour" style="display:none;background:#fff;color:var(--ink)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="gp-logo" aria-hidden="true" id="es-logo">🏫</div>
+      <div class="gp-ht"><h2 id="es-title">Mon établissement</h2><p class="gp-sub" id="es-sub"></p></div>
+      <button type="button" class="gp-x" id="es-x" onclick="esClose()" aria-label="Fermer"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="et-body" id="es-body"></div>
+    <div class="et-body" style="padding-top:0"><div id="es-status" role="status"></div></div>
+  </div>
+</div>
+<button type="button" id="es-fam-back" hidden onclick="esFamBack()">🏠 Espace famille</button>
 
 <div id="inline-bar" class="inline-bar" aria-hidden="true"><div id="inline-title" class="inline-title"></div></div>
 
@@ -2524,6 +2594,7 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
     <div class="hero">
       <h1 id="hero-title">Salut<br><em>toi</em></h1>
       <div class="hero-streak" id="hero-streak" hidden></div>
+      <div class="es-chip-top" id="es-chip" hidden></div>
     </div>
     <div class="mk-row" style="grid-template-columns:1fr"><button class="mk-tile dq-tile" id="dq-home" type="button" onclick="dqOpen()"></button><button class="mk-tile rk-tile" id="rk-home" type="button" onclick="rankedOpen()" style="display:none"></button><button class="mk-tile sh-tile" id="sh-home" type="button" onclick="shOpen()" style="display:none"></button></div>
     <div class="section-title">Tes fiches</div>
@@ -2533,6 +2604,9 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
     </div>
     <div class="mk-row" id="a2hs-row" style="grid-template-columns:1fr;margin-top:-12px">
       <button class="mk-tile" type="button" onclick="openA2hs()"><span class="mk-ico" style="background:var(--mur);color:#fff"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4.5"/><path d="M12 8.5v7M8.5 12h7"/></svg></span><span class="mk-txt"><b>Ajouter à l'écran d'accueil</b><i>Un raccourci pour l'ouvrir comme une app</i></span></button>
+    </div>
+    <div class="mk-row" id="es-row" style="grid-template-columns:1fr;margin-top:-12px;display:none">
+      <button class="mk-tile" type="button" onclick="esOpen('staff')"><span class="mk-ico" style="background:var(--sun);color:var(--ink)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-5h6v5"/></svg></span><span class="mk-txt"><b>Mon établissement</b><i>Tous les élèves et leur progression</i></span></button>
     </div>
     <div class="section-title">Tes matières</div>
     <div class="lib-seg" id="lib-seg" role="tablist"><button type="button" data-lib="socle" role="tab">Socle commun<small>Les fiches EcoLingo du programme officiel</small></button><button type="button" data-lib="ecole" role="tab">Mon école<small>Les fiches ajoutées par ton école</small></button><button type="button" data-lib="bb" role="tab" class="bb"><span class="bb-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4"/></svg></span><span class="bb-t">Brevet blanc n°1<small>3e · tout le programme de septembre à fin novembre, avec quiz</small></span></button></div>
@@ -8578,12 +8652,12 @@ async function admToggle(id, on, nm) {
 // Plus personne ne crée son compte : l'admin importe le tableau de l'établissement (Excel / Numbers exporté / CSV),
 // le serveur crée tous les comptes (identifiant prenom.nom + mot de passe provisoire), puis on imprime les codes.
 const ETAB_DOMAIN = "eleve.mes-revision.vercel.app";
-const ET_ROLES = { personnel: "Direction et personnel", prof: "Professeurs", eleve: "Élèves" };
+const ET_ROLES = { personnel: "Direction et personnel", prof: "Professeurs", eleve: "Élèves", famille: "Familles" };
 const ET_RANGS = [[/proviseur(?!.*adjoint)|principal(?!.*adjoint)|chef d.?(e|é)tablissement|directeur(?!.*adjoint)|directrice(?!.*adjointe)/i, 1], [/adjoint|adjointe/i, 2], [/gestionnaire|intendan/i, 3], [/cpe|conseill(er|ère) principal/i, 4], [/secr(e|é)tari/i, 5], [/documentaliste|cdi/i, 6], [/infirmi|sant(e|é)/i, 7], [/psy|orientation/i, 8], [/aed|surveillant|assistant d.?(e|é)ducation|vie scolaire/i, 9], [/aesh/i, 10]];
-const etRang = m => { if (m.rang != null) return m.rang; if (m.role === "eleve") return 1000; if (m.role === "prof") return 100; for (const [re, n] of ET_RANGS) if (re.test(m.fonction || "")) return n; return 50; };
+const etRang = m => { if (m.rang != null) return m.rang; if (m.role === "famille") return 1100; if (m.role === "eleve") return 1000; if (m.role === "prof") return 100; for (const [re, n] of ET_RANGS) if (re.test(m.fonction || "")) return n; return 50; };
 const etOrdre = (a, b) => (etRang(a) - etRang(b)) || String(a.classe || "").localeCompare(String(b.classe || ""), "fr", { numeric: true }) || String(a.nom || "").localeCompare(String(b.nom || ""), "fr") || String(a.prenom || "").localeCompare(String(b.prenom || ""), "fr");
 const etN = s => String(s == null ? "" : s).trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
-const etSub = m => [m.role === "personnel" ? (m.fonction || "Personnel") : m.role === "prof" ? "Prof · " + (m.matiere || "?") : "Élève · " + (m.classe || "?")].join("");
+const etSub = m => m.role === "famille" ? "Famille de " + (etKids(m) || "?") : m.role === "personnel" ? (m.fonction || "Personnel") : m.role === "prof" ? "Prof · " + (m.matiere || "?") : "Élève · " + (m.classe || "?");
 let ET = { view: "list", etabs: [], cur: null, draft: null, membres: [], res: [], hist: [] };
 
 function etSay(t, k) { const s = document.getElementById("et-status"); if (!s) return; s.textContent = t || ""; s.className = k || ""; }
@@ -8637,10 +8711,10 @@ function etRender() {
     const cur = ET.cur; etHead(cur.nom, "Tous les comptes, dans l’ordre");
     const q = etN((document.getElementById("et-q") || {}).value || ""), ms = ET.membres.filter(m => !q || etN(m.prenom + " " + m.nom + " " + m.identifiant + " " + etSub(m)).includes(q));
     b.innerHTML = '<input class="et-in" id="et-q" type="search" placeholder="Chercher un nom, une classe…" value="' + escHtml(q) + '" oninput="etRender();this.focus();this.setSelectionRange(this.value.length,this.value.length)">' +
-      '<div class="et-acts"><button class="et-btn" type="button" onclick="etAdd(ET.cur.id)">＋ Ajouter des comptes</button><button class="et-btn w" type="button" onclick="etResetAll()">🔑 Nouveaux codes pour ceux qui ne se sont pas connectés</button></div>' +
-      (ms.length ? etGroups(ms, m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.prenom + " " + m.nom) + '</b><small>' + escHtml(etSub(m)) + ' · <span class="et-code">' + escHtml(m.identifiant) + '</span> ' + (m.pwChanged ? '<span class="et-tag ok">connecté</span>' : '<span class="et-tag">provisoire</span>') + '</small></div><button class="et-btn w" type="button" data-p="' + m.uid + '" title="Nouveau mot de passe">🔑</button><button class="et-btn dg" type="button" data-d="' + m.uid + '" title="Supprimer">✕</button></div>') : '<p class="et-note">Aucun compte.</p>') +
+      '<div class="et-acts"><button class="et-btn" type="button" onclick="etAdd(ET.cur.id)">＋ Ajouter des comptes</button><button class="et-btn w" type="button" onclick="etResetAll()">🔑 Nouveaux codes pour ceux qui ne se sont pas connectés</button><button class="et-btn w" type="button" onclick="etFamilles()">🏠 Créer les comptes Famille</button></div>' +
+      (ms.length ? etGroups(ms, m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.prenom + " " + m.nom) + '</b><small>' + escHtml(etSub(m)) + ' · <span class="et-code">' + escHtml(m.identifiant) + '</span> ' + (m.pwChanged ? '<span class="et-tag ok">connecté</span>' : '<span class="et-tag">provisoire</span>') + (m.secu ? ' <span class="et-tag ok">🔐 sécurisé</span>' : "") + '</small></div>' + (m.role === "eleve" ? '<button class="et-btn w" type="button" data-s="' + m.uid + '" title="Suivi de la progression">📊</button>' : m.role === "famille" ? '<button class="et-btn w" type="button" data-l="' + m.uid + '" title="Relier un frère ou une sœur">＋ enfant</button>' : "") + '<button class="et-btn w" type="button" data-p="' + m.uid + '" title="Nouveau mot de passe">🔑</button><button class="et-btn dg" type="button" data-d="' + m.uid + '" title="Supprimer">✕</button></div>') : '<p class="et-note">Aucun compte.</p>') +
       '<button class="et-btn dg big" type="button" onclick="etDelEtab()">Supprimer l’établissement et tous ses comptes</button>';
-    b.onclick = ev => { const t = ev.target.closest("button"); if (!t) return; if (t.dataset.p) etReset([t.dataset.p]); if (t.dataset.d) etDelMembre(t.dataset.d); };
+    b.onclick = ev => { const t = ev.target.closest("button"); if (!t) return; if (t.dataset.p) etReset([t.dataset.p]); if (t.dataset.d) etDelMembre(t.dataset.d); if (t.dataset.s) esSuiviAdmin(t.dataset.s); if (t.dataset.l) etLier(t.dataset.l); };
   }
 }
 function etGroups(list, row, max) {
@@ -8752,7 +8826,7 @@ async function etDelEtab() {
 }
 function etCsv() {
   const ok = ET.res.filter(r => r.motdepasse).sort(etOrdre), q = v => '"' + String(v || "").replace(/"/g, '""') + '"';
-  const csv = "﻿" + ["Type;Fonction / matière / classe;Nom;Prénom;Identifiant;Mot de passe provisoire"].concat(ok.map(m => [ET_ROLES[m.role], m.role === "eleve" ? m.classe : m.role === "prof" ? m.matiere : m.fonction, m.nom, m.prenom, m.identifiant, m.motdepasse].map(q).join(";"))).join("\r\n");
+  const csv = "﻿" + ["Type;Fonction / matière / classe;Nom;Prénom;Identifiant;Mot de passe provisoire"].concat(ok.map(m => [ET_ROLES[m.role], m.role === "eleve" ? m.classe : m.role === "prof" ? m.matiere : m.role === "famille" ? etKids(m) : m.fonction, m.nom, m.prenom, m.identifiant, m.motdepasse].map(q).join(";"))).join("\r\n");
   const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
   a.download = "codes-" + etN(ET.cur ? ET.cur.nom : "etablissement").replace(/ /g, "-") + ".csv"; document.body.appendChild(a); a.click(); a.remove();
 }
@@ -8792,10 +8866,201 @@ async function tmpPwSave(ev) {
     await api("compte", { action: "pwDone" }, true);
     await FBA.idToken(true);
     ["pt-old", "pt-new", "pt-new2"].forEach(i => document.getElementById(i).value = "");
-    document.getElementById("pt-panel").classList.remove("open");
-    showToast("Mot de passe enregistré ✅", "success");
+    try { ME = await api("etab", { action: "moi", ...apiDev() }, true); } catch (x) {}
+    if (ME && ME.appareil === "config") { ptOpen(3); } else ptGo(4);
   } catch (e) { err.textContent = /invalid-credential|wrong-password/.test((e && e.code) || "") ? "Mot de passe provisoire incorrect." : fbMsg(e); }
   btn.disabled = false;
+}
+
+
+// ════════ COMPTES D'ÉTABLISSEMENT « comme École Directe » ════════
+// Élève, Famille (parents) ou personnel/prof · 1re connexion guidée (mot de passe + question secrète)
+// · question secrète demandée sur un nouvel appareil · espace famille · espace établissement (tous les élèves).
+let ME = null, ES = { mode: "", view: "list", eleves: [], cur: null, kids: [], kid: 0, classe: "", q: "", peutCodes: false, res: null };
+const esUser = () => { try { const u = firebase.auth().currentUser; return u && (u.email || "").endsWith("@" + ETAB_DOMAIN) ? u : null; } catch (e) { return null; } };
+async function etabBoot() {
+  try {
+    if (FBA.mock() || !window.firebase || !firebase.auth) return;
+    const u = esUser(); if (!u) return;
+    const t = await u.getIdTokenResult();
+    ME = await api("etab", { action: "moi", ...apiDev() }, true);
+    etabUi();
+    if (t.claims && t.claims.tmp) return ptOpen(1);
+    if (ME.appareil === "config") return ptOpen(3);
+    if (ME.appareil === "nouveau") return dvOpen();
+    etabHome();
+  } catch (e) { console.warn("etabBoot", e); }
+}
+function etabUi() {
+  const c = document.getElementById("es-chip"), m = ME && ME.moi; if (!c || !m) return;
+  c.textContent = "🏫 " + ME.etab.nom + (m.role === "eleve" && m.classe ? " · " + m.classe : m.role === "famille" ? " · Espace famille" : m.role === "prof" ? " · Prof" : m.role === "personnel" ? " · " + (m.fonction || "Personnel") : "");
+  c.hidden = false;
+  if (m.role === "famille" && acct && acct.name !== "Famille " + m.nom) { saveAcct({ ...acct, name: "Famille " + m.nom }); try { updateNav(); } catch (e) {} }
+  const r = document.getElementById("es-row"); if (r) r.style.display = m.role === "prof" || m.role === "personnel" ? "" : "none";
+}
+function etabHome() { if (ME && ME.moi && ME.moi.role === "famille") esOpen("famille"); }
+
+// ── 1re connexion guidée ──
+const PT_TITRES = { 1: ["Première connexion", "Bienvenue dans ton espace"], 2: ["Ton mot de passe", "Celui donné par ton établissement est provisoire"], 3: ["Ta question secrète", "Elle protège ton compte sur un nouvel appareil"], 4: ["C'est prêt !", "Ton compte est sécurisé"] };
+function ptOpen(n) {
+  const m = ME && ME.moi, u = esUser();
+  document.getElementById("pt-user").value = u ? (u.email || "").replace("@" + ETAB_DOMAIN, "") : "";
+  if (m) document.getElementById("pt-who").innerHTML = '<span class="pt-etab">🏫 ' + escHtml(ME.etab.nom) + '</span><b>' + escHtml(m.role === "famille" ? "Famille " + m.nom : m.prenom + " " + m.nom) + '</b><small>' + escHtml(m.role === "famille" ? "Compte parents" : m.role === "eleve" ? "Élève" + (m.classe ? " · " + m.classe : "") : m.role === "prof" ? "Professeur" + (m.matiere ? " · " + m.matiere : "") : (m.fonction || "Personnel")) + '</small><span class="et-code">' + escHtml(m.identifiant) + '</span>';
+  const qs = (ME && ME.questions) || []; document.getElementById("pt-q").innerHTML = '<option value="">Choisis une question…</option>' + qs.map((q, i) => '<option value="' + i + '">' + escHtml(q) + '</option>').join("");
+  document.getElementById("pt-panel").classList.add("open"); ptGo(n);
+}
+function ptGo(n) {
+  document.querySelectorAll("#pt-panel .pt-s").forEach(s => s.hidden = +s.dataset.s !== n);
+  document.querySelectorAll("#pt-dots i").forEach((d, i) => d.className = i < n ? "on" : "");
+  document.getElementById("pt-title").textContent = PT_TITRES[n][0]; document.getElementById("pt-sub").textContent = PT_TITRES[n][1];
+  document.getElementById("pt-card").scrollTop = 0;
+}
+async function ptSecu(ev) {
+  ev.preventDefault();
+  const q = document.getElementById("pt-q").value, r = document.getElementById("pt-r").value.trim(), r2 = document.getElementById("pt-r2").value.trim(), err = document.getElementById("pt-err3"), btn = document.getElementById("pt-go3");
+  err.textContent = "";
+  if (q === "") return err.textContent = "Choisis une question.";
+  if (r.length < 2) return err.textContent = "Écris ta réponse (2 caractères minimum).";
+  if (etN(r) !== etN(r2)) return err.textContent = "Les deux réponses ne sont pas pareilles.";
+  btn.disabled = true;
+  try { await api("etab", { action: "securite", q: +q, r, ...apiDev() }, true); ["pt-r", "pt-r2"].forEach(i => document.getElementById(i).value = ""); ptGo(4); }
+  catch (e) { err.textContent = e.code === "deja" ? "Ta question secrète est déjà enregistrée." : "Impossible pour le moment (" + (e.code || "réseau") + "). Réessaie."; if (e.code === "deja") ptGo(4); }
+  btn.disabled = false;
+}
+async function ptDone() {
+  document.getElementById("pt-panel").classList.remove("open");
+  try { ME = await api("etab", { action: "moi", ...apiDev() }, true); etabUi(); } catch (e) {}
+  showToast("Bienvenue sur EcoLingo ✅", "success");
+  etabHome();
+}
+
+// ── Nouvel appareil : question secrète ──
+let _dvOpen = false;
+async function dvOpen() {
+  if (_dvOpen) return; _dvOpen = true;
+  try { if (!ME || !ME.question) ME = await api("etab", { action: "moi", ...apiDev() }, true); } catch (e) {}
+  if (ME && ME.appareil === "ok") { _dvOpen = false; return; }
+  document.getElementById("dv-q").textContent = (ME && ME.question) || "Ta question secrète";
+  document.getElementById("dv-who").textContent = ME && ME.moi ? (ME.moi.role === "famille" ? "Famille " + ME.moi.nom : ME.moi.prenom + " " + ME.moi.nom) + " · " + ME.etab.nom : "";
+  document.getElementById("dv-panel").classList.add("open");
+  setTimeout(() => { try { document.getElementById("dv-r").focus(); } catch (e) {} }, 300);
+}
+async function dvSend(ev) {
+  ev.preventDefault();
+  const r = document.getElementById("dv-r").value.trim(), err = document.getElementById("dv-err"), btn = document.getElementById("dv-go");
+  err.textContent = ""; if (!r) return err.textContent = "Écris ta réponse.";
+  btn.disabled = true;
+  try {
+    await api("etab", { action: "confirmer", r, ...apiDev() }, true);
+    document.getElementById("dv-panel").classList.remove("open"); _dvOpen = false;
+    showToast("Appareil reconnu ✅", "success"); setTimeout(() => location.reload(), 700);
+  } catch (e) {
+    err.textContent = e.code === "faux" ? "Mauvaise réponse." + (e.data && e.data.reste != null ? " Encore " + e.data.reste + " essai(s)." : "")
+      : e.code === "locked" ? "Trop d'essais. Réessaie dans " + ((e.data && e.data.min) || 15) + " min." : "Impossible pour le moment (" + (e.code || "réseau") + ").";
+  }
+  btn.disabled = false;
+}
+function dvForgot() { iosSheet({ title: "Réponse oubliée", sub: "Demande un nouveau mot de passe provisoire à la vie scolaire de ton établissement. À la prochaine connexion, tu choisiras une nouvelle question secrète.", btns: [{ t: "OK", v: "" }] }); }
+function dvLogout() { document.getElementById("dv-panel").classList.remove("open"); _dvOpen = false; ME = null; logoutAcct(); }
+
+// ── Espace famille / Espace établissement ──
+const esTemps = t => { if (!t) return "jamais"; const d = Math.floor((Date.now() - t) / 864e5); return d <= 0 ? "aujourd'hui" : d === 1 ? "hier" : d < 30 ? "il y a " + d + " j" : new Date(t).toLocaleDateString("fr-FR"); };
+const esSub = sid => SUBJECTS.find(s => s.id === sid) || { name: sid, bg: "#fff", fg: "#0F3B2E" };
+function esFiche(fid) {
+  const f = (typeof allFiches !== "undefined" ? allFiches : []).find(x => x.id === fid); if (f && f.title) return f.title;
+  const m = /^sc-([a-z0-9]+)-[a-z]+-(\d+)$/.exec(fid || ""); return m ? (m[1] === "bb" ? "Brevet blanc" : "Programme " + m[1]) + " · fiche " + (+m[2]) : "Fiche";
+}
+function esSay(t, k) { const s = document.getElementById("es-status"); if (s) { s.textContent = t || ""; s.className = k || ""; } }
+async function esOpen(mode) {
+  ES.mode = mode || (ME && ME.moi && ME.moi.role === "famille" ? "famille" : "staff"); ES.res = null;
+  const p = document.getElementById("es-panel"); p.classList.add("open"); p.classList.toggle("fam", ES.mode === "famille");
+  document.getElementById("es-logo").textContent = ES.mode === "famille" ? "🏠" : "🏫";
+  document.getElementById("es-title").textContent = ES.mode === "famille" ? "Espace famille" : ES.mode === "admin" ? "Suivi de l'élève" : "Mon établissement";
+  document.getElementById("es-sub").textContent = ME && ME.etab ? ME.etab.nom : (ET.cur ? ET.cur.nom : "");
+  if (ES.mode === "admin") return;
+  ES.view = "list"; esSay("Chargement…"); esRender();
+  try {
+    if (ES.mode === "famille") { ES.kids = (await api("etab", { action: "enfants" }, true)).enfants || []; ES.kid = Math.min(ES.kid, Math.max(0, ES.kids.length - 1)); }
+    else { const r = await api("etab", { action: "eleves" }, true); ES.eleves = r.eleves || []; ES.peutCodes = !!r.peutCodes; }
+    esSay(""); esRender();
+  } catch (e) { esSay("❌ Chargement impossible (" + (e.code || "réseau") + ").", "err"); }
+}
+function esClose() { if (ES.mode === "famille") return; document.getElementById("es-panel").classList.remove("open"); }
+function esBack() { if (ES.mode === "admin") return esClose(); ES.view = "list"; ES.cur = null; ES.res = null; esRender(); }
+async function esEleve(uid) {
+  ES.view = "eleve"; ES.cur = null; ES.res = null; esRender(); esSay("Chargement…");
+  try { ES.cur = await api("etab", ES.mode === "admin" ? { action: "suivi", uid, adminEtab: true } : { action: "suivi", uid }, true); esSay(""); esRender(); }
+  catch (e) { esSay("❌ Chargement impossible (" + (e.code || "réseau") + ").", "err"); }
+}
+async function esSuiviAdmin(uid) { await esOpen("admin"); esEleve(uid); }
+function esSuivi(d, staff) {
+  const e = d.eleve, r = d.resume, tile = (v, l, s) => '<div class="es-tile"><b>' + v + '</b><span>' + l + '</span>' + (s ? '<small>' + s + '</small>' : "") + '</div>';
+  const jours = []; for (let i = 13; i >= 0; i--) { const k = new Date(Date.now() - i * 864e5).toISOString().slice(0, 10); jours.push({ k, n: (d.jours || {})[k] || 0, j: new Date(k).toLocaleDateString("fr-FR", { weekday: "narrow" }) }); }
+  const mx = Math.max(1, ...jours.map(j => j.n));
+  let h = '<div class="es-hero"><div><b>' + escHtml(e.prenom + " " + e.nom) + '</b><small>' + escHtml("Élève" + (e.classe ? " · " + e.classe : "")) + (staff ? ' · <span class="et-code">' + escHtml(e.identifiant) + '</span>' : "") + '</small></div><span class="et-tag' + (r.actif && Date.now() - r.actif < 3 * 864e5 ? " ok" : "") + '">' + (r.actif ? "Actif " + esTemps(r.actif) : "Pas encore actif") + '</span></div>' +
+    '<div class="es-tiles">' + tile(r.quiz, "quiz faits", r.quiz7 + " cette semaine") + tile(r.moyenne == null ? "–" : r.moyenne + " %", "moyenne", "dernier essai par fiche") + tile("🔥 " + r.serie, "série quiz du jour", "record : " + r.record) +
+    tile(r.fiches, "fiches travaillées") + tile(r.lingo, "Lingo") + tile(escHtml(r.rang), "rang") + '</div>' +
+    '<div class="et-sec"><p class="et-lab">Activité · 14 derniers jours</p><div class="es-cal">' + jours.map(j => '<div title="' + j.k + " : " + j.n + ' quiz"><i style="height:' + Math.round(6 + 54 * j.n / mx) + 'px"' + (j.n ? "" : ' class="z"') + '></i><span>' + j.j + '</span></div>').join("") + '</div></div>';
+  h += '<div class="et-sec"><p class="et-lab">Par matière</p>' + (d.matieres.length ? '<div class="et-list">' + d.matieres.map(m => { const s = esSub(m.sid); return '<div class="es-mat"><span class="es-dot" style="background:' + s.bg + '"></span><div class="et-t"><b>' + escHtml(s.name) + '</b><small>' + m.quiz + " quiz · " + m.fiches + ' fiche(s)</small><div class="es-bar"><i style="width:' + m.moyenne + '%"></i></div></div><b class="es-pc">' + m.moyenne + ' %</b></div>'; }).join("") + '</div>' : '<p class="et-note">Pas encore de quiz.</p>') + '</div>';
+  h += '<div class="et-sec"><p class="et-lab">Derniers quiz</p>' + (d.recents.length ? '<div class="et-list">' + d.recents.map(a => '<div class="et-mini"><div class="et-t"><b>' + escHtml(esFiche(a.fid)) + '</b><small>' + escHtml(esSub(a.sid).name) + " · " + esTemps(a.t) + '</small></div><span class="et-tag' + (a.p >= 70 ? " ok" : "") + '">' + (a.n ? a.s + "/" + a.n : a.p + " %") + '</span></div>').join("") + '</div>' : '<p class="et-note">Rien pour l’instant.</p>') + '</div>';
+  return h;
+}
+function esRender() {
+  const b = document.getElementById("es-body"); if (!b) return;
+  document.getElementById("es-back").style.display = ES.mode !== "famille" && ES.view !== "list" && ES.mode !== "admin" ? "" : "none";
+  if (ES.mode === "famille") {
+    const k = ES.kids;
+    b.innerHTML = (k.length > 1 ? '<div class="es-chips">' + k.map((x, i) => '<button type="button" class="es-chip' + (i === ES.kid ? " on" : "") + '" data-k="' + i + '">' + escHtml(x.eleve.prenom) + '</button>').join("") + '</div>' : "") +
+      (k.length ? esSuivi(k[ES.kid]) : '<p class="et-note">Aucun enfant n’est encore relié à ce compte. Contacte l’établissement.</p>') +
+      '<div class="et-acts"><button class="et-btn w" type="button" onclick="esFamFiches()">📚 Voir les fiches de révision</button><button class="et-btn dg" type="button" onclick="esFamLogout()">Se déconnecter</button></div>';
+    b.onclick = ev => { const t = ev.target.closest("button[data-k]"); if (t) { ES.kid = +t.dataset.k; esRender(); } };
+    return;
+  }
+  if (ES.view === "eleve") {
+    const d = ES.cur;
+    b.innerHTML = d ? esSuivi(d, true) + (ES.mode === "staff" && ES.peutCodes ? '<div class="et-sec"><p class="et-lab">Mot de passe oublié</p><div class="et-acts"><button class="et-btn" type="button" onclick="esCodes(false)">🔑 Nouveau code pour l’élève</button>' + (d.eleve.famille ? '<button class="et-btn w" type="button" onclick="esCodes(true)">🔑 Élève + famille</button>' : "") + '</div><p class="et-note">Le mot de passe actuel ne marchera plus. La personne choisira un nouveau mot de passe et une nouvelle question secrète.</p></div>' : "") + esResHtml() : "";
+    b.onclick = null; return;
+  }
+  const cls = [...new Set(ES.eleves.map(e => e.classe || "Sans classe"))].sort((a, c) => a.localeCompare(c, "fr", { numeric: true }));
+  const q = etN(ES.q), list = ES.eleves.filter(e => (!ES.classe || (e.classe || "Sans classe") === ES.classe) && (!q || etN(e.prenom + " " + e.nom + " " + e.classe + " " + e.identifiant).includes(q)));
+  const actifs = ES.eleves.filter(e => e.resume.actif && Date.now() - e.resume.actif < 7 * 864e5).length;
+  b.innerHTML = '<div class="et-stats"><span class="et-pill">' + ES.eleves.length + ' élèves</span><span class="et-pill">' + cls.length + ' classes</span><span class="et-pill">' + actifs + ' actifs cette semaine</span></div>' +
+    '<input class="et-in" id="es-q" type="search" placeholder="Chercher un élève, une classe…" value="' + escHtml(ES.q) + '">' +
+    '<div class="es-chips"><button type="button" class="es-chip' + (!ES.classe ? " on" : "") + '" data-c="">Toutes</button>' + cls.map(c => '<button type="button" class="es-chip' + (ES.classe === c ? " on" : "") + '" data-c="' + escHtml(c) + '">' + escHtml(c) + '</button>').join("") + '</div>' +
+    (list.length ? etGroups(list, e => '<button type="button" class="et-mini es-row" data-u="' + e.uid + '"><div class="et-t"><b>' + escHtml(e.prenom + " " + e.nom) + '</b><small>' + (e.resume.actif ? "Actif " + esTemps(e.resume.actif) : "Pas encore actif") + " · 🔥 " + e.resume.serie + " · " + e.resume.quiz + " quiz" + (e.resume.moyenne != null ? " · " + e.resume.moyenne + " %" : "") + '</small></div><span class="es-go">›</span></button>') : '<p class="et-note">Aucun élève.</p>');
+  const qi = document.getElementById("es-q"); qi.oninput = () => { ES.q = qi.value; esRender(); const n = document.getElementById("es-q"); n.focus(); n.setSelectionRange(n.value.length, n.value.length); };
+  b.onclick = ev => { const t = ev.target.closest("button"); if (!t) return; if (t.dataset.u) esEleve(t.dataset.u); else if (t.dataset.c != null) { ES.classe = t.dataset.c; esRender(); } };
+}
+function esResHtml() {
+  if (!ES.res) return "";
+  return '<div class="et-warn">⚠️ À noter maintenant : ce code ne s’affichera plus.</div>' + ES.res.map(m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.role === "famille" ? "Famille " + m.nom : m.prenom + " " + m.nom) + '</b><small>Identifiant</small><span class="et-code">' + escHtml(m.identifiant) + '</span></div><div class="et-t"><small>Mot de passe provisoire</small><span class="et-code">' + escHtml(m.motdepasse) + '</span></div></div>').join("");
+}
+async function esCodes(fam) {
+  const d = ES.cur; if (!d || !confirm("Donner un nouveau mot de passe provisoire à " + d.eleve.prenom + " " + d.eleve.nom + (fam ? " et à sa famille" : "") + " ?")) return;
+  try { ES.res = (await api("etab", { action: "codesEleve", uid: d.eleve.uid, famille: !!fam }, true)).resultats || []; esRender(); }
+  catch (e) { esSay("❌ Échec (" + (e.code || "réseau") + ").", "err"); }
+}
+function esFamFiches() { document.getElementById("es-panel").classList.remove("open"); const b = document.getElementById("es-fam-back"); if (b) b.hidden = false; }
+function esFamBack() { const b = document.getElementById("es-fam-back"); if (b) b.hidden = true; esOpen("famille"); }
+function esFamLogout() { document.getElementById("es-panel").classList.remove("open"); const b = document.getElementById("es-fam-back"); if (b) b.hidden = true; ME = null; logoutAcct(); }
+
+// ── Admin : comptes Famille ──
+const etKids = m => (m.enfantsNoms || (m.enfants || []).map(id => { const e = ET.membres.find(x => x.uid === id); return e ? e.prenom + " " + e.nom + (e.classe ? " (" + e.classe + ")" : "") : "?"; })).join(", ");
+async function etFamilles() {
+  const sans = ET.membres.filter(m => m.role === "eleve" && !m.famille).length;
+  if (!sans) return etSay("Tous les élèves ont déjà un compte Famille.", "ok");
+  if (!confirm("Créer un compte Famille pour " + sans + " élève(s) ?\nPour les frères et sœurs, tu pourras ensuite les relier au même compte (bouton ＋ enfant).")) return;
+  const out = []; etSay("Création des comptes Famille…");
+  try { for (let k = 0; k < 200; k++) { const r = await api("etab", { action: "creerFamilles", etab: ET.cur.id }, true); out.push(...(r.resultats || [])); etSay("Création des comptes Famille… " + out.length + " / " + sans); if (!r.reste || !(r.resultats || []).length) break; } ET.res = out; etGo("res"); }
+  catch (e) { if (out.length) { ET.res = out; etGo("res"); } etSay("❌ Échec (" + (e.code || "réseau") + "). Réessaie : ceux déjà créés ne seront pas doublés.", "err"); }
+}
+async function etLier(famId) {
+  const f = ET.membres.find(x => x.uid === famId); if (!f) return;
+  const v = prompt("Ajouter un enfant au compte Famille " + f.nom + "\n(" + etKids(f) + ")\n\nTape l'identifiant de l'enfant (ex. lea.martin) :"); if (!v) return;
+  const e = ET.membres.find(x => x.role === "eleve" && x.identifiant === v.trim().toLowerCase()); if (!e) return etSay("Aucun élève avec cet identifiant.", "err");
+  if (e.famille && e.famille !== famId && !confirm(e.prenom + " a déjà un compte Famille : il sera retiré de l'ancien (supprimé s'il n'a plus d'enfant). Continuer ?")) return;
+  try { await api("etab", { action: "lierEnfant", famille: famId, eleve: e.uid }, true); await etMembres(ET.cur.id); etSay("✅ " + e.prenom + " est relié(e) au compte Famille " + f.nom + ".", "ok"); }
+  catch (x) { etSay("❌ Échec (" + (x.code || "réseau") + ").", "err"); }
 }
 
 // ─── COMPTES (1 compte = 1 téléphone) ─────────────────────
@@ -8883,10 +9148,11 @@ function authBusy(which, on) {
 // et ne passent jamais par le navigateur.
 async function api(path, body, withAuth) {
   const h = { "Content-Type": "application/json" };
+  try { h["X-Dev"] = getDeviceId(); } catch (e) {}
   if (withAuth) { const t = await FBA.idToken(); if (!t) { const e = new Error("noauth"); e.code = "noauth"; throw e; } h.Authorization = "Bearer " + t; }
   let r; try { r = await fetch(API_BASE + "/api/" + path, { method: "POST", headers: h, body: JSON.stringify(body || {}) }); } catch (e) { throw new Error("offline"); }
   const j = await r.json().catch(() => ({}));
-  if (!r.ok) { const e = new Error(j.error || "api"); e.code = j.error || "api"; e.data = j; e.status = r.status; throw e; }
+  if (!r.ok) { const e = new Error(j.error || "api"); e.code = j.error || "api"; e.data = j; e.status = r.status; if (e.code === "device" && typeof dvOpen === "function") setTimeout(dvOpen, 0); throw e; }
   return j;
 }
 const apiDev = () => ({ dev: getDeviceId(), brand: devLabel() });
@@ -9524,6 +9790,12 @@ async function fbLogin(raw, pw) {
 }
 async function authForgot() {
   const raw = norm0($a("au-l-name").value).toLowerCase();
+  if (!raw || (!raw.includes("@") && raw.includes("."))) {
+    const r = await iosSheet({ title: "Identifiant ou mot de passe oublié", sub: "Ton compte est géré par ton établissement.", btns: [{ t: "J'ai oublié mon mot de passe", v: "pw" }, { t: "J'ai oublié mon identifiant", v: "id" }, { t: "Annuler", v: "", cls: "sec" }] });
+    if (r.v === "pw") return iosSheet({ title: "Mot de passe oublié", sub: "Demande un nouveau mot de passe provisoire à la vie scolaire ou à ton professeur principal. Ils peuvent le faire directement depuis EcoLingo. Tu choisiras ensuite un nouveau mot de passe et une nouvelle question secrète.", btns: [{ t: "OK", v: "" }] });
+    if (r.v === "id") return iosSheet({ title: "Identifiant oublié", sub: "Ton identifiant est sur la feuille donnée par ton établissement. Il ressemble à prenom.nom (élèves et personnels) ou famille.nom (parents). Sinon, demande-le à la vie scolaire.", btns: [{ t: "OK", v: "" }] });
+    return;
+  }
   if (!raw.includes("@") && raw.includes(".")) return iosSheet({ title: "Mot de passe oublié", sub: "Demande un nouveau mot de passe à ton établissement (professeur principal ou vie scolaire). Il te donnera un mot de passe provisoire.", btns: [{ t: "OK", v: "" }] });
   if (raw.endsWith("@" + ETAB_DOMAIN)) return authErr("login", "Demande un nouveau mot de passe à ton établissement.");
   if (!raw.includes("@")) return authGo("recover");             // ancien compte : code de récupération
@@ -9537,11 +9809,11 @@ async function syncAuthState() {
   try {
     const u = await FBA.ready();
     if (!u) { if (!FBA.mock()) logoutAcct("Reconnecte-toi."); return; }
-    tmpPwCheck();
+    etabBoot();
     IS_FB_ADMIN = await FBA.isAdmin(u.uid);
     let p = await FBA.getProfile(u.uid); PROFILE = p;
     if (p && (p.email !== u.email || !!p.emailVerified !== u.verified)) { p = { ...p, email: u.email, emailVerified: u.verified, updatedAt: Date.now() }; try { await FBA.setProfile(u.uid, p); PROFILE = p; } catch (e) {} }
-    if (!p) setTimeout(completeProfileSheet, 1200);
+    if (!p && !String(u.email || "").startsWith("famille.")) setTimeout(completeProfileSheet, 1200);
     const nm = p ? cleanName(p.firstName) : acct.name; if (nm && nm !== acct.name) saveAcct({ ...acct, name: nm });
     refreshSetSummary && refreshSetSummary();
   } catch (e) { /* hors ligne : on garde la session */ }

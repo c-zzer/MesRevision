@@ -381,5 +381,6 @@ module.exports = L.handler(async (b, req) => {
   const fn = A[b.action];
   if (!fn) throw L.httpErr(400, "action");
   const u = b.action === "jour" ? null : await L.caller(req);
+  if (u) await L.devGate(u, req);   // compte d'établissement : appareil confirmé par la question secrète
   return fn(b, u);
 });

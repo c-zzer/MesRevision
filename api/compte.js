@@ -33,7 +33,7 @@ const actions = {
     const u = await L.caller(req);
     if (!u.tmp) return { ok: true };
     const db = L.fs(), ref = db.doc("membres/" + u.uid), s = await ref.get();
-    await L.auth().setCustomUserClaims(u.uid, s.exists ? { etab: s.data().etab } : null);
+    await L.auth().setCustomUserClaims(u.uid, s.exists ? (s.data().role === "famille" ? { etab: s.data().etab, fam: 1 } : { etab: s.data().etab }) : null);
     if (s.exists) await ref.update({ pwChanged: true });
     return { ok: true };
   },
