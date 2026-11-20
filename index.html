@@ -8698,7 +8698,7 @@ function openEtabPanel(e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
   if (!isAdmin) { showToast("Accès réservé aux admins", ""); return; }
   try { closeAdminMenu(); } catch (x) {}
-  ET.gest = false; document.getElementById("et-panel").classList.add("open"); ET.hist = []; etGo("list");
+  ET.gest = false; document.getElementById("et-panel").classList.add("open"); ET.hist = []; etLoad();
 }
 function closeEtabPanel() {
   if (ET.view === "res" && ET.res.length && !confirm("Les mots de passe provisoires ne seront plus affichés.\nTu les as bien imprimés ou téléchargés ?")) return;
@@ -8709,8 +8709,8 @@ function etBack() { if (ET.view === "res" && ET.res.length && !confirm("Les mots
 function etHead(t, s) { document.getElementById("et-title").textContent = t; document.getElementById("et-sub").textContent = s; document.getElementById("et-back").style.display = ET.view === "list" || (ET.gest && ET.view === "membres") ? "none" : ""; }
 
 async function etLoad() {
-  ET.view = "list"; etRender();
-  try { ET.etabs = (await api("etab", { action: "list" }, true)).etabs || []; } catch (e) { ET.etabs = []; etSay("❌ Impossible de charger les établissements (" + (e.code || "réseau") + ").", "err"); }
+  ET.view = "list"; ET.loading = true; etRender();
+  try { ET.etabs = (await api("etab", { action: "list" }, true)).etabs || []; ET.loading = false; } catch (e) { ET.loading = false; ET.etabs = []; etSay("❌ Impossible de charger les établissements (" + (e.code || "réseau") + ").", "err"); }
   if (ET.view === "list") etRender();
 }
 function etRender() {
@@ -8724,7 +8724,7 @@ function etRender() {
           '<div class="et-stats"><span class="et-pill">🎒 ' + (c.eleve || 0) + ' élèves</span><span class="et-pill">👩‍🏫 ' + (c.prof || 0) + ' profs</span><span class="et-pill">🏫 ' + (c.personnel || 0) + ' direction</span><span class="et-pill">🏠 ' + (c.famille || 0) + ' familles</span></div>' +
           '<small class="et-gst">' + ((x.gestion || []).length ? "⚙️ Géré par " + escHtml(x.gestion.join(", ")) : "⚠️ Pas encore d’admin d’établissement : ouvre-le et appuie sur ⚙️ à côté de la direction") + '</small>' +
           '<div class="et-acts"><button class="et-btn" type="button" data-v="' + escHtml(x.id) + '">Ouvrir</button><button class="et-btn w" type="button" data-a="' + escHtml(x.id) + '">＋ Ajouter des comptes</button></div></div>'; }).join("") + '</div>'
-        : '<p class="et-note">Aucun établissement pour l’instant. Quand un établissement te choisit, clique sur « Nouvel établissement » et importe son tableau.</p>');
+        : ET.loading ? '<p class="et-note">Chargement des établissements…</p>' : '<p class="et-note">Aucun établissement pour l’instant. Quand un établissement te choisit, clique sur « Nouvel établissement » et importe son tableau.</p>');
     b.onclick = ev => { const t = ev.target.closest("button"); if (!t) return; if (t.dataset.v) etMembres(t.dataset.v); if (t.dataset.a) etAdd(t.dataset.a); };
   } else if (v === "import") {
     const d = ET.draft, cur = ET.cur;
