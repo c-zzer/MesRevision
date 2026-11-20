@@ -9962,8 +9962,52 @@ const sico = p => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 function actRow(icon, label, fn, cls) { const b = el$("button", "set-row set-act" + (cls ? " " + cls : ""), '<span class="sa-l">' + sico(icon) + escHtml(label) + "</span>" + CHEV); b.type = "button"; b.onclick = fn; return b; }
 function viewRow(l, v) { const r = el$("div", "set-row"); const a = el$("span"); a.textContent = l; const b = el$("b"); b.textContent = v || "—"; b.className = "pf-val"; r.append(a, b); return r; }
 
+// Comptes d'établissement : le profil (nom, classe, type de compte, e-mail technique) appartient à l'établissement.
+// L'élève ou le parent ne peut que changer son mot de passe, voir ses appareils et télécharger ses données.
+async function renderAccountEtab(root, tags) {
+  if (!ME) { root.appendChild(el$("div", "set-hint", "Chargement…")); try { ME = await api("etab", { action: "moi", ...apiDev() }, true); } catch (e) {} root.innerHTML = ""; }
+  const m = (ME && ME.moi) || {}, et = (ME && ME.etab) || {};
+  const role = { eleve: "Élève", famille: "Famille", prof: "Professeur", personnel: m.fonction || "Personnel" }[m.role] || "—";
+  if (tags) [role, et.nom || ""].filter(Boolean).forEach((t, i) => tags.appendChild(el$("i", "acct-tag t" + i, escHtml(t))));
+  root.appendChild(el$("div", "dv-title", "Mon compte"));
+  const g = el$("div", "set-group");
+  if (m.role === "famille") g.append(viewRow("Compte", "Famille " + (m.nom || "")), viewRow("Enfant(s)", String((m.enfants || []).length)));
+  else g.append(viewRow("Prénom", m.prenom), viewRow("Nom", m.nom), viewRow("Type de compte", role), m.role === "eleve" ? viewRow("Classe", m.classe) : m.role === "prof" ? viewRow("Matière", m.matiere) : viewRow("Fonction", m.fonction));
+  g.append(viewRow("Établissement", et.nom), viewRow("Identifiant", m.identifiant));
+  root.appendChild(g);
+  root.appendChild(el$("p", "set-hint", "Ces informations sont gérées par ton établissement. Une erreur ? Signale-la à la vie scolaire."));
+  root.appendChild(el$("div", "dv-title", "Sécurité"));
+  const g3 = el$("div", "set-group");
+  g3.appendChild(actRow('<rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 018 0v3"/>', "Changer mon mot de passe", acctEtabPw));
+  g3.appendChild(actRow('<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18h2"/>', "Mes appareils reconnus", acctEtabDevices));
+  g3.appendChild(actRow('<path d="M12 3v11m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>', "Télécharger mes données", acctExport));
+  g3.appendChild(actRow('<path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/>', "Confidentialité", () => showPrivacy()));
+  root.appendChild(g3);
+  root.appendChild(el$("p", "set-hint", "Pour supprimer ton compte, adresse-toi à ton établissement."));
+}
+async function acctEtabPw() {
+  const old = await askPw("Entre ton mot de passe actuel."); if (!old) return;
+  const r = await iosSheet({ title: "Nouveau mot de passe", sub: "8 caractères minimum, avec une lettre et un chiffre.", html: '<input class="ish-in" type="password" autocomplete="new-password" placeholder="Nouveau mot de passe">', btns: [{ t: "Continuer", v: "go" }, { t: "Annuler", v: "", cls: "sec" }] });
+  if (r.v !== "go" || !r.val) return; const a = r.val;
+  if (!pwOk(a)) return showToast("Trop faible : 8 caractères, une lettre et un chiffre", "");
+  if (a === old) return showToast("Choisis un mot de passe différent", "");
+  const r2 = await iosSheet({ title: "Confirme", sub: "Retape le nouveau mot de passe.", html: '<input class="ish-in" type="password" autocomplete="new-password" placeholder="Retape-le">', btns: [{ t: "Enregistrer", v: "go" }, { t: "Annuler", v: "", cls: "sec" }] });
+  if (r2.v !== "go") return; if (r2.val !== a) return showToast("Les deux mots de passe ne sont pas pareils", "");
+  try { await FBA.reauth(old); await firebase.auth().currentUser.updatePassword(a); showToast("Mot de passe changé ✅", "success"); }
+  catch (e) { showToast(/invalid-credential|wrong-password/.test((e && e.code) || "") ? "Mot de passe actuel incorrect" : fbMsg(e), ""); }
+}
+async function acctEtabDevices() {
+  let list = []; try { list = (await api("etab", { action: "appareils" }, true)).appareils || []; } catch (e) { return showToast("Indisponible pour le moment", ""); }
+  const me = getDeviceId();
+  const html = '<div class="et-list" style="text-align:left">' + (list.length ? list.map(d => '<div class="et-mini"><div class="et-t"><b>' + escHtml(d.brand || "Appareil") + (d.id === me ? " · cet appareil" : "") + '</b><small>Utilisé ' + esTemps(d.last) + '</small></div>' + (d.id === me ? "" : '<button class="et-btn dg" type="button" data-od="' + escHtml(d.id) + '">Retirer</button>') + '</div>').join("") : '<p class="et-note">Aucun appareil.</p>') + '</div>';
+  const pr = iosSheet({ title: "Mes appareils reconnus", sub: "Sur un appareil retiré, la question secrète sera de nouveau demandée.", html: "", btns: [{ t: "Fermer", v: "" }] });
+  const host = document.querySelector("#ios-sh .ish"); if (host) { const box = el$("div", "", html); const t = host.querySelector("h3"); t && t.after(box);
+    box.onclick = async ev => { const b = ev.target.closest("button[data-od]"); if (!b) return; try { await api("etab", { action: "oublierAppareil", id: b.dataset.od }, true); b.closest(".et-mini").remove(); showToast("Appareil retiré", "success"); } catch (e) { showToast("Échec", ""); } }; }
+  await pr;
+}
 async function renderAccount() {
   const root = $a("acct-root"), legacy = $a("acct-legacy"), tags = $a("acct-tags"); if (!root) return;
+  if (acct && acct.fb && esUser()) { if (legacy) legacy.style.display = "none"; root.innerHTML = ""; tags && (tags.innerHTML = ""); return renderAccountEtab(root, tags); }
   if (legacy) legacy.style.display = acct && acct.fb ? "none" : "";
   root.innerHTML = ""; tags && (tags.innerHTML = "");
   if (!acct) return;
@@ -10014,6 +10058,7 @@ async function renderAccount() {
 // édition du profil
 function acctEdit() {
   const root = $a("acct-root"); if (!root || !acct || !acct.fb) return;
+  if (esUser()) return renderAccount();   // compte d'établissement : profil non modifiable
   const p = PROFILE || { firstName: acct.name, lastName: "", role: "", level: "", birth: "", email: "" };
   const v = { role: p.role || "", level: p.level || "" };
   root.innerHTML = ""; const tags = $a("acct-tags"); tags && (tags.innerHTML = "");
@@ -10048,6 +10093,7 @@ async function askPw(sub) {
   return r.v === "go" && r.val ? r.val : null;
 }
 async function acctChangeEmail() {
+  if (esUser()) return;
   const r = await iosSheet({ title: "Changer d'e-mail", sub: "Entre la nouvelle adresse : on t'envoie un lien de confirmation.", html: '<input class="ish-in" type="email" autocomplete="email" placeholder="nouvelle@adresse.fr">', btns: [{ t: "Continuer", v: "go" }, { t: "Annuler", v: "", cls: "sec" }] });
   const mail = norm0(r.val).toLowerCase(); if (r.v !== "go") return;
   if (!EMAIL_RE.test(mail)) return showToast("Adresse e-mail invalide", "");
@@ -10066,6 +10112,7 @@ async function acctExport() {
   } catch (e) { showToast(fbMsg(e), ""); }
 }
 async function acctDelete() {
+  if (esUser()) return showToast("Pour supprimer ton compte, adresse-toi à ton établissement", "");
   const r = await iosSheet({ title: "Supprimer mon compte ?", sub: "Ton profil, ta progression et ton accès seront effacés définitivement. Cette action est irréversible.", btns: [{ t: "Supprimer définitivement", v: "go", cls: "danger" }, { t: "Annuler", v: "", cls: "sec" }] });
   if (r.v !== "go") return;
   const pw = await askPw("Entre ton mot de passe pour confirmer la suppression."); if (!pw) return;
