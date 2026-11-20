@@ -2148,6 +2148,7 @@ body.has-ipad-side .admin-menu { left: 314px; }
       <p class="au-sub" style="--i:2">Ton compte est créé par ton établissement. Connecte-toi avec l'identifiant et le mot de passe qu'il t'a donnés.</p>
       <div class="au-types" style="--i:2"><span>🎒 Élève</span><span>🏠 Famille</span><span>🏫 Personnel</span></div>
       <button class="au-btn" style="--i:3" type="button" onclick="authGo('login')">Me connecter</button>
+      <button class="au-link" style="--i:4;margin-top:6px" type="button" onclick="famStart()">Je suis parent : créer mon compte Famille</button>
       <p class="au-note" style="--i:4">Pas encore d'identifiant&nbsp;? Demande-le à ton professeur principal ou à la vie scolaire.</p>
     </div>
   </section>
@@ -2221,6 +2222,34 @@ body.has-ipad-side .admin-menu { left: 314px; }
         <div class="au-err" id="au-err-login" role="alert"></div>
         <button class="au-btn" style="--i:4" type="submit" id="au-btn-login">Se connecter</button>
         <button class="au-link" type="button" onclick="authForgot()">Identifiant ou mot de passe oublié ?</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Parents : compte Famille avec le code parents de l'enfant -->
+  <section class="au-step" id="au-famille" data-step="famille">
+    <div class="au-in">
+      <div class="au-top" style="--i:0"><button class="au-back" type="button" onclick="authGo('welcome')" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button></div>
+      <h1 style="--i:1">Compte <em>Famille</em></h1>
+      <p class="au-sub" style="--i:2">Entrez le code parents de votre enfant. Il le trouve sur son compte EcoLingo (tuile « Code parents »).</p>
+      <form id="au-form-famille" autocomplete="on" onsubmit="famSubmit(event)">
+        <div class="au-card" style="--i:3">
+          <div class="au-field"><label for="au-f-code">Code</label><input id="au-f-code" type="text" autocapitalize="characters" autocorrect="off" spellcheck="false" autocomplete="off" placeholder="K7P2-M9QX" maxlength="12"></div>
+        </div>
+        <div class="au-kid" id="au-f-kid" hidden></div>
+        <div id="au-f-more" hidden>
+          <div class="au-card">
+            <div class="au-field"><label for="au-f-pw">Mot de passe</label><input id="au-f-pw" type="password" autocomplete="new-password" placeholder="8 car., lettre + chiffre" maxlength="64"></div>
+            <div class="au-field"><label for="au-f-pw2">Confirmer</label><input id="au-f-pw2" type="password" autocomplete="new-password" placeholder="Retapez-le" maxlength="64"></div>
+          </div>
+          <div class="au-card" style="margin-top:12px">
+            <div class="au-field"><label for="au-f-q">Question</label><select id="au-f-q"></select></div>
+            <div class="au-field"><label for="au-f-r">Réponse</label><input id="au-f-r" type="password" autocomplete="off" placeholder="Réponse secrète" maxlength="60"></div>
+          </div>
+          <p class="au-note">La question secrète vous sera posée si vous vous connectez depuis un nouvel appareil.</p>
+        </div>
+        <div class="au-err" id="au-err-famille" role="alert"></div>
+        <button class="au-btn" style="--i:4" type="submit" id="au-btn-famille">Vérifier le code</button>
       </form>
     </div>
   </section>
@@ -2500,6 +2529,8 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
 .es-row{width:100%;text-align:left;font:inherit;color:var(--ink);cursor:pointer}.es-go{font:800 1.4rem var(--d);opacity:.5}
 .es-chip-top{display:inline-block;margin-top:6px;padding:5px 12px;border:2px solid var(--ink);border-radius:999px;background:#fff;font:800 .82rem var(--b);color:var(--ink)}
 #es-fam-back{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:9000;min-height:48px;padding:0 20px;border:2.5px solid var(--ink);border-radius:999px;background:var(--mur);color:#fff;font:800 .95rem var(--b);box-shadow:3px 3px 0 var(--ink);cursor:pointer}
+#auth .au-field select{display:block;width:100%;height:56px;padding:0 14px;background:#fff;border:var(--bw) solid var(--ink);border-radius:16px;box-shadow:3px 3px 0 var(--ink);outline:0;color:var(--ink);font:700 .95rem var(--b)}
+.au-kid{margin:12px 0;padding:12px 14px;border:var(--bw) solid var(--ink);border-radius:18px;background:var(--pis);font-weight:700;line-height:1.35;color:var(--ink)}.au-kid small{opacity:.7}
 .au-types{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}.au-types span{padding:6px 12px;border:2px solid var(--ink);border-radius:999px;background:#fff;font:800 .8rem var(--b);color:var(--ink)}
 #et-status,#pt-err{padding:10px 12px;border:2px solid var(--ink);border-radius:12px;font-weight:800;font-size:.86rem}
 #et-status.ok{background:#CFF5D8}#et-status.err,#pt-err{background:#FFD9D4}
@@ -2606,7 +2637,7 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
       <button class="mk-tile" type="button" onclick="openA2hs()"><span class="mk-ico" style="background:var(--mur);color:#fff"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4.5"/><path d="M12 8.5v7M8.5 12h7"/></svg></span><span class="mk-txt"><b>Ajouter à l'écran d'accueil</b><i>Un raccourci pour l'ouvrir comme une app</i></span></button>
     </div>
     <div class="mk-row" id="es-row" style="grid-template-columns:1fr;margin-top:-12px;display:none">
-      <button class="mk-tile" type="button" onclick="esOpen('staff')"><span class="mk-ico" style="background:var(--sun);color:var(--ink)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-5h6v5"/></svg></span><span class="mk-txt"><b>Mon établissement</b><i>Tous les élèves et leur progression</i></span></button>
+      <button class="mk-tile" type="button" onclick="esTile()"><span class="mk-ico" style="background:var(--sun);color:var(--ink)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-5h6v5"/></svg></span><span class="mk-txt"><b id="es-row-t">Mon établissement</b><i id="es-row-s">Tous les élèves et leur progression</i></span></button>
     </div>
     <div class="section-title">Tes matières</div>
     <div class="lib-seg" id="lib-seg" role="tablist"><button type="button" data-lib="socle" role="tab">Socle commun<small>Les fiches EcoLingo du programme officiel</small></button><button type="button" data-lib="ecole" role="tab">Mon école<small>Les fiches ajoutées par ton école</small></button><button type="button" data-lib="bb" role="tab" class="bb"><span class="bb-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4"/></svg></span><span class="bb-t">Brevet blanc n°1<small>3e · tout le programme de septembre à fin novembre, avec quiz</small></span></button></div>
@@ -8665,15 +8696,15 @@ function openEtabPanel(e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
   if (!isAdmin) { showToast("Accès réservé aux admins", ""); return; }
   try { closeAdminMenu(); } catch (x) {}
-  document.getElementById("et-panel").classList.add("open"); ET.hist = []; etGo("list");
+  ET.gest = false; document.getElementById("et-panel").classList.add("open"); ET.hist = []; etGo("list");
 }
 function closeEtabPanel() {
   if (ET.view === "res" && ET.res.length && !confirm("Les mots de passe provisoires ne seront plus affichés.\nTu les as bien imprimés ou téléchargés ?")) return;
   document.getElementById("et-panel").classList.remove("open"); ET.res = [];
 }
 function etGo(v, keep) { if (!keep && ET.view !== v) ET.hist.push(ET.view); ET.view = v; etSay(""); etRender(); }
-function etBack() { if (ET.view === "res" && ET.res.length && !confirm("Les mots de passe provisoires ne seront plus affichés. Continuer ?")) return; const v = ET.hist.pop() || "list"; ET.view = v; etSay(""); if (v === "list") etLoad(); else etRender(); }
-function etHead(t, s) { document.getElementById("et-title").textContent = t; document.getElementById("et-sub").textContent = s; document.getElementById("et-back").style.display = ET.view === "list" ? "none" : ""; }
+function etBack() { if (ET.view === "res" && ET.res.length && !confirm("Les mots de passe provisoires ne seront plus affichés. Continuer ?")) return; if (ET.gest) { ET.hist = []; return etMembres(ET.cur.id); } const v = ET.hist.pop() || "list"; ET.view = v; etSay(""); if (v === "list") etLoad(); else etRender(); }
+function etHead(t, s) { document.getElementById("et-title").textContent = t; document.getElementById("et-sub").textContent = s; document.getElementById("et-back").style.display = ET.view === "list" || (ET.gest && ET.view === "membres") ? "none" : ""; }
 
 async function etLoad() {
   ET.view = "list"; etRender();
@@ -8712,9 +8743,9 @@ function etRender() {
     const q = etN((document.getElementById("et-q") || {}).value || ""), ms = ET.membres.filter(m => !q || etN(m.prenom + " " + m.nom + " " + m.identifiant + " " + etSub(m)).includes(q));
     b.innerHTML = '<input class="et-in" id="et-q" type="search" placeholder="Chercher un nom, une classe…" value="' + escHtml(q) + '" oninput="etRender();this.focus();this.setSelectionRange(this.value.length,this.value.length)">' +
       '<div class="et-acts"><button class="et-btn" type="button" onclick="etAdd(ET.cur.id)">＋ Ajouter des comptes</button><button class="et-btn w" type="button" onclick="etResetAll()">🔑 Nouveaux codes pour ceux qui ne se sont pas connectés</button><button class="et-btn w" type="button" onclick="etFamilles()">🏠 Créer les comptes Famille</button></div>' +
-      (ms.length ? etGroups(ms, m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.prenom + " " + m.nom) + '</b><small>' + escHtml(etSub(m)) + ' · <span class="et-code">' + escHtml(m.identifiant) + '</span> ' + (m.pwChanged ? '<span class="et-tag ok">connecté</span>' : '<span class="et-tag">provisoire</span>') + (m.secu ? ' <span class="et-tag ok">🔐 sécurisé</span>' : "") + '</small></div>' + (m.role === "eleve" ? '<button class="et-btn w" type="button" data-s="' + m.uid + '" title="Suivi de la progression">📊</button>' : m.role === "famille" ? '<button class="et-btn w" type="button" data-l="' + m.uid + '" title="Relier un frère ou une sœur">＋ enfant</button>' : "") + '<button class="et-btn w" type="button" data-p="' + m.uid + '" title="Nouveau mot de passe">🔑</button><button class="et-btn dg" type="button" data-d="' + m.uid + '" title="Supprimer">✕</button></div>') : '<p class="et-note">Aucun compte.</p>') +
-      '<button class="et-btn dg big" type="button" onclick="etDelEtab()">Supprimer l’établissement et tous ses comptes</button>';
-    b.onclick = ev => { const t = ev.target.closest("button"); if (!t) return; if (t.dataset.p) etReset([t.dataset.p]); if (t.dataset.d) etDelMembre(t.dataset.d); if (t.dataset.s) esSuiviAdmin(t.dataset.s); if (t.dataset.l) etLier(t.dataset.l); };
+      (ms.length ? etGroups(ms, m => '<div class="et-mini"><div class="et-t"><b>' + escHtml(m.prenom + " " + m.nom) + '</b><small>' + escHtml(etSub(m)) + ' · <span class="et-code">' + escHtml(m.identifiant) + '</span> ' + (m.pwChanged ? '<span class="et-tag ok">connecté</span>' : '<span class="et-tag">provisoire</span>') + (m.secu ? ' <span class="et-tag ok">🔐 sécurisé</span>' : "") + (m.gest ? ' <span class="et-tag" style="background:#E5DBFF">⚙️ admin établissement</span>' : "") + '</small></div>' + (!ET.gest && (m.role === "personnel" || m.role === "prof") ? '<button class="et-btn w" type="button" data-g="' + m.uid + '" title="Administrateur de l’établissement">⚙️</button>' : "") + (m.role === "eleve" ? '<button class="et-btn w" type="button" data-s="' + m.uid + '" title="Suivi de la progression">📊</button>' : m.role === "famille" ? '<button class="et-btn w" type="button" data-l="' + m.uid + '" title="Relier un frère ou une sœur">＋ enfant</button>' : "") + '<button class="et-btn w" type="button" data-p="' + m.uid + '" title="Nouveau mot de passe">🔑</button><button class="et-btn dg" type="button" data-d="' + m.uid + '" title="Supprimer">✕</button></div>') : '<p class="et-note">Aucun compte.</p>') +
+      (ET.gest ? "" : '<button class="et-btn dg big" type="button" onclick="etDelEtab()">Supprimer l’établissement et tous ses comptes</button>');
+    b.onclick = ev => { const t = ev.target.closest("button"); if (!t) return; if (t.dataset.p) etReset([t.dataset.p]); if (t.dataset.d) etDelMembre(t.dataset.d); if (t.dataset.s) esSuiviAdmin(t.dataset.s); if (t.dataset.l) etLier(t.dataset.l); if (t.dataset.g) etSetGest(t.dataset.g); };
   }
 }
 function etGroups(list, row, max) {
@@ -8764,7 +8795,7 @@ async function etFile(f) {
       const hi = rows.findIndex((r, i) => i < 20 && r.some(c => /^nom\b/.test(etN(c))) && r.some(c => /^prenom/.test(etN(c))));
       if (hi < 0) continue;
       const H = rows[hi].map(etN), col = re => H.findIndex(h => re.test(h));
-      const c = { nom: col(/^nom\b/), prenom: col(/^prenom/), mat: col(/^matiere/), cl: col(/^classe/), fo: col(/^fonction|^poste/), nai: col(/naissance/), ty: col(/^(type|role|statut du compte)$/) };
+      const c = { nom: col(/^nom\b(?! (du |de la )?(resp|repr|pere|mere))/), prenom: col(/^prenom/), mat: col(/^(matiere|discipline)/), cl: col(/^(classe|division|groupe classe)/), fo: col(/^fonction|^poste/), nai: col(/naissance/), ty: col(/^(type|role|statut du compte)$/) };
       const def = /eleve/.test(sn) ? "eleve" : /enseignant|prof/.test(sn) ? "prof" : /personnel|direction|vie scolaire|administration/.test(sn) ? "personnel" : "";
       for (const r of rows.slice(hi + 1)) {
         const get = i => i < 0 ? "" : r[i] instanceof Date ? r[i] : String(r[i] == null ? "" : r[i]).trim();
@@ -8896,7 +8927,9 @@ function etabUi() {
   c.textContent = "🏫 " + ME.etab.nom + (m.role === "eleve" && m.classe ? " · " + m.classe : m.role === "famille" ? " · Espace famille" : m.role === "prof" ? " · Prof" : m.role === "personnel" ? " · " + (m.fonction || "Personnel") : "");
   c.hidden = false;
   if (m.role === "famille" && acct && acct.name !== "Famille " + m.nom) { saveAcct({ ...acct, name: "Famille " + m.nom }); try { updateNav(); } catch (e) {} }
-  const r = document.getElementById("es-row"); if (r) r.style.display = m.role === "prof" || m.role === "personnel" ? "" : "none";
+  const r = document.getElementById("es-row"); if (r) r.style.display = "";
+  const T = { eleve: ["Code parents", "Pour que tes parents créent leur compte Famille"], famille: ["Espace famille", "La progression de vos enfants"] }[m.role] || ["Mon établissement", m.gest ? "Élèves, progression et gestion des comptes" : "Tous les élèves et leur progression"];
+  document.getElementById("es-row-t").textContent = T[0]; document.getElementById("es-row-s").textContent = T[1];
 }
 function etabHome() { if (ME && ME.moi && ME.moi.role === "famille") esOpen("famille"); }
 
@@ -9012,7 +9045,7 @@ function esRender() {
     const k = ES.kids;
     b.innerHTML = (k.length > 1 ? '<div class="es-chips">' + k.map((x, i) => '<button type="button" class="es-chip' + (i === ES.kid ? " on" : "") + '" data-k="' + i + '">' + escHtml(x.eleve.prenom) + '</button>').join("") + '</div>' : "") +
       (k.length ? esSuivi(k[ES.kid]) : '<p class="et-note">Aucun enfant n’est encore relié à ce compte. Contacte l’établissement.</p>') +
-      '<div class="et-acts"><button class="et-btn w" type="button" onclick="esFamFiches()">📚 Voir les fiches de révision</button><button class="et-btn dg" type="button" onclick="esFamLogout()">Se déconnecter</button></div>';
+      '<div class="et-acts"><button class="et-btn" type="button" onclick="esAjouterEnfant()">＋ Ajouter un enfant</button><button class="et-btn w" type="button" onclick="esFamFiches()">📚 Voir les fiches de révision</button><button class="et-btn dg" type="button" onclick="esFamLogout()">Se déconnecter</button></div>';
     b.onclick = ev => { const t = ev.target.closest("button[data-k]"); if (t) { ES.kid = +t.dataset.k; esRender(); } };
     return;
   }
@@ -9024,7 +9057,7 @@ function esRender() {
   const cls = [...new Set(ES.eleves.map(e => e.classe || "Sans classe"))].sort((a, c) => a.localeCompare(c, "fr", { numeric: true }));
   const q = etN(ES.q), list = ES.eleves.filter(e => (!ES.classe || (e.classe || "Sans classe") === ES.classe) && (!q || etN(e.prenom + " " + e.nom + " " + e.classe + " " + e.identifiant).includes(q)));
   const actifs = ES.eleves.filter(e => e.resume.actif && Date.now() - e.resume.actif < 7 * 864e5).length;
-  b.innerHTML = '<div class="et-stats"><span class="et-pill">' + ES.eleves.length + ' élèves</span><span class="et-pill">' + cls.length + ' classes</span><span class="et-pill">' + actifs + ' actifs cette semaine</span></div>' +
+  b.innerHTML = (ME && ME.moi && ME.moi.gest ? '<button class="et-btn big" type="button" onclick="etGest()">⚙️ Gérer les comptes de l’établissement</button>' : "") + '<div class="et-stats"><span class="et-pill">' + ES.eleves.length + ' élèves</span><span class="et-pill">' + cls.length + ' classes</span><span class="et-pill">' + actifs + ' actifs cette semaine</span></div>' +
     '<input class="et-in" id="es-q" type="search" placeholder="Chercher un élève, une classe…" value="' + escHtml(ES.q) + '">' +
     '<div class="es-chips"><button type="button" class="es-chip' + (!ES.classe ? " on" : "") + '" data-c="">Toutes</button>' + cls.map(c => '<button type="button" class="es-chip' + (ES.classe === c ? " on" : "") + '" data-c="' + escHtml(c) + '">' + escHtml(c) + '</button>').join("") + '</div>' +
     (list.length ? etGroups(list, e => '<button type="button" class="et-mini es-row" data-u="' + e.uid + '"><div class="et-t"><b>' + escHtml(e.prenom + " " + e.nom) + '</b><small>' + (e.resume.actif ? "Actif " + esTemps(e.resume.actif) : "Pas encore actif") + " · 🔥 " + e.resume.serie + " · " + e.resume.quiz + " quiz" + (e.resume.moyenne != null ? " · " + e.resume.moyenne + " %" : "") + '</small></div><span class="es-go">›</span></button>') : '<p class="et-note">Aucun élève.</p>');
@@ -9043,6 +9076,84 @@ async function esCodes(fam) {
 function esFamFiches() { document.getElementById("es-panel").classList.remove("open"); const b = document.getElementById("es-fam-back"); if (b) b.hidden = false; }
 function esFamBack() { const b = document.getElementById("es-fam-back"); if (b) b.hidden = true; esOpen("famille"); }
 function esFamLogout() { document.getElementById("es-panel").classList.remove("open"); const b = document.getElementById("es-fam-back"); if (b) b.hidden = true; ME = null; logoutAcct(); }
+
+
+// ── Parents : activer leur compte Famille eux-mêmes avec le « code parents » de leur enfant ──
+const ES_QUESTIONS = ["Quel est le prénom de ton premier animal ?", "Dans quelle ville es-tu né(e) ?", "Quel est le nom de ton école primaire ?", "Quel est ton plat préféré ?", "Quel est le prénom de ton meilleur ami d'enfance ?", "Quel est le deuxième prénom d'un de tes parents ?"];
+let _famCode = "";
+function famStart() {
+  _famCode = ""; document.getElementById("au-f-code").value = ""; document.getElementById("au-f-more").hidden = true;
+  document.getElementById("au-f-kid").hidden = true; document.getElementById("au-btn-famille").textContent = "Vérifier le code";
+  document.getElementById("au-f-q").innerHTML = '<option value="">Choisissez une question…</option>' + ES_QUESTIONS.map((q, i) => '<option value="' + i + '">' + escHtml(q.replace("ton ", "votre ").replace("ta ", "votre ").replace("es-tu", "êtes-vous").replace("tes ", "vos ")) + '</option>').join("");
+  authGo("famille");
+}
+async function famSubmit(ev) {
+  ev.preventDefault(); if (_authBusy) return;
+  const code = document.getElementById("au-f-code").value.trim().toUpperCase();
+  if (!_famCode || code !== _famCode) {
+    if (code.replace(/[^A-Z0-9]/g, "").length !== 8) return authErr("famille", "Le code parents a 8 caractères (ex. K7P2-M9QX).");
+    authBusy("famille", true);
+    try {
+      const r = await api("etab", { action: "verifierCode", code });
+      authBusy("famille", false);
+      if (r.deja) { document.getElementById("au-l-name").value = r.deja; authGo("login"); return setTimeout(() => authErr("login", "Un compte Famille existe déjà pour " + r.enfant + " : connectez-vous avec l'identifiant " + r.deja + "."), 450); }
+      _famCode = code;
+      const k = document.getElementById("au-f-kid"); k.innerHTML = '✅ <b>' + escHtml(r.enfant) + '</b>' + (r.classe ? " · " + escHtml(r.classe) : "") + '<br><small>' + escHtml(r.etab) + '</small>'; k.hidden = false;
+      document.getElementById("au-f-more").hidden = false; document.getElementById("au-btn-famille").textContent = "Créer mon compte Famille";
+      setTimeout(() => { try { document.getElementById("au-f-pw").focus(); } catch (e) {} }, 200);
+    } catch (e) { authBusy("famille", false); authErr("famille", e.code === "locked" ? "Trop d'essais. Réessayez dans 15 minutes." : e.code === "code" ? "Code inconnu ou expiré. Demandez à votre enfant d'en générer un nouveau." : "Impossible pour le moment (" + (e.code || "réseau") + ")."); }
+    return;
+  }
+  const pw = document.getElementById("au-f-pw").value, pw2 = document.getElementById("au-f-pw2").value, q = document.getElementById("au-f-q").value, r = document.getElementById("au-f-r").value.trim();
+  if (!pwOk(pw)) return authErr("famille", "Mot de passe trop faible : 8 caractères minimum, avec une lettre et un chiffre.");
+  if (pw !== pw2) return authErr("famille", "Les deux mots de passe ne sont pas pareils.");
+  if (q === "") return authErr("famille", "Choisissez une question secrète.");
+  if (r.length < 2) return authErr("famille", "Écrivez la réponse à votre question secrète.");
+  authBusy("famille", true);
+  try {
+    const out = await api("etab", { action: "activerFamille", code: _famCode, pw, q: +q, r, ...apiDev() });
+    authBusy("famille", false);
+    ["au-f-pw", "au-f-pw2", "au-f-r", "au-f-code"].forEach(i => document.getElementById(i).value = "");
+    await iosSheet({ title: "Compte Famille créé ✅", sub: "Votre identifiant est « " + out.identifiant + " ». Notez-le : il vous servira à chaque connexion.", btns: [{ t: "Continuer", v: "" }] });
+    document.getElementById("au-l-name").value = out.identifiant;
+    await fbLogin(out.identifiant + "@" + ETAB_DOMAIN, pw);
+  } catch (e) {
+    authBusy("famille", false);
+    authErr("famille", e.code === "famille" ? "Un compte Famille existe déjà : " + ((e.data && e.data.identifiant) || "") + ". Connectez-vous avec." : e.code === "code" ? "Code expiré. Demandez-en un nouveau à votre enfant." : e.code === "weak" ? "Mot de passe trop faible." : "Impossible pour le moment (" + (e.code || "réseau") + ").");
+  }
+}
+// Élève : générer le code parents
+async function esInviter() {
+  try {
+    const r = await api("etab", { action: "inviterParents" }, true);
+    if (r.deja) return iosSheet({ title: "Code parents", sub: "Tes parents ont déjà leur compte Famille (identifiant : " + r.deja + "). S'ils l'ont perdu, ils peuvent demander un nouveau mot de passe à la vie scolaire.", btns: [{ t: "OK", v: "" }] });
+    iosSheet({ title: "Code parents : " + r.code, sub: "Donne ce code à tes parents. Sur EcoLingo, ils appuient sur « Je suis parent » et créent leur compte Famille : ils verront ta progression. Valable jusqu'au " + new Date(r.exp).toLocaleDateString("fr-FR") + ", une seule fois.", btns: [{ t: "Copier le code", v: "c" }, { t: "OK", v: "", cls: "sec" }] })
+      .then(x => { if (x.v === "c") try { navigator.clipboard.writeText(r.code); showToast("Code copié", "success"); } catch (e) {} });
+  } catch (e) { showToast("Impossible de créer le code (" + (e.code || "réseau") + ")", ""); }
+}
+async function esAjouterEnfant() {
+  const c = prompt("Code parents de votre autre enfant (il le trouve sur son compte EcoLingo, tuile « Code parents ») :"); if (!c) return;
+  try { const r = await api("etab", { action: "ajouterEnfant", code: c.trim() }, true); showToast(r.enfant + " ajouté(e) ✅", "success"); esOpen("famille"); }
+  catch (e) { showToast(e.code === "code" ? "Code inconnu ou expiré" : e.code === "famille" ? "Cet enfant a déjà un autre compte Famille actif" : "Impossible (" + (e.code || "réseau") + ")", ""); }
+}
+function esTile() {
+  const m = ME && ME.moi; if (!m) return;
+  if (m.role === "eleve") return esInviter();
+  if (m.role === "famille") return esOpen("famille");
+  esOpen("staff");
+}
+// Administrateur d'établissement (direction / secrétariat) : gère les comptes de SON établissement
+function etGest() {
+  if (!ME || !ME.moi || !ME.moi.gest) return;
+  ET.gest = true; ET.cur = { id: ME.etab.id, nom: ME.etab.nom }; ET.etabs = [ET.cur]; ET.hist = [];
+  esClose(); document.getElementById("et-panel").classList.add("open"); etMembres(ET.cur.id);
+}
+async function etSetGest(uid) {
+  const m = ET.membres.find(x => x.uid === uid); if (!m) return;
+  if (!confirm(m.gest ? "Retirer à " + m.prenom + " " + m.nom + " la gestion des comptes de l'établissement ?" : "Faire de " + m.prenom + " " + m.nom + " l'administrateur de l'établissement ?\nIl pourra importer les élèves, imprimer les codes, créer les comptes Famille et donner de nouveaux mots de passe, seulement pour " + ET.cur.nom + ".")) return;
+  try { await api("etab", { action: "setGest", uid, on: !m.gest }, true); m.gest = !m.gest; etRender(); etSay(m.gest ? "✅ " + m.prenom + " gère maintenant les comptes de l'établissement." : "Gestion retirée.", "ok"); }
+  catch (e) { etSay("❌ Échec (" + (e.code || "réseau") + ").", "err"); }
+}
 
 // ── Admin : comptes Famille ──
 const etKids = m => (m.enfantsNoms || (m.enfants || []).map(id => { const e = ET.membres.find(x => x.uid === id); return e ? e.prenom + " " + e.nom + (e.classe ? " (" + e.classe + ")" : "") : "?"; })).join(", ");
@@ -9117,7 +9228,7 @@ function authSuggest() {
 function authEye(id, btn) { const i = document.getElementById(id); i.type = i.type === "password" ? "text" : "password"; btn.style.color = i.type === "text" ? "#0a84ff" : ""; }
 
 function authGo(step) {
-  const order = ["welcome", "create", "create2", "create3", "login", "recover", "done"], from = _authStep;
+  const order = ["welcome", "famille", "create", "create2", "create3", "login", "recover", "done"], from = _authStep;
   const fwd = order.indexOf(step) >= order.indexOf(from);
   document.querySelectorAll("#auth .au-step").forEach(s => {
     const me = s.dataset.step;
