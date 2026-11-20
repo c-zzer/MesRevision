@@ -2,7 +2,7 @@
    - La page se charge toujours depuis internet d'abord (donc toujours à jour), et une copie sert de secours hors connexion.
    - Firebase et les scripts externes ne sont jamais touchés : ils passent directement par le navigateur.
    Pour forcer une purge chez tout le monde un jour, change simplement le numéro de CACHE. */
-const CACHE = "mesrevisions-v2";
+const CACHE = "mesrevisions-v3";
 const PAGE = "./index.html";
 
 self.addEventListener("install", (e) => {
@@ -40,6 +40,6 @@ self.addEventListener("fetch", (e) => {
   if (url.origin !== self.location.origin) return;           // Firebase, CDN… : on ne touche à rien
   if (url.pathname.endsWith("/sw.js")) return;
   if (url.pathname.startsWith("/api/")) return;                // serveur (comptes, Drive) : jamais en cache
-  if (req.mode === "navigate") { e.respondWith(networkFirst(req, PAGE, 4000)); return; }
+  if (req.mode === "navigate") { e.respondWith(networkFirst(req, PAGE, 15000)); return; }   // la page est grosse : on attend le réseau (copie seulement hors connexion)
   e.respondWith(networkFirst(req, req, 4000));               // icônes et autres fichiers du site
 });
