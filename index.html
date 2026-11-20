@@ -2022,6 +2022,12 @@ body.has-ipad-side .admin-menu { left: 314px; }
 .shfx.dud .shfx-art { filter: grayscale(.7); }
 .shfx.dud .shfx-glow, .shfx.dud .shfx-rays { opacity: 0 !important; }
 #reader-content sup, .rf sup { font-size: .72em; line-height: 0; vertical-align: super; font-weight: inherit; }
+
+/* Apparition au défilement : les blocs arrivent au fur et à mesure qu'on avance (et quand on remonte) */
+.rv{animation:none!important;opacity:0;translate:0 22px;scale:.97;transition:opacity .5s cubic-bezier(.2,.8,.2,1),translate .6s cubic-bezier(.2,.9,.25,1.15),scale .6s cubic-bezier(.2,.9,.25,1.15);transition-delay:var(--rvd,0ms)}
+.rv.rv-up{translate:0 -22px}
+.rv.rv-in{opacity:1;translate:0 0;scale:1}
+@media (prefers-reduced-motion: reduce){.rv{opacity:1!important;translate:none!important;scale:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -11217,6 +11223,42 @@ async function grantApply(all) {
     const w = document.createTreeWalker(n, NodeFilter.SHOW_TEXT); let t; const all = []; while ((t = w.nextNode())) all.push(t); all.forEach(clean); };
   window.sansEmoji = s => String(s == null ? "" : s).replace(RE, "");
   const start = () => { clean(document.body); new MutationObserver(ms => { for (const m of ms) { if (m.type === "characterData") clean(m.target); else m.addedNodes.forEach(clean); } }).observe(document.body, { childList: true, subtree: true, characterData: true }); };
+  if (document.body) start(); else document.addEventListener("DOMContentLoaded", start);
+})();
+</script>
+<script>
+// ── Apparition au défilement : chaque bloc apparaît quand il entre à l'écran, dans le sens où on fait défiler ──
+(function () {
+  if (!("IntersectionObserver" in window)) return;
+  const SEL = ".mk-tile,.section-title,.subject-card,.fiche-card:not(.sk-row),.lib-seg,.et-card,.et-mini,.es-tile,.es-mat,.es-hero,.es-cal,.set-group,.dv-title," +
+    "#reader-content > *,#reader-content blockquote,#reader-content li,#reader-content h2,#reader-content h3,#reader-content table,#reader-content img";
+  const seen = new WeakSet();
+  let batch = 0, batchT = 0;
+  const io = new IntersectionObserver(es => {
+    const now = performance.now(); if (now - batchT > 120) batch = 0; batchT = now;
+    es.forEach(e => {
+      const el = e.target;
+      if (e.isIntersecting) {
+        el.style.setProperty("--rvd", Math.min(batch++, 8) * 55 + "ms");
+        el.classList.add("rv-in"); el.classList.remove("rv-up");
+      } else if (el.classList.contains("rv-in")) {
+        // sorti de l'écran : prêt à réapparaître (par le haut si on remonte, par le bas si on descend)
+        el.classList.remove("rv-in"); el.style.removeProperty("--rvd");
+        el.classList.toggle("rv-up", e.boundingClientRect.top < 0);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: "0px 0px -4% 0px" });
+  const typing = () => { const a = document.activeElement; return a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName); };
+  const add = el => {
+    if (seen.has(el)) return; seen.add(el);
+    if (el.closest("#auth,.ish,#ios-sh,.gp-head,#pt-panel,#dv-panel") || el.closest(".rv")) return;   // pas dans les feuilles de connexion / alertes
+    if (typing()) return;                                     // liste qui se refait pendant qu'on tape : pas d'effet
+    const an = getComputedStyle(el).animationName;
+    if (an !== "none" && an !== "rise") return;   // a déjà sa propre animation (sauf l'apparition « rise », remplacée par celle-ci)
+    el.classList.add("rv"); io.observe(el);
+  };
+  const scan = root => { if (root.nodeType !== 1) return; if (root.matches && root.matches(SEL)) add(root); root.querySelectorAll && root.querySelectorAll(SEL).forEach(add); };
+  const start = () => { scan(document.body); new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(scan))).observe(document.body, { childList: true, subtree: true }); };
   if (document.body) start(); else document.addEventListener("DOMContentLoaded", start);
 })();
 </script>
