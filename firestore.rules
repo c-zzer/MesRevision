@@ -40,18 +40,20 @@ service cloud.firestore {
         && d.privacy is map
         && d.schema == 1;
     }
+    // Comptes d'établissement (élèves, familles, personnel) : leur profil est géré par l'établissement, jamais modifiable par eux
+    function etabAcct() { return signed() && ('etab' in request.auth.token); }
     match /profiles/{uid} {
       allow read: if isMe(uid) || isAdmin();
-      allow create: if isMe(uid) && validProfile(request.resource.data);
-      allow update: if isMe(uid) && validProfile(request.resource.data) && request.resource.data.createdAt == resource.data.createdAt;
-      allow delete: if isMe(uid);
+      allow create: if isMe(uid) && !etabAcct() && validProfile(request.resource.data);
+      allow update: if isMe(uid) && !etabAcct() && validProfile(request.resource.data) && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isMe(uid) && !etabAcct();
     }
     match /progress/{uid} { allow read, write: if isMe(uid) || isAdmin(); }
 
     // ── Jeu (ANTI-TRICHE) : Lingo, rangs, boutique et duels sont écrits UNIQUEMENT par le serveur (api/jeu) ──
     match /lingo/{uid} {
       allow read: if signed();
-      allow delete: if isMe(uid);          // suppression de son propre compte
+      allow delete: if isMe(uid) && !etabAcct();   // suppression de son propre compte (pas pour les comptes d'établissement)
       allow create, update: if false;
     }
     match /presence/{uid} {
