@@ -4941,12 +4941,14 @@ async function xpWiki(sel) {
   return { t: p.title, e: phrases.slice(0, 2).join(" ").trim(), src: "Wikipédia" };
 }
 async function xpWiktionary(sel) {
-  const w = xpN(sel); if (!w || w.includes(" ")) return null;
-  const d = await xpFetchJson("https://fr.wiktionary.org/api/rest_v1/page/definition/" + encodeURIComponent(sel.trim().toLowerCase()));
-  const fr = d && (d.fr || d.other || [])[0], def = fr && fr.definitions && fr.definitions[0] && fr.definitions[0].definition;
-  if (!def) return null;
-  const txt = def.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim(); if (txt.length < 4) return null;
-  return { t: sel.trim(), e: txt.charAt(0).toUpperCase() + txt.slice(1) + (/[.!?]$/.test(txt) ? "" : "."), src: "Wiktionnaire" };
+  const w = sel.trim().toLowerCase(); if (!w || /\s/.test(w) || w.length > 40) return null;
+  const j = await xpFetchJson("https://fr.wiktionary.org/w/api.php?action=parse&prop=wikitext&format=json&formatversion=2&origin=*&redirects=1&page=" + encodeURIComponent(w));
+  const wt = j && j.parse && j.parse.wikitext; if (!wt) return null;
+  const fr = wt.split(/==\s*\{\{langue\|fr\}\}\s*==/)[1]; if (!fr) return null;
+  const line = fr.split("\n").find(l => /^#\s/.test(l)); if (!line) return null;
+  let t = line.replace(/^#\s*/, "").replace(/\{\{[^{}]*\}\}/g, "").replace(/\[\[(?:[^|\]]*\|)?([^\]]*)\]\]/g, "$1").replace(/'{2,}/g, "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+  if (t.length < 4) return null;
+  return { t: sel.trim(), e: t.charAt(0).toUpperCase() + t.slice(1) + (/[.!?]$/.test(t) ? "" : "."), src: "Wiktionnaire" };
 }
 // ── Voix ──
 let _xpVoice = null;
@@ -4985,7 +4987,7 @@ async function xpExplain(sel) {
   const c = xpCard(); c.classList.add("on"); c.classList.remove("talk");
   document.getElementById("xp-t").textContent = sel; document.getElementById("xp-e").textContent = "Je cherche une explication…"; document.getElementById("xp-src").textContent = "";
   let r = xpFindGloss(sel) || xpFindInFiche(sel);
-  if (!r && navigator.onLine !== false) r = await xpWiki(sel) || await xpWiktionary(sel);
+  if (!r && navigator.onLine !== false) r = /\s/.test(sel) ? (await xpWiki(sel) || await xpWiktionary(sel)) : (await xpWiktionary(sel) || await xpWiki(sel));   // un seul mot : le dictionnaire d'abord
   if (!r) r = { t: sel, e: "Je n'ai pas d'explication pour ça. Essaie de sélectionner un seul mot important, par exemple un mot en gras dans la fiche.", src: "" };
   if (!c.classList.contains("on")) return;
   document.getElementById("xp-t").textContent = r.t; document.getElementById("xp-e").textContent = r.e;
