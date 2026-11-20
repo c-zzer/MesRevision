@@ -2307,7 +2307,7 @@ body.has-ipad-side .admin-menu { left: 314px; }
     <input type="file" id="import-file-input" accept="application/json,.json" style="display:none" onchange="importAllData(this.files[0])">
     <button id="btn-autobak" class="btn btn-ghost" style="display:none" onclick="openAutoBackups()" title="Copies automatiques des fiches (une par jour)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 11-2.3-5.6M20 4v4h-4"/><path d="M12 8v4l3 2"/></svg> Sauvegardes auto</button>
     <button id="btn-admin-admins" class="btn btn-ghost" style="display:none" onclick="openAdminsPanel(event)" title="Gérer les admins"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 7.6-8 9-4.8-1.4-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg> Admins</button>
-    <button id="btn-admin-etab" class="btn btn-ghost" style="display:none" onclick="openEtabPanel(event)" title="Créer les comptes d'un établissement"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-5h6v5M10 12h4"/></svg> Établissements</button>
+    <button id="btn-admin-etab" class="btn btn-primary" style="display:none" onclick="openEtabPanel(event)" title="Créer les comptes d'un établissement"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-5h6v5M10 12h4"/></svg> Établissements</button>
     <button id="btn-admin-give" class="btn btn-ghost" style="display:none" onclick="openGrantPanel(event)" title="Gérer les inventaires"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg> Give inventaire</button>
     <button id="btn-admin-drive" class="btn btn-ghost" style="display:none" onclick="openDrivePanel(event)" title="Stockage Google Drive chiffré"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Stockage Drive</button>
     <button id="btn-admin-pw" class="btn btn-ghost" style="display:none" onclick="openPwModal()" title="Changer le mot de passe"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/></svg> Mot de passe</button>
@@ -2485,6 +2485,8 @@ html.has-back #btn-admin-menu{left:calc(120px + var(--tb) + 12px)}
 .et-row{display:flex;align-items:center;gap:12px;padding:12px 13px;border:2px solid var(--ink);border-radius:16px;background:#fff;box-shadow:3px 3px 0 var(--ink)}
 .et-row .et-t{flex:1;min-width:0}.et-row b{display:block;font:800 1rem/1.2 var(--d)}
 .et-row small{display:block;margin-top:2px;font-size:.8rem;font-weight:700;opacity:.7;line-height:1.35;overflow-wrap:anywhere}
+.et-card{display:grid;gap:8px;padding:14px;border:2.5px solid var(--ink);border-radius:18px;background:#fff;box-shadow:3px 3px 0 var(--ink)}.et-card.hi{background:var(--pis);animation:et-hi 1.6s ease-out 2}
+@keyframes et-hi{50%{box-shadow:0 0 0 6px var(--mur)}}.et-ct{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.et-ct b{font:800 1.2rem/1.15 var(--d)}.et-card small{font-weight:700;opacity:.72;font-size:.8rem}.et-card .et-gst{opacity:.9}
 .et-btn{flex:none;min-height:42px;padding:0 15px;border:2px solid var(--ink);border-radius:999px;background:var(--sun);color:var(--ink);font:800 .84rem var(--b);cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .1s,box-shadow .1s;-webkit-tap-highlight-color:transparent}
 .et-btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
 .et-btn.w{background:#fff}.et-btn.dg{background:#FFD9D4}.et-btn.big{min-height:54px;font-size:1rem;width:100%}
@@ -8716,7 +8718,12 @@ function etRender() {
   if (v === "list") {
     etHead("Établissements", "Les comptes sont créés ici, et nulle part ailleurs");
     b.innerHTML = '<button class="et-btn big" type="button" onclick="etNew()">＋ Nouvel établissement</button>' +
-      (ET.etabs.length ? '<div class="et-list">' + ET.etabs.map(x => { const c = x.compte || {}; return '<div class="et-row"><div class="et-t"><b>' + escHtml(x.nom) + '</b><small>' + escHtml([x.type, x.ville, x.annee].filter(Boolean).join(" · ")) + '</small><small>' + (c.personnel || 0) + ' direction/personnel · ' + (c.prof || 0) + ' profs · ' + (c.eleve || 0) + ' élèves</small></div><div class="et-acts"><button class="et-btn w" type="button" data-v="' + escHtml(x.id) + '">Voir</button><button class="et-btn" type="button" data-a="' + escHtml(x.id) + '">Ajouter</button></div></div>'; }).join("") + '</div>'
+      (ET.etabs.length ? '<p class="et-lab">' + ET.etabs.length + ' établissement' + (ET.etabs.length > 1 ? "s" : "") + ' · le plus récent en haut</p><div class="et-list">' + ET.etabs.map(x => { const c = x.compte || {}, neuf = x.createdAt && Date.now() - x.createdAt < 2 * 864e5, d = x.createdAt ? new Date(x.createdAt) : null;
+        return '<div class="et-card' + (x.id === ET.lastId ? " hi" : "") + '"><div class="et-ct"><b>' + escHtml(x.nom) + '</b>' + (neuf ? '<span class="et-tag ok">Nouveau</span>' : "") + '</div>' +
+          '<small>' + escHtml([x.type, x.ville, x.annee].filter(Boolean).join(" · ") || "—") + (d ? " · créé le " + d.toLocaleDateString("fr-FR") + " à " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : "") + '</small>' +
+          '<div class="et-stats"><span class="et-pill">🎒 ' + (c.eleve || 0) + ' élèves</span><span class="et-pill">👩‍🏫 ' + (c.prof || 0) + ' profs</span><span class="et-pill">🏫 ' + (c.personnel || 0) + ' direction</span><span class="et-pill">🏠 ' + (c.famille || 0) + ' familles</span></div>' +
+          '<small class="et-gst">' + ((x.gestion || []).length ? "⚙️ Géré par " + escHtml(x.gestion.join(", ")) : "⚠️ Pas encore d’admin d’établissement : ouvre-le et appuie sur ⚙️ à côté de la direction") + '</small>' +
+          '<div class="et-acts"><button class="et-btn" type="button" data-v="' + escHtml(x.id) + '">Ouvrir</button><button class="et-btn w" type="button" data-a="' + escHtml(x.id) + '">＋ Ajouter des comptes</button></div></div>'; }).join("") + '</div>'
         : '<p class="et-note">Aucun établissement pour l’instant. Quand un établissement te choisit, clique sur « Nouvel établissement » et importe son tableau.</p>');
     b.onclick = ev => { const t = ev.target.closest("button"); if (!t) return; if (t.dataset.v) etMembres(t.dataset.v); if (t.dataset.a) etAdd(t.dataset.a); };
   } else if (v === "import") {
@@ -8817,10 +8824,18 @@ async function etCreate() {
   if (!ok.length) return etSay("Rien à créer.", "err");
   if (!ET.cur && (ET.draft.nom || "").length < 2) return etSay("Donne le nom de l’établissement.", "err");
   if (bad && !confirm(bad + " ligne(s) incomplète(s) seront ignorées. Continuer ?")) return;
+  if (!ET.cur) {
+    const meme = ET.etabs.find(x => etN(x.nom) === etN(ET.draft.nom));
+    if (meme) {
+      const r = await iosSheet({ title: "« " + meme.nom + " » existe déjà", sub: "Il a déjà " + ((meme.compte || {}).eleve || 0) + " élève(s). Tu veux ajouter ces comptes dedans, ou vraiment créer un deuxième établissement du même nom ?", btns: [{ t: "Ajouter dans l’existant", v: "add" }, { t: "Créer un nouveau quand même", v: "new", cls: "sec" }, { t: "Annuler", v: "", cls: "sec" }] });
+      if (!r.v) return; if (r.v === "add") ET.cur = meme;
+    }
+  }
   if (!confirm("Créer " + ok.length + " comptes" + (ET.cur ? " pour " + ET.cur.nom : "") + " ?")) return;
   const btn = document.getElementById("et-go"); if (btn) btn.disabled = true;
   try {
     if (!ET.cur) { const d = ET.draft, r = await api("etab", { action: "creerEtab", nom: d.nom, type: d.type, ville: d.ville, annee: d.annee }, true); ET.cur = { id: r.id, nom: d.nom }; }
+    ET.lastId = ET.cur.id;
     const list = ok.slice().sort(etOrdre).map(({ _i, err, ...m }) => m), out = [];
     const st = document.getElementById("et-status"); st.className = ""; st.innerHTML = '<div>Création des comptes… <span id="et-pc">0</span> / ' + list.length + '</div><div class="et-bar" style="margin-top:8px"><i id="et-pb"></i></div>';
     for (let i = 0; i < list.length; i += 20) {
